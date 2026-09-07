@@ -1,0 +1,10 @@
+{
+  "schema_version": "1.0",
+  "profile": "cpu_core",
+  "clips": [
+    {"id": "two_color_cut", "path": "fixtures/video/two_color_cut.mp4", "required": true},
+    {"id": "no_cut", "path": "fixtures/video/no_cut.mp4", "required": true},
+    {"id": "no_audio", "path": "fixtures/video/no_audio.mp4", "required": true},
+    {"id": "tension_signals", "path": "fixtures/video/tension_signals.mp4", "required": true}
+  ]
+}

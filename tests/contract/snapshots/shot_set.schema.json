@@ -1,0 +1,238 @@
+{
+  "$defs": {
+    "MethodProvenance": {
+      "additionalProperties": false,
+      "description": "How a value was produced, including the hashed analysis configuration.",
+      "properties": {
+        "code_revision": {
+          "maxLength": 128,
+          "minLength": 1,
+          "title": "Code Revision",
+          "type": "string"
+        },
+        "completed_at": {
+          "format": "date-time",
+          "title": "Completed At",
+          "type": "string"
+        },
+        "config_hash": {
+          "description": "Lowercase hex SHA-256 digest.",
+          "pattern": "^[0-9a-f]{64}$",
+          "title": "Config Hash",
+          "type": "string"
+        },
+        "device": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Device"
+        },
+        "method": {
+          "maxLength": 128,
+          "minLength": 1,
+          "title": "Method",
+          "type": "string"
+        },
+        "method_version": {
+          "maxLength": 64,
+          "minLength": 1,
+          "title": "Method Version",
+          "type": "string"
+        },
+        "model_name": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Model Name"
+        },
+        "model_package_version": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Model Package Version"
+        },
+        "random_seed": {
+          "anyOf": [
+            {
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Random Seed"
+        },
+        "started_at": {
+          "format": "date-time",
+          "title": "Started At",
+          "type": "string"
+        },
+        "weights_sha256": {
+          "anyOf": [
+            {
+              "description": "Lowercase hex SHA-256 digest.",
+              "pattern": "^[0-9a-f]{64}$",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Weights Sha256"
+        }
+      },
+      "required": [
+        "method",
+        "method_version",
+        "config_hash",
+        "code_revision",
+        "started_at",
+        "completed_at"
+      ],
+      "title": "MethodProvenance",
+      "type": "object"
+    },
+    "Shot": {
+      "additionalProperties": false,
+      "description": "Half-open interval between two consecutive boundaries, plus clip start and end.",
+      "properties": {
+        "incoming_boundary_id": {
+          "anyOf": [
+            {
+              "format": "uuid",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Incoming Boundary Id"
+        },
+        "index": {
+          "minimum": 0,
+          "title": "Index",
+          "type": "integer"
+        },
+        "outgoing_boundary_id": {
+          "anyOf": [
+            {
+              "format": "uuid",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Outgoing Boundary Id"
+        },
+        "representative_sample_id": {
+          "anyOf": [
+            {
+              "format": "uuid",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Representative Sample Id"
+        },
+        "shot_id": {
+          "format": "uuid",
+          "title": "Shot Id",
+          "type": "string"
+        },
+        "time_range": {
+          "$ref": "#/$defs/TimeRangeMs"
+        }
+      },
+      "required": [
+        "shot_id",
+        "index",
+        "time_range"
+      ],
+      "title": "Shot",
+      "type": "object"
+    },
+    "TimeRangeMs": {
+      "additionalProperties": false,
+      "description": "Half-open interval ``[start_ms, end_ms)`` on the media timeline.",
+      "properties": {
+        "end_ms": {
+          "description": "Exclusive end on the media timeline, integer milliseconds.",
+          "exclusiveMinimum": 0,
+          "title": "End Ms",
+          "type": "integer"
+        },
+        "start_ms": {
+          "description": "Inclusive start on the media timeline, integer milliseconds.",
+          "minimum": 0,
+          "title": "Start Ms",
+          "type": "integer"
+        }
+      },
+      "required": [
+        "start_ms",
+        "end_ms"
+      ],
+      "title": "TimeRangeMs",
+      "type": "object"
+    }
+  },
+  "additionalProperties": false,
+  "description": "Ordered, contiguous covering of the analysed timeline by shots.",
+  "properties": {
+    "analysis_id": {
+      "format": "uuid",
+      "title": "Analysis Id",
+      "type": "string"
+    },
+    "detector": {
+      "$ref": "#/$defs/MethodProvenance"
+    },
+    "schema_version": {
+      "description": "Shot-set schema version.",
+      "title": "Schema Version",
+      "type": "string"
+    },
+    "shots": {
+      "items": {
+        "$ref": "#/$defs/Shot"
+      },
+      "minItems": 1,
+      "title": "Shots",
+      "type": "array"
+    }
+  },
+  "required": [
+    "schema_version",
+    "analysis_id",
+    "detector",
+    "shots"
+  ],
+  "title": "ShotSet",
+  "type": "object"
+}

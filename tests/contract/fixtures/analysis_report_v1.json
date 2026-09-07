@@ -1,0 +1,160 @@
+{
+  "schema_version": "1.0",
+  "analysis_id": "aaaaaaaa-aaaa-4aaa-8aaa-aaaaaaaaaaaa",
+  "video": {
+    "video_id": "bbbbbbbb-bbbb-4bbb-8bbb-bbbbbbbbbbbb",
+    "original_filename": "clip.mp4",
+    "content_sha256": "036b08531c8bcb8e7f54c339d7f5dc7769456667e8ebd19866763af8f5bdb6fa",
+    "size_bytes": 1024,
+    "duration_ms": 4000,
+    "width": 1920,
+    "height": 1080,
+    "display_rotation_degrees": 0,
+    "average_frame_rate": {
+      "numerator": 24,
+      "denominator": 1
+    },
+    "real_frame_rate": null,
+    "video_codec": "h264",
+    "pixel_format": null,
+    "has_audio": false,
+    "audio_codec": null,
+    "probe_artifact": {
+      "artifact_id": "dddddddd-dddd-4ddd-8ddd-dddddddddddd",
+      "kind": "probe",
+      "media_type": "application/json",
+      "sha256": "036b08531c8bcb8e7f54c339d7f5dc7769456667e8ebd19866763af8f5bdb6fa",
+      "size_bytes": 128,
+      "schema_version": "1.0"
+    }
+  },
+  "generated_at": "2026-09-06T12:00:00Z",
+  "pipeline_version": "0.1.0",
+  "configuration_hash": "036b08531c8bcb8e7f54c339d7f5dc7769456667e8ebd19866763af8f5bdb6fa",
+  "availability": {
+    "shots": "COMPLETE",
+    "chromatic": "COMPLETE",
+    "spatial": "UNAVAILABLE",
+    "motion": "UNAVAILABLE",
+    "audio": "UNAVAILABLE",
+    "tension": "UNAVAILABLE",
+    "critic": "NOT_REQUESTED"
+  },
+  "summary": {
+    "shot_count": 1,
+    "average_shot_length_ms": 4000.0,
+    "median_shot_length_ms": 4000.0,
+    "shots_per_minute": 15.0
+  },
+  "shots": [
+    {
+      "shot": {
+        "shot_id": "cccccccc-cccc-4ccc-8ccc-cccccccccccc",
+        "index": 0,
+        "time_range": {
+          "start_ms": 0,
+          "end_ms": 4000
+        },
+        "incoming_boundary_id": null,
+        "outgoing_boundary_id": null,
+        "representative_sample_id": null
+      },
+      "chromatic": {
+        "status": "OK",
+        "value": {
+          "palette": [
+            {
+              "rank": 1,
+              "lab": {
+                "lstar": 50.0,
+                "a": 0.0,
+                "b": 0.0
+              },
+              "rgb": {
+                "r": 16,
+                "g": 32,
+                "b": 48,
+                "hex": "#102030"
+              },
+              "proportion": 1.0
+            }
+          ],
+          "lightness": {
+            "mean_lstar": 40.0,
+            "stddev_lstar": 5.0,
+            "p10_lstar": 20.0,
+            "p50_lstar": 40.0,
+            "p90_lstar": 60.0,
+            "shadow_ratio": 0.2,
+            "highlight_ratio": 0.1
+          },
+          "lighting_key": "BALANCED_ESTIMATE",
+          "usable_pixel_ratio": 0.95
+        },
+        "confidence": null,
+        "reason_code": null,
+        "evidence_sample_ids": [],
+        "method": {
+          "method": "shots.adaptive",
+          "method_version": "1.0.0",
+          "config_hash": "036b08531c8bcb8e7f54c339d7f5dc7769456667e8ebd19866763af8f5bdb6fa",
+          "code_revision": "dev",
+          "random_seed": null,
+          "model_name": null,
+          "model_package_version": null,
+          "weights_sha256": null,
+          "device": null,
+          "started_at": "2026-09-06T12:00:00Z",
+          "completed_at": "2026-09-06T12:00:00Z"
+        }
+      },
+      "spatial": {
+        "status": "NOT_COMPUTED",
+        "value": null,
+        "confidence": null,
+        "reason_code": "detector_not_installed",
+        "evidence_sample_ids": [],
+        "method": {
+          "method": "shots.adaptive",
+          "method_version": "1.0.0",
+          "config_hash": "036b08531c8bcb8e7f54c339d7f5dc7769456667e8ebd19866763af8f5bdb6fa",
+          "code_revision": "dev",
+          "random_seed": null,
+          "model_name": null,
+          "model_package_version": null,
+          "weights_sha256": null,
+          "device": null,
+          "started_at": "2026-09-06T12:00:00Z",
+          "completed_at": "2026-09-06T12:00:00Z"
+        }
+      },
+      "temporal": {
+        "status": "OK",
+        "value": {
+          "duration_ms": 4000,
+          "motion_magnitude_median": null,
+          "global_motion_magnitude": null,
+          "residual_motion_magnitude": null
+        },
+        "confidence": null,
+        "reason_code": null,
+        "evidence_sample_ids": [],
+        "method": {
+          "method": "shots.adaptive",
+          "method_version": "1.0.0",
+          "config_hash": "036b08531c8bcb8e7f54c339d7f5dc7769456667e8ebd19866763af8f5bdb6fa",
+          "code_revision": "dev",
+          "random_seed": null,
+          "model_name": null,
+          "model_package_version": null,
+          "weights_sha256": null,
+          "device": null,
+          "started_at": "2026-09-06T12:00:00Z",
+          "completed_at": "2026-09-06T12:00:00Z"
+        }
+      }
+    }
+  ],
+  "timeline_artifact": null,
+  "critique": null
+}

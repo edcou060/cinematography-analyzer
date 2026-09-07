@@ -1,0 +1,170 @@
+{
+  "$defs": {
+    "MethodProvenance": {
+      "additionalProperties": false,
+      "description": "How a value was produced, including the hashed analysis configuration.",
+      "properties": {
+        "code_revision": {
+          "maxLength": 128,
+          "minLength": 1,
+          "title": "Code Revision",
+          "type": "string"
+        },
+        "completed_at": {
+          "format": "date-time",
+          "title": "Completed At",
+          "type": "string"
+        },
+        "config_hash": {
+          "description": "Lowercase hex SHA-256 digest.",
+          "pattern": "^[0-9a-f]{64}$",
+          "title": "Config Hash",
+          "type": "string"
+        },
+        "device": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Device"
+        },
+        "method": {
+          "maxLength": 128,
+          "minLength": 1,
+          "title": "Method",
+          "type": "string"
+        },
+        "method_version": {
+          "maxLength": 64,
+          "minLength": 1,
+          "title": "Method Version",
+          "type": "string"
+        },
+        "model_name": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Model Name"
+        },
+        "model_package_version": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Model Package Version"
+        },
+        "random_seed": {
+          "anyOf": [
+            {
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Random Seed"
+        },
+        "started_at": {
+          "format": "date-time",
+          "title": "Started At",
+          "type": "string"
+        },
+        "weights_sha256": {
+          "anyOf": [
+            {
+              "description": "Lowercase hex SHA-256 digest.",
+              "pattern": "^[0-9a-f]{64}$",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Weights Sha256"
+        }
+      },
+      "required": [
+        "method",
+        "method_version",
+        "config_hash",
+        "code_revision",
+        "started_at",
+        "completed_at"
+      ],
+      "title": "MethodProvenance",
+      "type": "object"
+    }
+  },
+  "additionalProperties": false,
+  "description": "Outcome of one stage attempt. Output is named by artifact IDs.",
+  "properties": {
+    "analysis_id": {
+      "format": "uuid",
+      "title": "Analysis Id",
+      "type": "string"
+    },
+    "attempt": {
+      "minimum": 1,
+      "title": "Attempt",
+      "type": "integer"
+    },
+    "output_artifact_ids": {
+      "items": {
+        "format": "uuid",
+        "type": "string"
+      },
+      "title": "Output Artifact Ids",
+      "type": "array"
+    },
+    "provenance": {
+      "$ref": "#/$defs/MethodProvenance"
+    },
+    "schema_version": {
+      "description": "Stage-result schema version.",
+      "title": "Schema Version",
+      "type": "string"
+    },
+    "stage_name": {
+      "maxLength": 64,
+      "minLength": 1,
+      "title": "Stage Name",
+      "type": "string"
+    },
+    "warnings": {
+      "default": [],
+      "items": {
+        "type": "string"
+      },
+      "title": "Warnings",
+      "type": "array"
+    }
+  },
+  "required": [
+    "schema_version",
+    "analysis_id",
+    "stage_name",
+    "attempt",
+    "output_artifact_ids",
+    "provenance"
+  ],
+  "title": "StageResult",
+  "type": "object"
+}

@@ -1,0 +1,23 @@
+# Build context is the repository root (see compose.yaml).
+.git
+.github
+.mypy_cache
+.pytest_cache
+.ruff_cache
+.venv
+.cursor
+__pycache__
+*.pyc
+var/
+build/
+dist/
+htmlcov/
+.coverage
+docs/
+apps/
+tests/
+fixtures/
+prompts/
+*.md
+!README.md
+!LICENSE

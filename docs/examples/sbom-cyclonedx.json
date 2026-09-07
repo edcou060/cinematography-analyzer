@@ -1,0 +1,323 @@
+{
+  "bomFormat": "CycloneDX",
+  "specVersion": "1.5",
+  "version": 1,
+  "serialNumber": "urn:uuid:aaaaaaaa-aaaa-4aaa-8aaa-aaaaaaaaaa13",
+  "metadata": {
+    "timestamp": "2026-09-07T00:00:00Z",
+    "tools": [
+      {
+        "name": "cine-analyzer-lockfile-sbom",
+        "version": "0.1.0"
+      }
+    ],
+    "component": {
+      "type": "library",
+      "name": "cine-analyzer",
+      "version": "0.1.0",
+      "licenses": [
+        {
+          "license": {
+            "id": "Apache-2.0"
+          }
+        }
+      ]
+    }
+  },
+  "components": [
+    {
+      "type": "library",
+      "name": "alembic",
+      "version": "1.19.2",
+      "bom-ref": "pkg:pypi/alembic@1.19.2",
+      "purl": "pkg:pypi/alembic@1.19.2"
+    },
+    {
+      "type": "library",
+      "name": "annotated-doc",
+      "version": "0.0.5",
+      "bom-ref": "pkg:pypi/annotated-doc@0.0.5",
+      "purl": "pkg:pypi/annotated-doc@0.0.5"
+    },
+    {
+      "type": "library",
+      "name": "annotated-types",
+      "version": "0.8.0",
+      "bom-ref": "pkg:pypi/annotated-types@0.8.0",
+      "purl": "pkg:pypi/annotated-types@0.8.0"
+    },
+    {
+      "type": "library",
+      "name": "anyio",
+      "version": "4.15.1",
+      "bom-ref": "pkg:pypi/anyio@4.15.1",
+      "purl": "pkg:pypi/anyio@4.15.1"
+    },
+    {
+      "type": "library",
+      "name": "asn1crypto",
+      "version": "1.5.1",
+      "bom-ref": "pkg:pypi/asn1crypto@1.5.1",
+      "purl": "pkg:pypi/asn1crypto@1.5.1"
+    },
+    {
+      "type": "library",
+      "name": "av",
+      "version": "15.1.0",
+      "bom-ref": "pkg:pypi/av@15.1.0",
+      "purl": "pkg:pypi/av@15.1.0"
+    },
+    {
+      "type": "library",
+      "name": "certifi",
+      "version": "2026.7.22",
+      "bom-ref": "pkg:pypi/certifi@2026.7.22",
+      "purl": "pkg:pypi/certifi@2026.7.22"
+    },
+    {
+      "type": "library",
+      "name": "click",
+      "version": "8.5.0",
+      "bom-ref": "pkg:pypi/click@8.5.0",
+      "purl": "pkg:pypi/click@8.5.0"
+    },
+    {
+      "type": "library",
+      "name": "cloudpickle",
+      "version": "3.1.2",
+      "bom-ref": "pkg:pypi/cloudpickle@3.1.2",
+      "purl": "pkg:pypi/cloudpickle@3.1.2"
+    },
+    {
+      "type": "library",
+      "name": "fastapi",
+      "version": "0.141.1",
+      "bom-ref": "pkg:pypi/fastapi@0.141.1",
+      "purl": "pkg:pypi/fastapi@0.141.1"
+    },
+    {
+      "type": "library",
+      "name": "greenlet",
+      "version": "3.5.5",
+      "bom-ref": "pkg:pypi/greenlet@3.5.5",
+      "purl": "pkg:pypi/greenlet@3.5.5"
+    },
+    {
+      "type": "library",
+      "name": "h11",
+      "version": "0.16.0",
+      "bom-ref": "pkg:pypi/h11@0.16.0",
+      "purl": "pkg:pypi/h11@0.16.0"
+    },
+    {
+      "type": "library",
+      "name": "httpcore",
+      "version": "1.0.9",
+      "bom-ref": "pkg:pypi/httpcore@1.0.9",
+      "purl": "pkg:pypi/httpcore@1.0.9"
+    },
+    {
+      "type": "library",
+      "name": "httpx",
+      "version": "0.28.1",
+      "bom-ref": "pkg:pypi/httpx@0.28.1",
+      "purl": "pkg:pypi/httpx@0.28.1"
+    },
+    {
+      "type": "library",
+      "name": "idna",
+      "version": "3.19",
+      "bom-ref": "pkg:pypi/idna@3.19",
+      "purl": "pkg:pypi/idna@3.19"
+    },
+    {
+      "type": "library",
+      "name": "joblib",
+      "version": "1.6.0",
+      "bom-ref": "pkg:pypi/joblib@1.6.0",
+      "purl": "pkg:pypi/joblib@1.6.0"
+    },
+    {
+      "type": "library",
+      "name": "mako",
+      "version": "1.4.1",
+      "bom-ref": "pkg:pypi/mako@1.4.1",
+      "purl": "pkg:pypi/mako@1.4.1"
+    },
+    {
+      "type": "library",
+      "name": "markupsafe",
+      "version": "3.0.3",
+      "bom-ref": "pkg:pypi/markupsafe@3.0.3",
+      "purl": "pkg:pypi/markupsafe@3.0.3"
+    },
+    {
+      "type": "library",
+      "name": "narwhals",
+      "version": "2.25.0",
+      "bom-ref": "pkg:pypi/narwhals@2.25.0",
+      "purl": "pkg:pypi/narwhals@2.25.0"
+    },
+    {
+      "type": "library",
+      "name": "numpy",
+      "version": "2.5.2",
+      "bom-ref": "pkg:pypi/numpy@2.5.2",
+      "purl": "pkg:pypi/numpy@2.5.2"
+    },
+    {
+      "type": "library",
+      "name": "opencv-python",
+      "version": "4.14.0.94",
+      "bom-ref": "pkg:pypi/opencv-python@4.14.0.94",
+      "purl": "pkg:pypi/opencv-python@4.14.0.94"
+    },
+    {
+      "type": "library",
+      "name": "pg8000",
+      "version": "1.31.5",
+      "bom-ref": "pkg:pypi/pg8000@1.31.5",
+      "purl": "pkg:pypi/pg8000@1.31.5"
+    },
+    {
+      "type": "library",
+      "name": "platformdirs",
+      "version": "4.11.7",
+      "bom-ref": "pkg:pypi/platformdirs@4.11.7",
+      "purl": "pkg:pypi/platformdirs@4.11.7"
+    },
+    {
+      "type": "library",
+      "name": "pydantic",
+      "version": "2.13.5",
+      "bom-ref": "pkg:pypi/pydantic@2.13.5",
+      "purl": "pkg:pypi/pydantic@2.13.5"
+    },
+    {
+      "type": "library",
+      "name": "pydantic-core",
+      "version": "2.46.5",
+      "bom-ref": "pkg:pypi/pydantic-core@2.46.5",
+      "purl": "pkg:pypi/pydantic-core@2.46.5"
+    },
+    {
+      "type": "library",
+      "name": "pydantic-settings",
+      "version": "2.15.0",
+      "bom-ref": "pkg:pypi/pydantic-settings@2.15.0",
+      "purl": "pkg:pypi/pydantic-settings@2.15.0"
+    },
+    {
+      "type": "library",
+      "name": "python-dateutil",
+      "version": "2.9.0.post0",
+      "bom-ref": "pkg:pypi/python-dateutil@2.9.0.post0",
+      "purl": "pkg:pypi/python-dateutil@2.9.0.post0"
+    },
+    {
+      "type": "library",
+      "name": "python-dotenv",
+      "version": "1.2.3",
+      "bom-ref": "pkg:pypi/python-dotenv@1.2.3",
+      "purl": "pkg:pypi/python-dotenv@1.2.3"
+    },
+    {
+      "type": "library",
+      "name": "python-multipart",
+      "version": "0.0.32",
+      "bom-ref": "pkg:pypi/python-multipart@0.0.32",
+      "purl": "pkg:pypi/python-multipart@0.0.32"
+    },
+    {
+      "type": "library",
+      "name": "scenedetect",
+      "version": "0.7.1",
+      "bom-ref": "pkg:pypi/scenedetect@0.7.1",
+      "purl": "pkg:pypi/scenedetect@0.7.1"
+    },
+    {
+      "type": "library",
+      "name": "scikit-learn",
+      "version": "1.9.0",
+      "bom-ref": "pkg:pypi/scikit-learn@1.9.0",
+      "purl": "pkg:pypi/scikit-learn@1.9.0"
+    },
+    {
+      "type": "library",
+      "name": "scipy",
+      "version": "1.18.1",
+      "bom-ref": "pkg:pypi/scipy@1.18.1",
+      "purl": "pkg:pypi/scipy@1.18.1"
+    },
+    {
+      "type": "library",
+      "name": "scramp",
+      "version": "1.4.17",
+      "bom-ref": "pkg:pypi/scramp@1.4.17",
+      "purl": "pkg:pypi/scramp@1.4.17"
+    },
+    {
+      "type": "library",
+      "name": "six",
+      "version": "1.17.0",
+      "bom-ref": "pkg:pypi/six@1.17.0",
+      "purl": "pkg:pypi/six@1.17.0"
+    },
+    {
+      "type": "library",
+      "name": "sqlalchemy",
+      "version": "2.0.52",
+      "bom-ref": "pkg:pypi/sqlalchemy@2.0.52",
+      "purl": "pkg:pypi/sqlalchemy@2.0.52"
+    },
+    {
+      "type": "library",
+      "name": "starlette",
+      "version": "1.6.0",
+      "bom-ref": "pkg:pypi/starlette@1.6.0",
+      "purl": "pkg:pypi/starlette@1.6.0"
+    },
+    {
+      "type": "library",
+      "name": "structlog",
+      "version": "25.5.0",
+      "bom-ref": "pkg:pypi/structlog@25.5.0",
+      "purl": "pkg:pypi/structlog@25.5.0"
+    },
+    {
+      "type": "library",
+      "name": "threadpoolctl",
+      "version": "3.6.0",
+      "bom-ref": "pkg:pypi/threadpoolctl@3.6.0",
+      "purl": "pkg:pypi/threadpoolctl@3.6.0"
+    },
+    {
+      "type": "library",
+      "name": "tqdm",
+      "version": "4.70.0",
+      "bom-ref": "pkg:pypi/tqdm@4.70.0",
+      "purl": "pkg:pypi/tqdm@4.70.0"
+    },
+    {
+      "type": "library",
+      "name": "typing-extensions",
+      "version": "4.16.0",
+      "bom-ref": "pkg:pypi/typing-extensions@4.16.0",
+      "purl": "pkg:pypi/typing-extensions@4.16.0"
+    },
+    {
+      "type": "library",
+      "name": "typing-inspection",
+      "version": "0.4.4",
+      "bom-ref": "pkg:pypi/typing-inspection@0.4.4",
+      "purl": "pkg:pypi/typing-inspection@0.4.4"
+    },
+    {
+      "type": "library",
+      "name": "uvicorn",
+      "version": "0.52.4",
+      "bom-ref": "pkg:pypi/uvicorn@0.52.4",
+      "purl": "pkg:pypi/uvicorn@0.52.4"
+    }
+  ]
+}

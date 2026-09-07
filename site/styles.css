@@ -1,0 +1,253 @@
+:root {
+  --bg: #0b0a09;
+  --paper: #141210;
+  --ink: #efe8dc;
+  --muted: #9c9488;
+  --line: #2a2622;
+  --amber: #d06a2a;
+  --teal: #3aa394;
+  --gold: #c9a227;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--ink);
+  font: 16px/1.55 "Iowan Old Style", "Palatino Linotype", Palatino, Georgia, serif;
+}
+
+code,
+.mono,
+pre {
+  font-family: ui-monospace, "SF Mono", Menlo, Consolas, monospace;
+}
+
+a {
+  color: var(--teal);
+}
+
+a:hover {
+  color: var(--ink);
+}
+
+.skip {
+  position: absolute;
+  left: -999px;
+}
+
+.skip:focus {
+  left: 1rem;
+  top: 1rem;
+  background: var(--paper);
+  padding: 0.4rem 0.7rem;
+}
+
+header,
+main,
+footer {
+  width: min(1040px, calc(100% - 2.4rem));
+  margin-inline: auto;
+}
+
+header {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 1rem;
+  padding: 1.4rem 0 1.1rem;
+  border-bottom: 1px solid var(--line);
+}
+
+.mark {
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  font-size: 0.72rem;
+  color: var(--muted);
+}
+
+nav {
+  display: flex;
+  gap: 1.1rem;
+  font-size: 0.95rem;
+}
+
+.hero {
+  padding: 3.2rem 0 2.4rem;
+}
+
+.hero p.kicker {
+  margin: 0 0 0.8rem;
+  color: var(--amber);
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  font-size: 0.72rem;
+  font-family: ui-monospace, "SF Mono", Menlo, Consolas, monospace;
+}
+
+h1 {
+  margin: 0 0 1rem;
+  font-size: clamp(2rem, 5vw, 3.4rem);
+  line-height: 1.12;
+  font-weight: 600;
+}
+
+.lede {
+  max-width: 42rem;
+  font-size: 1.15rem;
+  color: var(--muted);
+}
+
+.actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.7rem;
+  margin-top: 1.6rem;
+}
+
+.btn {
+  display: inline-block;
+  padding: 0.55rem 0.9rem;
+  border: 1px solid var(--line);
+  text-decoration: none;
+  color: var(--ink);
+  background: var(--paper);
+}
+
+.btn.primary {
+  background: var(--amber);
+  border-color: var(--amber);
+  color: #140c07;
+}
+
+.notice {
+  border: 1px solid var(--gold);
+  color: #e6d7a8;
+  padding: 0.8rem 1rem;
+  margin: 0 0 2.4rem;
+  font-size: 0.95rem;
+}
+
+h2 {
+  margin: 2.4rem 0 0.8rem;
+  font-size: 1.45rem;
+}
+
+.kinds,
+.bench,
+.arch {
+  display: grid;
+  gap: 0.8rem;
+}
+
+.kinds {
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+}
+
+.card {
+  background: var(--paper);
+  border: 1px solid var(--line);
+  padding: 1rem 1.05rem;
+}
+
+.card h3 {
+  margin: 0 0 0.4rem;
+  font-size: 1rem;
+}
+
+.card p {
+  margin: 0;
+  color: var(--muted);
+  font-size: 0.95rem;
+}
+
+figure {
+  margin: 1.2rem 0;
+  background: var(--paper);
+  border: 1px solid var(--line);
+  padding: 0.9rem;
+}
+
+figure img {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+figcaption {
+  margin-top: 0.55rem;
+  color: var(--muted);
+  font-size: 0.88rem;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.92rem;
+  font-family: ui-monospace, "SF Mono", Menlo, Consolas, monospace;
+}
+
+th,
+td {
+  text-align: left;
+  padding: 0.45rem 0.5rem;
+  border-bottom: 1px solid var(--line);
+}
+
+td.num,
+th.num {
+  text-align: right;
+}
+
+.chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+  margin: 0.8rem 0 1rem;
+}
+
+.chip {
+  font-family: ui-monospace, "SF Mono", Menlo, Consolas, monospace;
+  font-size: 0.75rem;
+  padding: 0.25rem 0.45rem;
+  border: 1px solid var(--line);
+}
+
+.chip.ok {
+  border-color: var(--teal);
+  color: var(--teal);
+}
+
+.chip.off {
+  border-color: var(--gold);
+  color: var(--gold);
+}
+
+pre {
+  overflow: auto;
+  background: var(--paper);
+  border: 1px solid var(--line);
+  padding: 0.9rem;
+  font-size: 0.82rem;
+}
+
+footer {
+  padding: 2.2rem 0 2.6rem;
+  color: var(--muted);
+  font-size: 0.9rem;
+  border-top: 1px solid var(--line);
+  margin-top: 2.4rem;
+}
+
+.hash {
+  word-break: break-all;
+  font-size: 0.78rem;
+  color: var(--muted);
+}

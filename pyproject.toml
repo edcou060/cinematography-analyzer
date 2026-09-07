@@ -1,0 +1,339 @@
+[project]
+name = "cine-analyzer"
+description = "Reproducible cinematography measurement with traceable evidence."
+readme = "README.md"
+requires-python = ">=3.12,<3.13"
+license = "Apache-2.0"
+license-files = ["LICENSE"]
+authors = [{ name = "Edgar Coutiño Ocampo", email = "edcou060@gmail.com" }]
+keywords = ["video-analysis", "cinematography", "reproducibility"]
+classifiers = [
+  "Development Status :: 3 - Alpha",
+  "Intended Audience :: Developers",
+  "Programming Language :: Python :: 3.12",
+  "Topic :: Multimedia :: Video",
+]
+dynamic = ["version"]
+
+# Base installation. Phase 09 adds httpx for the typed dashboard HTTP client
+# (ADR-0020). Streamlit/Plotly stay in the dashboard extra so workers do not
+# install a UI stack. Celery/Redis stay in the celery extra (ADR-0021).
+dependencies = [
+  "alembic>=1.14,<2",
+  "av>=13,<16",
+  "fastapi>=0.115,<1",
+  "greenlet>=3,<4",
+  "httpx>=0.27,<1",
+  "numpy>=2.0,<3",
+  "opencv-python>=4.10,<5",
+  "pg8000>=1.31,<2",
+  "pydantic>=2.9,<3",
+  "pydantic-settings>=2.5,<3",
+  "python-multipart>=0.0.12,<1",
+  "scenedetect>=0.6.6,<0.8",
+  "scikit-learn>=1.5,<2",
+  "sqlalchemy>=2.0.36,<3",
+  "structlog>=24.4,<26",
+  "uvicorn>=0.32,<1",
+]
+
+[project.scripts]
+cine-analyzer = "cine_analyzer.cli.main:main"
+
+[dependency-groups]
+dev = [
+  "hypothesis>=6.112,<7",
+  "mypy>=1.11,<2",
+  "pytest>=8.3,<9",
+  "pytest-cov>=5,<8",
+  "ruff>=0.6,<1",
+]
+dashboard = [
+  "plotly>=5.24,<7",
+  "streamlit>=1.44,<2",
+]
+celery = [
+  "celery[redis]>=5.4,<6",
+]
+
+[build-system]
+requires = ["hatchling>=1.27"]
+build-backend = "hatchling.build"
+
+[tool.hatch.version]
+path = "src/cine_analyzer/__init__.py"
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/cine_analyzer"]
+
+# ---------------------------------------------------------------------------
+# Lint and format
+# ---------------------------------------------------------------------------
+[tool.ruff]
+line-length = 100
+target-version = "py312"
+src = ["src", "tests", "apps"]
+
+[tool.ruff.lint]
+select = [
+  "A",    # builtin shadowing
+  "ANN",  # missing annotations
+  "ARG",  # unused arguments
+  "B",    # bugbear
+  "BLE",  # blind except
+  "C4",   # comprehensions
+  "DTZ",  # naive datetimes
+  "E",    # pycodestyle errors
+  "EM",   # exception message hygiene
+  "ERA",  # commented-out code
+  "F",    # pyflakes
+  "FBT",  # boolean trap
+  "G",    # logging format
+  "I",    # import sorting
+  "INP",  # implicit namespace packages
+  "ISC",  # implicit string concat
+  "LOG",  # logging misuse
+  "N",    # pep8 naming
+  "PERF", # obvious performance traps
+  "PIE",
+  "PL",   # pylint subset
+  "PT",   # pytest style
+  "PTH",  # pathlib over os.path
+  "RET",
+  "RSE",
+  "RUF",
+  "S",    # bandit
+  "SIM",
+  "SLF",  # private member access
+  "T20",  # no print in library or service code
+  "TC",   # typing-only imports
+  "TID",  # banned relative imports
+  "TRY",  # exception antipatterns
+  "UP",   # pyupgrade
+  "W",    # pycodestyle warnings
+]
+# ISC001 is the only suppression: it contradicts the Ruff formatter's own output.
+ignore = ["ISC001"]
+
+[tool.ruff.lint.flake8-tidy-imports]
+ban-relative-imports = "all"
+
+[tool.ruff.lint.per-file-ignores]
+# Tests assert (S101), compare against literals (PLR2004), spawn the CLI as a
+# subprocess with a fixed argv (S603/S607), raise throwaway exceptions inline to
+# provoke a failure path (EM101/TRY003/TRY301), and are collected by importlib
+# rather than as a package (INP001).
+"apps/**/*.py" = ["INP001", "PLR0911", "PLR0913", "PLR0915"]
+"tests/**/*.py" = [
+  "ARG001",
+  "ARG002",
+  "ARG005",
+  "BLE001",
+  "EM101",
+  "INP001",
+  "PLR0911",
+  "PLR0913",
+  "PLR0915",
+  "PLC0415",
+  "PLR2004",
+  "PT011",
+  "PT017",
+  "PT018",
+  "S101",
+  "S108",
+  "S311",
+  "S603",
+  "S607",
+  "SLF",
+  "TRY003",
+  "TRY301",
+]
+# SafeError/AdapterError codes are stable literals by design.
+"src/cine_analyzer/application/**/*.py" = ["EM101", "PLR0913", "PLR0915", "PLR0917", "TRY003"]
+"src/cine_analyzer/application/benchmark.py" = [
+  "ANN401",
+  "EM101",
+  "PLC0415",
+  "PLR0913",
+  "S404",
+  "S603",
+  "S607",
+  "TRY003",
+]
+"src/cine_analyzer/dashboard/**/*.py" = ["EM101", "PLR0913", "PLR2004", "TRY003"]
+"src/cine_analyzer/cli/main.py" = ["ANN401", "EM101", "PLC0415", "PLR0911", "PLR0912", "PLR0913", "TRY003"]
+"src/cine_analyzer/application/stage_execute.py" = ["EM101", "PLR0911", "TRY003", "TRY300"]
+"src/cine_analyzer/worker/celery_app.py" = ["ANN401", "PLC0415", "SLF001"]
+"src/cine_analyzer/worker/celery_worker.py" = ["EM101", "PLC0415", "TRY003"]
+"src/cine_analyzer/worker/commands.py" = ["EM101", "PIE810", "PLR2004", "TRY003", "TRY004"]
+"src/cine_analyzer/worker/dispatch.py" = [
+  "EM101",
+  "PLC0415",
+  "PLR0911",
+  "PLR0913",
+  "PLW0603",
+  "TRY003",
+]
+"src/cine_analyzer/worker/enqueue.py" = ["EM101", "PLC0415", "TRY003"]
+"src/cine_analyzer/worker/lifecycle.py" = ["EM101", "PLC0415", "PLW0603", "TRY003"]
+"src/cine_analyzer/worker/tasks.py" = ["ANN401", "PLC0415"]
+"src/cine_analyzer/ports/control.py" = ["PLR0913"]
+"src/cine_analyzer/worker/**/*.py" = ["EM101", "PLC0415", "PLR0911", "PLR0913", "PLR0915", "PLR0917", "S311", "TRY003"]
+"src/cine_analyzer/observability/**/*.py" = ["EM101", "TRY003"]
+"src/cine_analyzer/adapters/media/childproc.py" = ["EM101", "PLC0415", "TRY003"]
+"src/cine_analyzer/logging_setup.py" = ["PLR2004"]
+"src/cine_analyzer/api/**/*.py" = ["EM101", "PLR0911", "PLR0913", "PLR0915", "PLR2004", "TRY003"]
+"src/cine_analyzer/adapters/persistence/postgres.py" = [
+  "EM101",
+  "PLR0911",
+  "PLR0913",
+  "PLR0915",
+  "TRY003",
+]
+"src/cine_analyzer/adapters/critic/**/*.py" = ["EM101", "PLR2004", "TRY003"]
+"alembic/**/*.py" = ["INP001", "PLC0415"]
+# ffprobe invokes a resolved binary with an argv list; probe parsers are branchy.
+"src/cine_analyzer/adapters/**/*.py" = ["EM101", "TRY003"]
+"src/cine_analyzer/adapters/media/ffprobe.py" = [
+  "EM101",
+  "PLR0911",
+  "S404",
+  "S603",
+  "TRY003",
+]
+"src/cine_analyzer/adapters/media/ffmpeg_audio.py" = [
+  "EM101",
+  "S404",
+  "S603",
+  "TRY003",
+]
+# Lazy library imports keep package import free of OpenCV/PyAV; the extract
+# helper takes the decode cursor plus rotation.
+"src/cine_analyzer/adapters/media/pyav_extract.py" = ["ANN401", "EM101", "PLC0415", "PLR0913", "TRY003"]
+"src/cine_analyzer/adapters/vision/pyscenedetect.py" = ["EM101", "PLC0415", "TRY003"]
+# Lazy OpenCV/sklearn imports keep package import free of native libraries.
+"src/cine_analyzer/adapters/vision/opencv_chromatics.py" = [
+  "ANN401",
+  "EM101",
+  "PLC0415",
+  "TRY003",
+]
+"src/cine_analyzer/adapters/vision/opencv_motion.py" = [
+  "ANN401",
+  "EM101",
+  "PLC0415",
+  "TRY003",
+]
+"src/cine_analyzer/adapters/vision/opencv_overlay.py" = [
+  "ANN401",
+  "EM101",
+  "PLC0415",
+  "PLR0913",
+  "PLR0917",
+  "TRY003",
+]
+"src/cine_analyzer/adapters/vision/fake_subject.py" = [
+  "ANN401",
+  "EM101",
+  "PLC0415",
+  "TRY003",
+]
+"scripts/**/*.py" = ["INP001", "PLR0913", "S404", "S603"]
+
+[tool.ruff.format]
+docstring-code-format = true
+
+# ---------------------------------------------------------------------------
+# Types
+# ---------------------------------------------------------------------------
+# Strict mode with no relaxations. If a rule is ever disabled it is recorded
+# here with the reason; an empty list is the current, deliberate state.
+[tool.mypy]
+python_version = "3.12"
+strict = true
+warn_unreachable = true
+enable_error_code = [
+  "ignore-without-code",
+  "possibly-undefined",
+  "redundant-expr",
+  "truthy-bool",
+]
+plugins = ["pydantic.mypy"]
+
+[tool.pydantic-mypy]
+init_forbid_extra = true
+init_typed = true
+warn_required_dynamic_aliases = true
+
+# Native wheels ship no complete type stubs. Domain code never imports these
+# modules; only adapters do, behind ports.
+[[tool.mypy.overrides]]
+module = [
+  "av",
+  "av.*",
+  "cv2",
+  "plotly",
+  "plotly.*",
+  "scenedetect",
+  "scenedetect.*",
+  "sklearn",
+  "sklearn.*",
+  "streamlit",
+  "streamlit.*",
+  "celery",
+  "celery.*",
+  "kombu",
+  "kombu.*",
+  "redis",
+  "redis.*",
+  "billiard",
+  "billiard.*",
+  "amqp",
+  "vine",
+]
+ignore_missing_imports = true
+
+# ---------------------------------------------------------------------------
+# Tests and coverage
+# ---------------------------------------------------------------------------
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+addopts = [
+  "-ra",
+  "--strict-config",
+  "--strict-markers",
+  "--import-mode=importlib",
+  "--cov",
+  "--cov-report=term-missing",
+]
+filterwarnings = [
+  "error",
+  # Starlette 1.6 TestClient still supports httpx but emits this warning until
+  # httpx2 is the default client. Tests use FastAPI's TestClient, not httpx2.
+  "ignore:Using `httpx` with `starlette.testclient` is deprecated:starlette.exceptions.StarletteDeprecationWarning",
+  "ignore:You should not use the 'timeout' argument with the TestClient:starlette.exceptions.StarletteDeprecationWarning",
+  # Starlette 1.6 still types the portal factory against anyio.abc.BlockingPortal.
+  "ignore:The anyio.abc.BlockingPortal alias is deprecated:DeprecationWarning",
+]
+xfail_strict = true
+markers = [
+  "live_critic: optional live OpenAI-compatible critic (not default CI)",
+]
+
+[tool.coverage.run]
+source = ["cine_analyzer"]
+branch = true
+# __main__.py is exercised by test_cli.py::test_python_dash_m_entry_point_reports_the_same_version,
+# which runs it in a subprocess that this coverage run does not follow.
+omit = ["*/cine_analyzer/__main__.py"]
+
+[tool.coverage.paths]
+source = ["src/cine_analyzer", "*/site-packages/cine_analyzer"]
+
+[tool.coverage.report]
+show_missing = true
+# The full suite (`make test` / `uv run pytest -q`) must stay at 100%.
+# Phase guides also invoke pytest on a subdirectory; fail_under lives on the
+# Makefile `test` target so those narrower commands are not punished for
+# modules they were never asked to run.
+exclude_also = ["if TYPE_CHECKING:", "raise NotImplementedError"]

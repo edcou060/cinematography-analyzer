@@ -1,0 +1,94 @@
+{
+  "$defs": {
+    "SamplePurpose": {
+      "description": "Why a sample was requested. A sample may serve more than one purpose.",
+      "enum": [
+        "CHROMATIC",
+        "COMPOSITION",
+        "MOTION",
+        "EVIDENCE"
+      ],
+      "title": "SamplePurpose",
+      "type": "string"
+    },
+    "SampleRequest": {
+      "additionalProperties": false,
+      "description": "One planned decode. The plan names the timestamp; it does not carry pixels.",
+      "properties": {
+        "purposes": {
+          "items": {
+            "$ref": "#/$defs/SamplePurpose"
+          },
+          "minItems": 1,
+          "title": "Purposes",
+          "type": "array"
+        },
+        "requested_ms": {
+          "description": "Requested media timestamp, integer milliseconds.",
+          "minimum": 0,
+          "title": "Requested Ms",
+          "type": "integer"
+        },
+        "sample_id": {
+          "format": "uuid",
+          "title": "Sample Id",
+          "type": "string"
+        },
+        "shot_id": {
+          "format": "uuid",
+          "title": "Shot Id",
+          "type": "string"
+        }
+      },
+      "required": [
+        "sample_id",
+        "shot_id",
+        "requested_ms",
+        "purposes"
+      ],
+      "title": "SampleRequest",
+      "type": "object"
+    }
+  },
+  "additionalProperties": false,
+  "description": "Deterministic list of samples an analysis will decode.",
+  "properties": {
+    "analysis_id": {
+      "format": "uuid",
+      "title": "Analysis Id",
+      "type": "string"
+    },
+    "method_version": {
+      "maxLength": 64,
+      "minLength": 1,
+      "title": "Method Version",
+      "type": "string"
+    },
+    "requests": {
+      "items": {
+        "$ref": "#/$defs/SampleRequest"
+      },
+      "title": "Requests",
+      "type": "array"
+    },
+    "schema_version": {
+      "description": "Sampling-plan schema version.",
+      "title": "Schema Version",
+      "type": "string"
+    },
+    "video_id": {
+      "format": "uuid",
+      "title": "Video Id",
+      "type": "string"
+    }
+  },
+  "required": [
+    "schema_version",
+    "analysis_id",
+    "video_id",
+    "method_version",
+    "requests"
+  ],
+  "title": "SamplingPlan",
+  "type": "object"
+}

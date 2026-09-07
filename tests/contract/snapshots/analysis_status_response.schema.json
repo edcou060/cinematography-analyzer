@@ -1,0 +1,138 @@
+{
+  "$defs": {
+    "AnalysisState": {
+      "description": "Overall analysis state. Progress is derived from stages, not from log text.",
+      "enum": [
+        "QUEUED",
+        "RUNNING",
+        "CANCEL_REQUESTED",
+        "CANCELED",
+        "SUCCEEDED",
+        "PARTIAL",
+        "FAILED"
+      ],
+      "title": "AnalysisState",
+      "type": "string"
+    },
+    "SafeError": {
+      "additionalProperties": false,
+      "description": "The only error shape exposed to clients. No paths, no stderr, no frames.",
+      "properties": {
+        "code": {
+          "maxLength": 64,
+          "minLength": 1,
+          "title": "Code",
+          "type": "string"
+        },
+        "details": {
+          "default": [],
+          "items": {
+            "additionalProperties": {
+              "type": "string"
+            },
+            "type": "object"
+          },
+          "title": "Details",
+          "type": "array"
+        },
+        "message": {
+          "maxLength": 512,
+          "minLength": 1,
+          "title": "Message",
+          "type": "string"
+        },
+        "request_id": {
+          "maxLength": 128,
+          "minLength": 1,
+          "title": "Request Id",
+          "type": "string"
+        },
+        "retryable": {
+          "title": "Retryable",
+          "type": "boolean"
+        },
+        "stage": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Stage"
+        }
+      },
+      "required": [
+        "code",
+        "message",
+        "retryable",
+        "request_id"
+      ],
+      "title": "SafeError",
+      "type": "object"
+    }
+  },
+  "additionalProperties": false,
+  "description": "Client status view. Reads from authoritative state, not from a broker.",
+  "properties": {
+    "active_stages": {
+      "items": {
+        "type": "string"
+      },
+      "title": "Active Stages",
+      "type": "array"
+    },
+    "analysis_id": {
+      "format": "uuid",
+      "title": "Analysis Id",
+      "type": "string"
+    },
+    "completed_stages": {
+      "items": {
+        "type": "string"
+      },
+      "title": "Completed Stages",
+      "type": "array"
+    },
+    "error": {
+      "anyOf": [
+        {
+          "$ref": "#/$defs/SafeError"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null
+    },
+    "progress": {
+      "description": "Ratio in [0, 1]. Percentages are a presentation concern.",
+      "maximum": 1.0,
+      "minimum": 0.0,
+      "title": "Progress",
+      "type": "number"
+    },
+    "state": {
+      "$ref": "#/$defs/AnalysisState"
+    },
+    "unavailable_stages": {
+      "items": {
+        "type": "string"
+      },
+      "title": "Unavailable Stages",
+      "type": "array"
+    }
+  },
+  "required": [
+    "analysis_id",
+    "state",
+    "progress",
+    "completed_stages",
+    "active_stages",
+    "unavailable_stages"
+  ],
+  "title": "AnalysisStatusResponse",
+  "type": "object"
+}

@@ -1,0 +1,199 @@
+# Automated Cinematography Analyzer - ignore rules
+#
+# Rationale: source media, derived frames, model weights, generated reports,
+# local databases, secrets, caches, and profiler output are all reproducible or
+# sensitive. None of them belong in version control. See docs/product-contract.md
+# for the input contract and docs/adr/ADR-0008-release-model-and-license.md for
+# the release posture that makes committed media a licensing hazard.
+
+# ---------------------------------------------------------------------------
+# Source and intermediate media
+# Video and audio containers are never committed, at any path.
+# ---------------------------------------------------------------------------
+*.mp4
+*.m4v
+*.mov
+*.mkv
+*.webm
+*.avi
+*.wmv
+*.flv
+*.mpg
+*.mpeg
+*.m2ts
+*.mts
+*.mxf
+*.ogv
+*.3gp
+# .ts here means MPEG transport stream. This repository has no TypeScript.
+*.ts
+*.wav
+*.aiff
+*.aif
+*.flac
+*.mp3
+*.m4a
+*.aac
+*.ogg
+*.opus
+
+# ---------------------------------------------------------------------------
+# Media, artifact, and working directories
+# Extracted frames, proxies, keyframes, quarantined uploads, and reports.
+# ---------------------------------------------------------------------------
+/data/
+/media/
+/uploads/
+/quarantine/
+/artifacts/
+/frames/
+/proxies/
+/keyframes/
+/thumbnails/
+/reports/
+/storage/
+/var/
+/tmp/
+/.tmp/
+/benchmarks/media/
+/demo/media/
+/fixtures/media/
+/tests/fixtures/media/
+
+# ---------------------------------------------------------------------------
+# Model weights and compiled inference artifacts
+# ---------------------------------------------------------------------------
+/models/
+/weights/
+/checkpoints/
+*.pt
+*.pth
+*.ckpt
+*.onnx
+*.engine
+*.plan
+*.trt
+*.safetensors
+*.gguf
+*.ggml
+*.tflite
+*.mlmodel
+*.mlpackage
+*.bin
+*.npz
+
+# ---------------------------------------------------------------------------
+# Generated reports and analysis output
+# ---------------------------------------------------------------------------
+*.report.json
+*.analysis.json
+/out/
+/output/
+
+# ---------------------------------------------------------------------------
+# Databases and dumps
+# PostgreSQL is authoritative at runtime, never in the repository.
+# ---------------------------------------------------------------------------
+*.db
+*.db-journal
+*.db-wal
+*.db-shm
+*.sqlite
+*.sqlite3
+*.dump
+*.sql.gz
+*.rdb
+/pgdata/
+/postgres-data/
+/redis-data/
+
+# ---------------------------------------------------------------------------
+# Secrets, credentials, and local settings
+# ---------------------------------------------------------------------------
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+*.crt
+*.cer
+*.p12
+*.pfx
+*.keystore
+*.jks
+.netrc
+.npmrc
+/secrets/
+credentials.json
+service-account*.json
+*.secret
+
+# ---------------------------------------------------------------------------
+# Python environments, build output, and tool caches
+# ---------------------------------------------------------------------------
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.venv/
+venv/
+env/
+/build/
+/dist/
+*.egg-info/
+.eggs/
+.installed.cfg
+.mypy_cache/
+.dmypy.json
+dmypy.json
+.ruff_cache/
+.pytest_cache/
+.hypothesis/
+.tox/
+.nox/
+.cache/
+.ipynb_checkpoints/
+.coverage
+.coverage.*
+coverage.xml
+/htmlcov/
+node_modules/
+
+# ---------------------------------------------------------------------------
+# Profiler, tracer, and benchmark output
+# ---------------------------------------------------------------------------
+/build/
+/profiles/
+/benchmarks/results/
+*.prof
+*.pstats
+*.lprof
+*.hprof
+*.memray
+memray-*.bin
+*.speedscope.json
+*.nsys-rep
+*.qdrep
+*.qdstrm
+*.nvvp
+*.ncu-rep
+perf.data
+perf.data.old
+callgrind.out.*
+*.trace
+
+# ---------------------------------------------------------------------------
+# Editor and operating system noise
+# ---------------------------------------------------------------------------
+.DS_Store
+.AppleDouble
+.Spotlight-V100
+.Trashes
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+.idea/
+*.iml
+*.swp
+*.swo
+*~

@@ -1,0 +1,300 @@
+{
+  "$defs": {
+    "ArtifactRef": {
+      "additionalProperties": false,
+      "description": "Content-addressed pointer to an immutable blob.",
+      "properties": {
+        "artifact_id": {
+          "format": "uuid",
+          "title": "Artifact Id",
+          "type": "string"
+        },
+        "kind": {
+          "maxLength": 64,
+          "minLength": 1,
+          "title": "Kind",
+          "type": "string"
+        },
+        "media_type": {
+          "maxLength": 128,
+          "minLength": 1,
+          "title": "Media Type",
+          "type": "string"
+        },
+        "schema_version": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Schema Version"
+        },
+        "sha256": {
+          "description": "Lowercase hex SHA-256 digest.",
+          "pattern": "^[0-9a-f]{64}$",
+          "title": "Sha256",
+          "type": "string"
+        },
+        "size_bytes": {
+          "description": "Artifact size in bytes, not a media duration.",
+          "minimum": 0,
+          "title": "Size Bytes",
+          "type": "integer"
+        }
+      },
+      "required": [
+        "artifact_id",
+        "kind",
+        "media_type",
+        "sha256",
+        "size_bytes"
+      ],
+      "title": "ArtifactRef",
+      "type": "object"
+    },
+    "SamplePurpose": {
+      "description": "Why a sample was requested. A sample may serve more than one purpose.",
+      "enum": [
+        "CHROMATIC",
+        "COMPOSITION",
+        "MOTION",
+        "EVIDENCE"
+      ],
+      "title": "SamplePurpose",
+      "type": "string"
+    },
+    "SampleRequest": {
+      "additionalProperties": false,
+      "description": "One planned decode. The plan names the timestamp; it does not carry pixels.",
+      "properties": {
+        "purposes": {
+          "items": {
+            "$ref": "#/$defs/SamplePurpose"
+          },
+          "minItems": 1,
+          "title": "Purposes",
+          "type": "array"
+        },
+        "requested_ms": {
+          "description": "Requested media timestamp, integer milliseconds.",
+          "minimum": 0,
+          "title": "Requested Ms",
+          "type": "integer"
+        },
+        "sample_id": {
+          "format": "uuid",
+          "title": "Sample Id",
+          "type": "string"
+        },
+        "shot_id": {
+          "format": "uuid",
+          "title": "Shot Id",
+          "type": "string"
+        }
+      },
+      "required": [
+        "sample_id",
+        "shot_id",
+        "requested_ms",
+        "purposes"
+      ],
+      "title": "SampleRequest",
+      "type": "object"
+    },
+    "SampleResult": {
+      "additionalProperties": false,
+      "description": "One extracted sample, or an explicit unavailable outcome.",
+      "properties": {
+        "decoded_ms": {
+          "anyOf": [
+            {
+              "description": "Actual decoded media timestamp, integer milliseconds.",
+              "minimum": 0,
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Decoded Ms"
+        },
+        "frame_index": {
+          "anyOf": [
+            {
+              "minimum": 0,
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Frame Index"
+        },
+        "image": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/ArtifactRef"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null
+        },
+        "purposes": {
+          "items": {
+            "$ref": "#/$defs/SamplePurpose"
+          },
+          "minItems": 1,
+          "title": "Purposes",
+          "type": "array"
+        },
+        "requested_ms": {
+          "description": "Requested media timestamp, integer milliseconds.",
+          "minimum": 0,
+          "title": "Requested Ms",
+          "type": "integer"
+        },
+        "sample_id": {
+          "format": "uuid",
+          "title": "Sample Id",
+          "type": "string"
+        },
+        "shot_id": {
+          "format": "uuid",
+          "title": "Shot Id",
+          "type": "string"
+        },
+        "status": {
+          "$ref": "#/$defs/SampleStatus"
+        },
+        "unavailable_reason": {
+          "anyOf": [
+            {
+              "maxLength": 256,
+              "minLength": 1,
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Unavailable Reason"
+        }
+      },
+      "required": [
+        "sample_id",
+        "shot_id",
+        "requested_ms",
+        "purposes",
+        "status"
+      ],
+      "title": "SampleResult",
+      "type": "object"
+    },
+    "SampleStatus": {
+      "description": "Outcome of one extract. Cross-shot substitution is never silent success.",
+      "enum": [
+        "DECODED",
+        "UNAVAILABLE"
+      ],
+      "title": "SampleStatus",
+      "type": "string"
+    },
+    "SamplingPlan": {
+      "additionalProperties": false,
+      "description": "Deterministic list of samples an analysis will decode.",
+      "properties": {
+        "analysis_id": {
+          "format": "uuid",
+          "title": "Analysis Id",
+          "type": "string"
+        },
+        "method_version": {
+          "maxLength": 64,
+          "minLength": 1,
+          "title": "Method Version",
+          "type": "string"
+        },
+        "requests": {
+          "items": {
+            "$ref": "#/$defs/SampleRequest"
+          },
+          "title": "Requests",
+          "type": "array"
+        },
+        "schema_version": {
+          "description": "Sampling-plan schema version.",
+          "title": "Schema Version",
+          "type": "string"
+        },
+        "video_id": {
+          "format": "uuid",
+          "title": "Video Id",
+          "type": "string"
+        }
+      },
+      "required": [
+        "schema_version",
+        "analysis_id",
+        "video_id",
+        "method_version",
+        "requests"
+      ],
+      "title": "SamplingPlan",
+      "type": "object"
+    }
+  },
+  "additionalProperties": false,
+  "description": "Plan plus per-request extract outcomes. Stage output, not a queue payload.",
+  "properties": {
+    "analysis_id": {
+      "format": "uuid",
+      "title": "Analysis Id",
+      "type": "string"
+    },
+    "method_version": {
+      "maxLength": 64,
+      "minLength": 1,
+      "title": "Method Version",
+      "type": "string"
+    },
+    "plan": {
+      "$ref": "#/$defs/SamplingPlan"
+    },
+    "results": {
+      "items": {
+        "$ref": "#/$defs/SampleResult"
+      },
+      "title": "Results",
+      "type": "array"
+    },
+    "schema_version": {
+      "description": "Sampling-manifest schema version.",
+      "title": "Schema Version",
+      "type": "string"
+    },
+    "video_id": {
+      "format": "uuid",
+      "title": "Video Id",
+      "type": "string"
+    }
+  },
+  "required": [
+    "schema_version",
+    "analysis_id",
+    "video_id",
+    "method_version",
+    "plan",
+    "results"
+  ],
+  "title": "SamplingManifest",
+  "type": "object"
+}

@@ -1,0 +1,3050 @@
+{
+  "components": {
+    "schemas": {
+      "AnalysisAccepted": {
+        "additionalProperties": false,
+        "description": "Asynchronous analysis creation. Poll status; do not assume completion.",
+        "properties": {
+          "analysis_id": {
+            "format": "uuid",
+            "title": "Analysis Id",
+            "type": "string"
+          },
+          "configuration_hash": {
+            "title": "Configuration Hash",
+            "type": "string"
+          },
+          "pipeline_version": {
+            "title": "Pipeline Version",
+            "type": "string"
+          },
+          "reused": {
+            "title": "Reused",
+            "type": "boolean"
+          },
+          "state": {
+            "$ref": "#/components/schemas/AnalysisState"
+          },
+          "video_id": {
+            "format": "uuid",
+            "title": "Video Id",
+            "type": "string"
+          }
+        },
+        "required": [
+          "analysis_id",
+          "video_id",
+          "configuration_hash",
+          "pipeline_version",
+          "reused",
+          "state"
+        ],
+        "title": "AnalysisAccepted",
+        "type": "object"
+      },
+      "AnalysisConfig": {
+        "additionalProperties": false,
+        "description": "The hashed analysis configuration. Environment endpoints never appear here.",
+        "properties": {
+          "audio": {
+            "$ref": "#/components/schemas/AudioConfig",
+            "default": {
+              "sample_rate_hz": 22050,
+              "window_ms": 1000
+            }
+          },
+          "chromatic": {
+            "$ref": "#/components/schemas/ChromaticConfig",
+            "default": {
+              "clusters": 5,
+              "delta_e_merge": 3.0,
+              "highlight_lstar": 80.0,
+              "kmeans_batch_size": 1024,
+              "kmeans_n_init": 3,
+              "letterbox_coverage": 0.92,
+              "letterbox_lstar_max": 8.0,
+              "lighting_key_rules": {
+                "high_median_lstar": 65.0,
+                "high_shadow_ratio": 0.1,
+                "high_spread_lstar": 45.0,
+                "low_median_lstar": 40.0,
+                "low_shadow_ratio": 0.4,
+                "low_spread_lstar": 45.0
+              },
+              "max_pixels_per_shot": 50000,
+              "min_swatch_proportion": 0.02,
+              "min_usable_pixel_ratio": 0.05,
+              "random_seed": 42,
+              "samples_per_shot": 3,
+              "shadow_lstar": 20.0,
+              "working_max_side": 640
+            }
+          },
+          "critic": {
+            "$ref": "#/components/schemas/CriticConfig",
+            "default": {
+              "enabled": false
+            }
+          },
+          "limits": {
+            "$ref": "#/components/schemas/LimitsConfig",
+            "default": {
+              "max_duration_ms": 1200000,
+              "max_height": 2160,
+              "max_upload_bytes": 1073741824,
+              "max_width": 4096
+            }
+          },
+          "motion": {
+            "$ref": "#/components/schemas/MotionConfig",
+            "default": {
+              "discontinuity_diag_per_s": 1.5,
+              "farneback": {
+                "iterations": 3,
+                "levels": 3,
+                "poly_n": 5,
+                "poly_sigma": 1.2,
+                "pyr_scale": 0.5,
+                "winsize": 15
+              },
+              "sample_fps": 6.0,
+              "working_max_side": 320
+            }
+          },
+          "pipeline_version": {
+            "default": "0.1.0",
+            "maxLength": 64,
+            "minLength": 1,
+            "title": "Pipeline Version",
+            "type": "string"
+          },
+          "schema_version": {
+            "default": "1.0",
+            "description": "Analysis-config schema version.",
+            "title": "Schema Version",
+            "type": "string"
+          },
+          "shots": {
+            "$ref": "#/components/schemas/ShotsConfig",
+            "default": {
+              "backend": "pyscenedetect",
+              "debug": false,
+              "detector": "adaptive",
+              "min_content_val": 15.0,
+              "min_shot_ms": 300,
+              "threshold": 3.0,
+              "working_width": 320
+            }
+          },
+          "spatial": {
+            "$ref": "#/components/schemas/SpatialConfig",
+            "default": {
+              "backend": "none",
+              "framing_rules": {
+                "close_up_height_max": 0.85,
+                "disagreement_fraction": 0.4,
+                "edge_truncation": 0.02,
+                "extreme_wide_height_max": 0.18,
+                "medium_height_max": 0.62,
+                "min_track_coverage": 0.4,
+                "version": "framing_rules_v1",
+                "wide_height_max": 0.38
+              },
+              "person_confidence": 0.35,
+              "primary_track_weights": {
+                "coverage": 0.45,
+                "median_area": 0.35,
+                "median_confidence": 0.2
+              },
+              "sample_fps": 2.0,
+              "thirds_sigma": 0.18,
+              "track_iou_min": 0.3
+            }
+          },
+          "tension": {
+            "$ref": "#/components/schemas/TensionConfig",
+            "default": {
+              "cut_reference": 3.0,
+              "cut_sigma_ms": 750,
+              "epsilon": 1e-06,
+              "hop_ms": 500,
+              "percentile_high": 90.0,
+              "percentile_low": 10.0,
+              "weights": {
+                "audio_activity": 0.3,
+                "cut_activity": 0.35,
+                "motion": 0.35
+              }
+            }
+          }
+        },
+        "title": "AnalysisConfig",
+        "type": "object"
+      },
+      "AnalysisCreateRequest": {
+        "additionalProperties": false,
+        "description": "Start or reuse an analysis for an existing video.",
+        "properties": {
+          "config": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/AnalysisConfig"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "video_id": {
+            "format": "uuid",
+            "title": "Video Id",
+            "type": "string"
+          }
+        },
+        "required": [
+          "video_id"
+        ],
+        "title": "AnalysisCreateRequest",
+        "type": "object"
+      },
+      "AnalysisReport": {
+        "additionalProperties": false,
+        "description": "The versioned document a client reads. Large series live behind artifact references.",
+        "properties": {
+          "analysis_id": {
+            "format": "uuid",
+            "title": "Analysis Id",
+            "type": "string"
+          },
+          "availability": {
+            "$ref": "#/components/schemas/ReportAvailability"
+          },
+          "configuration_hash": {
+            "description": "Lowercase hex SHA-256 digest.",
+            "pattern": "^[0-9a-f]{64}$",
+            "title": "Configuration Hash",
+            "type": "string"
+          },
+          "critique": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/Critique"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "generated_at": {
+            "format": "date-time",
+            "title": "Generated At",
+            "type": "string"
+          },
+          "pipeline_version": {
+            "maxLength": 64,
+            "minLength": 1,
+            "title": "Pipeline Version",
+            "type": "string"
+          },
+          "schema_version": {
+            "description": "Report schema version.",
+            "title": "Schema Version",
+            "type": "string"
+          },
+          "shots": {
+            "items": {
+              "$ref": "#/components/schemas/ShotAnalysis"
+            },
+            "minItems": 1,
+            "title": "Shots",
+            "type": "array"
+          },
+          "summary": {
+            "$ref": "#/components/schemas/VideoSummary"
+          },
+          "timeline_artifact": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/ArtifactRef"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "video": {
+            "$ref": "#/components/schemas/VideoMetadata"
+          }
+        },
+        "required": [
+          "schema_version",
+          "analysis_id",
+          "video",
+          "generated_at",
+          "pipeline_version",
+          "configuration_hash",
+          "availability",
+          "summary",
+          "shots"
+        ],
+        "title": "AnalysisReport",
+        "type": "object"
+      },
+      "AnalysisState": {
+        "description": "Overall analysis state. Progress is derived from stages, not from log text.",
+        "enum": [
+          "QUEUED",
+          "RUNNING",
+          "CANCEL_REQUESTED",
+          "CANCELED",
+          "SUCCEEDED",
+          "PARTIAL",
+          "FAILED"
+        ],
+        "title": "AnalysisState",
+        "type": "string"
+      },
+      "ArtifactRef": {
+        "additionalProperties": false,
+        "description": "Content-addressed pointer to an immutable blob.",
+        "properties": {
+          "artifact_id": {
+            "format": "uuid",
+            "title": "Artifact Id",
+            "type": "string"
+          },
+          "kind": {
+            "maxLength": 64,
+            "minLength": 1,
+            "title": "Kind",
+            "type": "string"
+          },
+          "media_type": {
+            "maxLength": 128,
+            "minLength": 1,
+            "title": "Media Type",
+            "type": "string"
+          },
+          "schema_version": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Schema Version"
+          },
+          "sha256": {
+            "description": "Lowercase hex SHA-256 digest.",
+            "pattern": "^[0-9a-f]{64}$",
+            "title": "Sha256",
+            "type": "string"
+          },
+          "size_bytes": {
+            "description": "Artifact size in bytes, not a media duration.",
+            "minimum": 0.0,
+            "title": "Size Bytes",
+            "type": "integer"
+          }
+        },
+        "required": [
+          "artifact_id",
+          "kind",
+          "media_type",
+          "sha256",
+          "size_bytes"
+        ],
+        "title": "ArtifactRef",
+        "type": "object"
+      },
+      "AudioConfig": {
+        "additionalProperties": false,
+        "description": "Audio resampling target and analysis window (ADR-0016).",
+        "properties": {
+          "sample_rate_hz": {
+            "description": "Target audio sample rate in hertz.",
+            "exclusiveMinimum": 0.0,
+            "title": "Sample Rate Hz",
+            "type": "integer"
+          },
+          "window_ms": {
+            "default": 1000,
+            "description": "Audio feature window, integer milliseconds.",
+            "maximum": 10000.0,
+            "minimum": 50.0,
+            "title": "Window Ms",
+            "type": "integer"
+          }
+        },
+        "required": [
+          "sample_rate_hz"
+        ],
+        "title": "AudioConfig",
+        "type": "object"
+      },
+      "AudioWindowValue": {
+        "additionalProperties": false,
+        "description": "Audio features over one timeline window. Absent audio is a measurement status, not zeros.",
+        "properties": {
+          "loudness_lufs_short_term": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Loudness Lufs Short Term"
+          },
+          "onset_strength": {
+            "minimum": 0.0,
+            "title": "Onset Strength",
+            "type": "number"
+          },
+          "rms_dbfs": {
+            "title": "Rms Dbfs",
+            "type": "number"
+          },
+          "spectral_flux": {
+            "minimum": 0.0,
+            "title": "Spectral Flux",
+            "type": "number"
+          }
+        },
+        "required": [
+          "rms_dbfs",
+          "onset_strength",
+          "spectral_flux"
+        ],
+        "title": "AudioWindowValue",
+        "type": "object"
+      },
+      "Body_upload_video_v1_videos_post": {
+        "properties": {
+          "file": {
+            "contentMediaType": "application/octet-stream",
+            "title": "File",
+            "type": "string"
+          }
+        },
+        "required": [
+          "file"
+        ],
+        "title": "Body_upload_video_v1_videos_post",
+        "type": "object"
+      },
+      "ChromaticConfig": {
+        "additionalProperties": false,
+        "description": "Sampling, letterbox, clustering, and lighting-key rules (ADR-0011).",
+        "properties": {
+          "clusters": {
+            "maximum": 5.0,
+            "minimum": 1.0,
+            "title": "Clusters",
+            "type": "integer"
+          },
+          "delta_e_merge": {
+            "default": 3.0,
+            "description": "CIE76 Delta-E below which palette centres merge.",
+            "minimum": 0.0,
+            "title": "Delta E Merge",
+            "type": "number"
+          },
+          "highlight_lstar": {
+            "default": 80.0,
+            "maximum": 100.0,
+            "minimum": 0.0,
+            "title": "Highlight Lstar",
+            "type": "number"
+          },
+          "kmeans_batch_size": {
+            "default": 1024,
+            "minimum": 1.0,
+            "title": "Kmeans Batch Size",
+            "type": "integer"
+          },
+          "kmeans_n_init": {
+            "default": 3,
+            "minimum": 1.0,
+            "title": "Kmeans N Init",
+            "type": "integer"
+          },
+          "letterbox_coverage": {
+            "default": 0.92,
+            "description": "Ratio in [0, 1]. Percentages are a presentation concern.",
+            "maximum": 1.0,
+            "minimum": 0.0,
+            "title": "Letterbox Coverage",
+            "type": "number"
+          },
+          "letterbox_lstar_max": {
+            "default": 8.0,
+            "description": "Maximum CIE L* treated as near-black letterbox.",
+            "maximum": 100.0,
+            "minimum": 0.0,
+            "title": "Letterbox Lstar Max",
+            "type": "number"
+          },
+          "lighting_key_rules": {
+            "$ref": "#/components/schemas/LightingKeyRules",
+            "default": {
+              "high_median_lstar": 65.0,
+              "high_shadow_ratio": 0.1,
+              "high_spread_lstar": 45.0,
+              "low_median_lstar": 40.0,
+              "low_shadow_ratio": 0.4,
+              "low_spread_lstar": 45.0
+            }
+          },
+          "max_pixels_per_shot": {
+            "minimum": 1.0,
+            "title": "Max Pixels Per Shot",
+            "type": "integer"
+          },
+          "min_swatch_proportion": {
+            "default": 0.02,
+            "description": "Ratio in [0, 1]. Percentages are a presentation concern.",
+            "maximum": 1.0,
+            "minimum": 0.0,
+            "title": "Min Swatch Proportion",
+            "type": "number"
+          },
+          "min_usable_pixel_ratio": {
+            "default": 0.05,
+            "description": "Ratio in [0, 1]. Percentages are a presentation concern.",
+            "maximum": 1.0,
+            "minimum": 0.0,
+            "title": "Min Usable Pixel Ratio",
+            "type": "number"
+          },
+          "random_seed": {
+            "title": "Random Seed",
+            "type": "integer"
+          },
+          "samples_per_shot": {
+            "minimum": 1.0,
+            "title": "Samples Per Shot",
+            "type": "integer"
+          },
+          "shadow_lstar": {
+            "default": 20.0,
+            "maximum": 100.0,
+            "minimum": 0.0,
+            "title": "Shadow Lstar",
+            "type": "number"
+          },
+          "working_max_side": {
+            "default": 640,
+            "description": "Longest downscale side in pixels before sampling.",
+            "maximum": 4096.0,
+            "minimum": 16.0,
+            "title": "Working Max Side",
+            "type": "integer"
+          }
+        },
+        "required": [
+          "samples_per_shot",
+          "max_pixels_per_shot",
+          "clusters",
+          "random_seed"
+        ],
+        "title": "ChromaticConfig",
+        "type": "object"
+      },
+      "ChromaticValue": {
+        "additionalProperties": false,
+        "description": "Measured palette and lightness, plus a lighting-key estimate.",
+        "properties": {
+          "lighting_key": {
+            "$ref": "#/components/schemas/LightingKeyLabel"
+          },
+          "lightness": {
+            "$ref": "#/components/schemas/LightnessDistribution"
+          },
+          "palette": {
+            "items": {
+              "$ref": "#/components/schemas/ColorSwatch"
+            },
+            "maxItems": 5,
+            "minItems": 1,
+            "title": "Palette",
+            "type": "array"
+          },
+          "usable_pixel_ratio": {
+            "description": "Ratio in [0, 1]. Percentages are a presentation concern.",
+            "maximum": 1.0,
+            "minimum": 0.0,
+            "title": "Usable Pixel Ratio",
+            "type": "number"
+          }
+        },
+        "required": [
+          "palette",
+          "lightness",
+          "lighting_key",
+          "usable_pixel_ratio"
+        ],
+        "title": "ChromaticValue",
+        "type": "object"
+      },
+      "ColorSwatch": {
+        "additionalProperties": false,
+        "description": "One palette entry. Rank 1 is the most prevalent colour.",
+        "properties": {
+          "lab": {
+            "$ref": "#/components/schemas/LabColor"
+          },
+          "proportion": {
+            "description": "Ratio in [0, 1]. Percentages are a presentation concern.",
+            "maximum": 1.0,
+            "minimum": 0.0,
+            "title": "Proportion",
+            "type": "number"
+          },
+          "rank": {
+            "maximum": 5.0,
+            "minimum": 1.0,
+            "title": "Rank",
+            "type": "integer"
+          },
+          "rgb": {
+            "$ref": "#/components/schemas/RgbColor"
+          }
+        },
+        "required": [
+          "rank",
+          "lab",
+          "rgb",
+          "proportion"
+        ],
+        "title": "ColorSwatch",
+        "type": "object"
+      },
+      "CounterEntry": {
+        "additionalProperties": false,
+        "description": "One labeled counter.",
+        "properties": {
+          "labels": {
+            "items": {
+              "maxItems": 2,
+              "minItems": 2,
+              "prefixItems": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "string"
+                }
+              ],
+              "type": "array"
+            },
+            "title": "Labels",
+            "type": "array"
+          },
+          "name": {
+            "title": "Name",
+            "type": "string"
+          },
+          "value": {
+            "title": "Value",
+            "type": "integer"
+          }
+        },
+        "required": [
+          "name",
+          "labels",
+          "value"
+        ],
+        "title": "CounterEntry",
+        "type": "object"
+      },
+      "CriticConfig": {
+        "additionalProperties": false,
+        "description": "Interpretation switch. Disabled by default; cannot write a measured field.",
+        "properties": {
+          "enabled": {
+            "default": false,
+            "title": "Enabled",
+            "type": "boolean"
+          }
+        },
+        "title": "CriticConfig",
+        "type": "object"
+      },
+      "Critique": {
+        "additionalProperties": false,
+        "description": "Optional interpretation of an already-validated report. Regenerable; cannot write metrics.",
+        "properties": {
+          "input_report_sha256": {
+            "anyOf": [
+              {
+                "description": "Lowercase hex SHA-256 digest.",
+                "pattern": "^[0-9a-f]{64}$",
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Input Report Sha256"
+          },
+          "model_name": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Model Name"
+          },
+          "prompt_version": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Prompt Version"
+          },
+          "status": {
+            "$ref": "#/components/schemas/MetricStatus"
+          },
+          "text": {
+            "anyOf": [
+              {
+                "maxLength": 1200,
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Text"
+          }
+        },
+        "required": [
+          "status"
+        ],
+        "title": "Critique",
+        "type": "object"
+      },
+      "FarnebackParams": {
+        "additionalProperties": false,
+        "description": "Dense Farneback hyperparameters. Camera-movement labels are not derived from these.",
+        "properties": {
+          "iterations": {
+            "default": 3,
+            "maximum": 16.0,
+            "minimum": 1.0,
+            "title": "Iterations",
+            "type": "integer"
+          },
+          "levels": {
+            "default": 3,
+            "maximum": 8.0,
+            "minimum": 1.0,
+            "title": "Levels",
+            "type": "integer"
+          },
+          "poly_n": {
+            "default": 5,
+            "maximum": 7.0,
+            "minimum": 5.0,
+            "title": "Poly N",
+            "type": "integer"
+          },
+          "poly_sigma": {
+            "default": 1.2,
+            "exclusiveMinimum": 0.0,
+            "title": "Poly Sigma",
+            "type": "number"
+          },
+          "pyr_scale": {
+            "default": 0.5,
+            "exclusiveMaximum": 1.0,
+            "exclusiveMinimum": 0.0,
+            "title": "Pyr Scale",
+            "type": "number"
+          },
+          "winsize": {
+            "default": 15,
+            "maximum": 64.0,
+            "minimum": 3.0,
+            "title": "Winsize",
+            "type": "integer"
+          }
+        },
+        "title": "FarnebackParams",
+        "type": "object"
+      },
+      "FramingLabel": {
+        "description": "Heuristic shot-size estimate. Abstains rather than guessing.",
+        "enum": [
+          "EXTREME_WIDE_ESTIMATE",
+          "WIDE_ESTIMATE",
+          "MEDIUM_ESTIMATE",
+          "CLOSE_UP_ESTIMATE",
+          "EXTREME_CLOSE_UP_ESTIMATE",
+          "UNDETERMINED"
+        ],
+        "title": "FramingLabel",
+        "type": "string"
+      },
+      "FramingRules": {
+        "additionalProperties": false,
+        "description": "Versioned person-height framing estimates. Labels are estimates, not shot size.",
+        "properties": {
+          "close_up_height_max": {
+            "default": 0.85,
+            "exclusiveMaximum": 1.0,
+            "exclusiveMinimum": 0.0,
+            "title": "Close Up Height Max",
+            "type": "number"
+          },
+          "disagreement_fraction": {
+            "default": 0.4,
+            "description": "Ratio in [0, 1]. Percentages are a presentation concern.",
+            "maximum": 1.0,
+            "minimum": 0.0,
+            "title": "Disagreement Fraction",
+            "type": "number"
+          },
+          "edge_truncation": {
+            "default": 0.02,
+            "description": "Ratio in [0, 1]. Percentages are a presentation concern.",
+            "maximum": 1.0,
+            "minimum": 0.0,
+            "title": "Edge Truncation",
+            "type": "number"
+          },
+          "extreme_wide_height_max": {
+            "default": 0.18,
+            "exclusiveMaximum": 1.0,
+            "exclusiveMinimum": 0.0,
+            "title": "Extreme Wide Height Max",
+            "type": "number"
+          },
+          "medium_height_max": {
+            "default": 0.62,
+            "exclusiveMaximum": 1.0,
+            "exclusiveMinimum": 0.0,
+            "title": "Medium Height Max",
+            "type": "number"
+          },
+          "min_track_coverage": {
+            "default": 0.4,
+            "description": "Ratio in [0, 1]. Percentages are a presentation concern.",
+            "maximum": 1.0,
+            "minimum": 0.0,
+            "title": "Min Track Coverage",
+            "type": "number"
+          },
+          "version": {
+            "default": "framing_rules_v1",
+            "maxLength": 64,
+            "minLength": 1,
+            "title": "Version",
+            "type": "string"
+          },
+          "wide_height_max": {
+            "default": 0.38,
+            "exclusiveMaximum": 1.0,
+            "exclusiveMinimum": 0.0,
+            "title": "Wide Height Max",
+            "type": "number"
+          }
+        },
+        "title": "FramingRules",
+        "type": "object"
+      },
+      "GaugeEntry": {
+        "additionalProperties": false,
+        "description": "A point-in-time gauge. Not stored in the counter map.",
+        "properties": {
+          "name": {
+            "title": "Name",
+            "type": "string"
+          },
+          "value": {
+            "title": "Value",
+            "type": "integer"
+          }
+        },
+        "required": [
+          "name",
+          "value"
+        ],
+        "title": "GaugeEntry",
+        "type": "object"
+      },
+      "HTTPValidationError": {
+        "properties": {
+          "detail": {
+            "items": {
+              "$ref": "#/components/schemas/ValidationError"
+            },
+            "title": "Detail",
+            "type": "array"
+          }
+        },
+        "title": "HTTPValidationError",
+        "type": "object"
+      },
+      "HealthResponse": {
+        "additionalProperties": false,
+        "description": "Liveness or readiness payload.",
+        "properties": {
+          "status": {
+            "enum": [
+              "ok",
+              "unavailable"
+            ],
+            "title": "Status",
+            "type": "string"
+          }
+        },
+        "required": [
+          "status"
+        ],
+        "title": "HealthResponse",
+        "type": "object"
+      },
+      "HistogramEntry": {
+        "additionalProperties": false,
+        "description": "One labeled millisecond histogram summary.",
+        "properties": {
+          "count": {
+            "title": "Count",
+            "type": "integer"
+          },
+          "labels": {
+            "items": {
+              "maxItems": 2,
+              "minItems": 2,
+              "prefixItems": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "string"
+                }
+              ],
+              "type": "array"
+            },
+            "title": "Labels",
+            "type": "array"
+          },
+          "max_ms": {
+            "title": "Max Ms",
+            "type": "integer"
+          },
+          "name": {
+            "title": "Name",
+            "type": "string"
+          },
+          "sum_ms": {
+            "title": "Sum Ms",
+            "type": "integer"
+          }
+        },
+        "required": [
+          "name",
+          "labels",
+          "count",
+          "sum_ms",
+          "max_ms"
+        ],
+        "title": "HistogramEntry",
+        "type": "object"
+      },
+      "LabColor": {
+        "additionalProperties": false,
+        "description": "CIE L*a*b* colour. L* is not an OpenCV 8-bit L channel.",
+        "properties": {
+          "a": {
+            "maximum": 127.0,
+            "minimum": -128.0,
+            "title": "A",
+            "type": "number"
+          },
+          "b": {
+            "maximum": 127.0,
+            "minimum": -128.0,
+            "title": "B",
+            "type": "number"
+          },
+          "lstar": {
+            "description": "CIE L*, range [0, 100].",
+            "maximum": 100.0,
+            "minimum": 0.0,
+            "title": "Lstar",
+            "type": "number"
+          }
+        },
+        "required": [
+          "lstar",
+          "a",
+          "b"
+        ],
+        "title": "LabColor",
+        "type": "object"
+      },
+      "LightingKeyLabel": {
+        "description": "Heuristic lighting-key estimate. Describes sampled pixels, not intent.",
+        "enum": [
+          "LOW_KEY_ESTIMATE",
+          "HIGH_KEY_ESTIMATE",
+          "BALANCED_ESTIMATE"
+        ],
+        "title": "LightingKeyLabel",
+        "type": "string"
+      },
+      "LightingKeyRules": {
+        "additionalProperties": false,
+        "description": "Versioned lighting-key estimate thresholds. Labels are estimates, not intent.",
+        "properties": {
+          "high_median_lstar": {
+            "default": 65.0,
+            "maximum": 100.0,
+            "minimum": 0.0,
+            "title": "High Median Lstar",
+            "type": "number"
+          },
+          "high_shadow_ratio": {
+            "default": 0.1,
+            "description": "Ratio in [0, 1]. Percentages are a presentation concern.",
+            "maximum": 1.0,
+            "minimum": 0.0,
+            "title": "High Shadow Ratio",
+            "type": "number"
+          },
+          "high_spread_lstar": {
+            "default": 45.0,
+            "maximum": 100.0,
+            "minimum": 0.0,
+            "title": "High Spread Lstar",
+            "type": "number"
+          },
+          "low_median_lstar": {
+            "default": 40.0,
+            "maximum": 100.0,
+            "minimum": 0.0,
+            "title": "Low Median Lstar",
+            "type": "number"
+          },
+          "low_shadow_ratio": {
+            "default": 0.4,
+            "description": "Ratio in [0, 1]. Percentages are a presentation concern.",
+            "maximum": 1.0,
+            "minimum": 0.0,
+            "title": "Low Shadow Ratio",
+            "type": "number"
+          },
+          "low_spread_lstar": {
+            "default": 45.0,
+            "maximum": 100.0,
+            "minimum": 0.0,
+            "title": "Low Spread Lstar",
+            "type": "number"
+          }
+        },
+        "title": "LightingKeyRules",
+        "type": "object"
+      },
+      "LightnessDistribution": {
+        "additionalProperties": false,
+        "description": "Perceptual lightness statistics in CIE L*.",
+        "properties": {
+          "highlight_ratio": {
+            "description": "Ratio in [0, 1]. Percentages are a presentation concern.",
+            "maximum": 1.0,
+            "minimum": 0.0,
+            "title": "Highlight Ratio",
+            "type": "number"
+          },
+          "mean_lstar": {
+            "maximum": 100.0,
+            "minimum": 0.0,
+            "title": "Mean Lstar",
+            "type": "number"
+          },
+          "p10_lstar": {
+            "maximum": 100.0,
+            "minimum": 0.0,
+            "title": "P10 Lstar",
+            "type": "number"
+          },
+          "p50_lstar": {
+            "maximum": 100.0,
+            "minimum": 0.0,
+            "title": "P50 Lstar",
+            "type": "number"
+          },
+          "p90_lstar": {
+            "maximum": 100.0,
+            "minimum": 0.0,
+            "title": "P90 Lstar",
+            "type": "number"
+          },
+          "shadow_ratio": {
+            "description": "Ratio in [0, 1]. Percentages are a presentation concern.",
+            "maximum": 1.0,
+            "minimum": 0.0,
+            "title": "Shadow Ratio",
+            "type": "number"
+          },
+          "stddev_lstar": {
+            "minimum": 0.0,
+            "title": "Stddev Lstar",
+            "type": "number"
+          }
+        },
+        "required": [
+          "mean_lstar",
+          "stddev_lstar",
+          "p10_lstar",
+          "p50_lstar",
+          "p90_lstar",
+          "shadow_ratio",
+          "highlight_ratio"
+        ],
+        "title": "LightnessDistribution",
+        "type": "object"
+      },
+      "LimitsConfig": {
+        "additionalProperties": false,
+        "description": "Acceptance ceilings. Enforced at probe time; part of the hashed analysis key.",
+        "properties": {
+          "max_duration_ms": {
+            "description": "Maximum accepted media duration, integer milliseconds.",
+            "exclusiveMinimum": 0.0,
+            "title": "Max Duration Ms",
+            "type": "integer"
+          },
+          "max_height": {
+            "exclusiveMinimum": 0.0,
+            "title": "Max Height",
+            "type": "integer"
+          },
+          "max_upload_bytes": {
+            "description": "Maximum upload size in bytes.",
+            "exclusiveMinimum": 0.0,
+            "title": "Max Upload Bytes",
+            "type": "integer"
+          },
+          "max_width": {
+            "exclusiveMinimum": 0.0,
+            "title": "Max Width",
+            "type": "integer"
+          }
+        },
+        "required": [
+          "max_upload_bytes",
+          "max_duration_ms",
+          "max_width",
+          "max_height"
+        ],
+        "title": "LimitsConfig",
+        "type": "object"
+      },
+      "Measurement_ChromaticValue_": {
+        "additionalProperties": false,
+        "properties": {
+          "confidence": {
+            "anyOf": [
+              {
+                "description": "Ratio in [0, 1]. Percentages are a presentation concern.",
+                "maximum": 1.0,
+                "minimum": 0.0,
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Confidence"
+          },
+          "evidence_sample_ids": {
+            "default": [],
+            "items": {
+              "format": "uuid",
+              "type": "string"
+            },
+            "title": "Evidence Sample Ids",
+            "type": "array"
+          },
+          "method": {
+            "$ref": "#/components/schemas/MethodProvenance"
+          },
+          "reason_code": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Reason Code"
+          },
+          "status": {
+            "$ref": "#/components/schemas/MetricStatus"
+          },
+          "value": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/ChromaticValue"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          }
+        },
+        "required": [
+          "status",
+          "value",
+          "method"
+        ],
+        "title": "Measurement[ChromaticValue]",
+        "type": "object"
+      },
+      "Measurement_SpatialValue_": {
+        "additionalProperties": false,
+        "properties": {
+          "confidence": {
+            "anyOf": [
+              {
+                "description": "Ratio in [0, 1]. Percentages are a presentation concern.",
+                "maximum": 1.0,
+                "minimum": 0.0,
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Confidence"
+          },
+          "evidence_sample_ids": {
+            "default": [],
+            "items": {
+              "format": "uuid",
+              "type": "string"
+            },
+            "title": "Evidence Sample Ids",
+            "type": "array"
+          },
+          "method": {
+            "$ref": "#/components/schemas/MethodProvenance"
+          },
+          "reason_code": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Reason Code"
+          },
+          "status": {
+            "$ref": "#/components/schemas/MetricStatus"
+          },
+          "value": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/SpatialValue"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          }
+        },
+        "required": [
+          "status",
+          "value",
+          "method"
+        ],
+        "title": "Measurement[SpatialValue]",
+        "type": "object"
+      },
+      "Measurement_TemporalValue_": {
+        "additionalProperties": false,
+        "properties": {
+          "confidence": {
+            "anyOf": [
+              {
+                "description": "Ratio in [0, 1]. Percentages are a presentation concern.",
+                "maximum": 1.0,
+                "minimum": 0.0,
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Confidence"
+          },
+          "evidence_sample_ids": {
+            "default": [],
+            "items": {
+              "format": "uuid",
+              "type": "string"
+            },
+            "title": "Evidence Sample Ids",
+            "type": "array"
+          },
+          "method": {
+            "$ref": "#/components/schemas/MethodProvenance"
+          },
+          "reason_code": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Reason Code"
+          },
+          "status": {
+            "$ref": "#/components/schemas/MetricStatus"
+          },
+          "value": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/TemporalValue"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          }
+        },
+        "required": [
+          "status",
+          "value",
+          "method"
+        ],
+        "title": "Measurement[TemporalValue]",
+        "type": "object"
+      },
+      "MethodProvenance": {
+        "additionalProperties": false,
+        "description": "How a value was produced, including the hashed analysis configuration.",
+        "properties": {
+          "code_revision": {
+            "maxLength": 128,
+            "minLength": 1,
+            "title": "Code Revision",
+            "type": "string"
+          },
+          "completed_at": {
+            "format": "date-time",
+            "title": "Completed At",
+            "type": "string"
+          },
+          "config_hash": {
+            "description": "Lowercase hex SHA-256 digest.",
+            "pattern": "^[0-9a-f]{64}$",
+            "title": "Config Hash",
+            "type": "string"
+          },
+          "device": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Device"
+          },
+          "method": {
+            "maxLength": 128,
+            "minLength": 1,
+            "title": "Method",
+            "type": "string"
+          },
+          "method_version": {
+            "maxLength": 64,
+            "minLength": 1,
+            "title": "Method Version",
+            "type": "string"
+          },
+          "model_name": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Model Name"
+          },
+          "model_package_version": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Model Package Version"
+          },
+          "random_seed": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Random Seed"
+          },
+          "started_at": {
+            "format": "date-time",
+            "title": "Started At",
+            "type": "string"
+          },
+          "weights_sha256": {
+            "anyOf": [
+              {
+                "description": "Lowercase hex SHA-256 digest.",
+                "pattern": "^[0-9a-f]{64}$",
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Weights Sha256"
+          }
+        },
+        "required": [
+          "method",
+          "method_version",
+          "config_hash",
+          "code_revision",
+          "started_at",
+          "completed_at"
+        ],
+        "title": "MethodProvenance",
+        "type": "object"
+      },
+      "MetricStatus": {
+        "description": "Why a measurement envelope does or does not carry a value.\n\n``OK`` is the only status that may hold a value. Every other status is a\nmachine-readable absence, never an unexplained null.",
+        "enum": [
+          "OK",
+          "NOT_COMPUTED",
+          "INSUFFICIENT_DATA",
+          "NO_SUBJECT",
+          "NO_AUDIO",
+          "FAILED"
+        ],
+        "title": "MetricStatus",
+        "type": "string"
+      },
+      "MetricsSnapshot": {
+        "additionalProperties": false,
+        "description": "JSON scrape payload for ``GET /metrics``.",
+        "properties": {
+          "counters": {
+            "items": {
+              "$ref": "#/components/schemas/CounterEntry"
+            },
+            "title": "Counters",
+            "type": "array"
+          },
+          "gauges": {
+            "items": {
+              "$ref": "#/components/schemas/GaugeEntry"
+            },
+            "title": "Gauges",
+            "type": "array"
+          },
+          "histograms": {
+            "items": {
+              "$ref": "#/components/schemas/HistogramEntry"
+            },
+            "title": "Histograms",
+            "type": "array"
+          }
+        },
+        "required": [
+          "counters",
+          "histograms",
+          "gauges"
+        ],
+        "title": "MetricsSnapshot",
+        "type": "object"
+      },
+      "MotionConfig": {
+        "additionalProperties": false,
+        "description": "Motion sampling and Farneback identity (ADR-0015). Camera-movement labels are not emitted.",
+        "properties": {
+          "discontinuity_diag_per_s": {
+            "default": 1.5,
+            "description": "Flag a pair when global magnitude exceeds this many frame-diagonals per second.",
+            "exclusiveMinimum": 0.0,
+            "title": "Discontinuity Diag Per S",
+            "type": "number"
+          },
+          "farneback": {
+            "$ref": "#/components/schemas/FarnebackParams",
+            "default": {
+              "iterations": 3,
+              "levels": 3,
+              "poly_n": 5,
+              "poly_sigma": 1.2,
+              "pyr_scale": 0.5,
+              "winsize": 15
+            }
+          },
+          "sample_fps": {
+            "description": "Motion sampling rate in frames per second.",
+            "exclusiveMinimum": 0.0,
+            "title": "Sample Fps",
+            "type": "number"
+          },
+          "working_max_side": {
+            "default": 320,
+            "description": "Longest side after aspect-preserving downscale.",
+            "maximum": 1920.0,
+            "minimum": 32.0,
+            "title": "Working Max Side",
+            "type": "integer"
+          }
+        },
+        "required": [
+          "sample_fps"
+        ],
+        "title": "MotionConfig",
+        "type": "object"
+      },
+      "PrimaryTrackWeights": {
+        "additionalProperties": false,
+        "description": "Primary-subject score weights. They must sum to one (metric-definitions \u00a75.1).",
+        "properties": {
+          "coverage": {
+            "default": 0.45,
+            "description": "Ratio in [0, 1]. Percentages are a presentation concern.",
+            "maximum": 1.0,
+            "minimum": 0.0,
+            "title": "Coverage",
+            "type": "number"
+          },
+          "median_area": {
+            "default": 0.35,
+            "description": "Ratio in [0, 1]. Percentages are a presentation concern.",
+            "maximum": 1.0,
+            "minimum": 0.0,
+            "title": "Median Area",
+            "type": "number"
+          },
+          "median_confidence": {
+            "default": 0.2,
+            "description": "Ratio in [0, 1]. Percentages are a presentation concern.",
+            "maximum": 1.0,
+            "minimum": 0.0,
+            "title": "Median Confidence",
+            "type": "number"
+          }
+        },
+        "title": "PrimaryTrackWeights",
+        "type": "object"
+      },
+      "Rational": {
+        "additionalProperties": false,
+        "description": "Exact frame-rate fraction. A float is display-only and is not stored here.",
+        "properties": {
+          "denominator": {
+            "description": "Non-zero denominator.",
+            "exclusiveMinimum": 0.0,
+            "title": "Denominator",
+            "type": "integer"
+          },
+          "numerator": {
+            "title": "Numerator",
+            "type": "integer"
+          }
+        },
+        "required": [
+          "numerator",
+          "denominator"
+        ],
+        "title": "Rational",
+        "type": "object"
+      },
+      "ReportAvailability": {
+        "additionalProperties": false,
+        "description": "Typed per-pillar availability. Absence is a status, not a missing key.",
+        "properties": {
+          "audio": {
+            "$ref": "#/components/schemas/StageAvailability"
+          },
+          "chromatic": {
+            "$ref": "#/components/schemas/StageAvailability"
+          },
+          "critic": {
+            "$ref": "#/components/schemas/StageAvailability"
+          },
+          "motion": {
+            "$ref": "#/components/schemas/StageAvailability"
+          },
+          "shots": {
+            "$ref": "#/components/schemas/StageAvailability"
+          },
+          "spatial": {
+            "$ref": "#/components/schemas/StageAvailability"
+          },
+          "tension": {
+            "$ref": "#/components/schemas/StageAvailability"
+          }
+        },
+        "required": [
+          "shots",
+          "chromatic",
+          "spatial",
+          "motion",
+          "audio",
+          "tension",
+          "critic"
+        ],
+        "title": "ReportAvailability",
+        "type": "object"
+      },
+      "RgbColor": {
+        "additionalProperties": false,
+        "description": "8-bit sRGB plus the matching uppercase hex encoding.",
+        "properties": {
+          "b": {
+            "maximum": 255.0,
+            "minimum": 0.0,
+            "title": "B",
+            "type": "integer"
+          },
+          "g": {
+            "maximum": 255.0,
+            "minimum": 0.0,
+            "title": "G",
+            "type": "integer"
+          },
+          "hex": {
+            "description": "sRGB hex colour, uppercase, with a leading #.",
+            "pattern": "^#[0-9A-F]{6}$",
+            "title": "Hex",
+            "type": "string"
+          },
+          "r": {
+            "maximum": 255.0,
+            "minimum": 0.0,
+            "title": "R",
+            "type": "integer"
+          }
+        },
+        "required": [
+          "r",
+          "g",
+          "b",
+          "hex"
+        ],
+        "title": "RgbColor",
+        "type": "object"
+      },
+      "Shot": {
+        "additionalProperties": false,
+        "description": "Half-open interval between two consecutive boundaries, plus clip start and end.",
+        "properties": {
+          "incoming_boundary_id": {
+            "anyOf": [
+              {
+                "format": "uuid",
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Incoming Boundary Id"
+          },
+          "index": {
+            "minimum": 0.0,
+            "title": "Index",
+            "type": "integer"
+          },
+          "outgoing_boundary_id": {
+            "anyOf": [
+              {
+                "format": "uuid",
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Outgoing Boundary Id"
+          },
+          "representative_sample_id": {
+            "anyOf": [
+              {
+                "format": "uuid",
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Representative Sample Id"
+          },
+          "shot_id": {
+            "format": "uuid",
+            "title": "Shot Id",
+            "type": "string"
+          },
+          "time_range": {
+            "$ref": "#/components/schemas/TimeRangeMs"
+          }
+        },
+        "required": [
+          "shot_id",
+          "index",
+          "time_range"
+        ],
+        "title": "Shot",
+        "type": "object"
+      },
+      "ShotAnalysis": {
+        "additionalProperties": false,
+        "description": "One shot and the three per-shot measurement envelopes.",
+        "properties": {
+          "chromatic": {
+            "$ref": "#/components/schemas/Measurement_ChromaticValue_"
+          },
+          "shot": {
+            "$ref": "#/components/schemas/Shot"
+          },
+          "spatial": {
+            "$ref": "#/components/schemas/Measurement_SpatialValue_"
+          },
+          "temporal": {
+            "$ref": "#/components/schemas/Measurement_TemporalValue_"
+          }
+        },
+        "required": [
+          "shot",
+          "chromatic",
+          "spatial",
+          "temporal"
+        ],
+        "title": "ShotAnalysis",
+        "type": "object"
+      },
+      "ShotsConfig": {
+        "additionalProperties": false,
+        "description": "Shot-boundary detector selection, working resolution, and thresholds.\n\nThresholds are hashed with the analysis so a detector change cannot reuse\na previous identity (ADR-0010).",
+        "properties": {
+          "backend": {
+            "maxLength": 64,
+            "minLength": 1,
+            "pattern": "^[a-z][a-z0-9_]*$",
+            "title": "Backend",
+            "type": "string"
+          },
+          "debug": {
+            "default": false,
+            "title": "Debug",
+            "type": "boolean"
+          },
+          "detector": {
+            "maxLength": 64,
+            "minLength": 1,
+            "pattern": "^[a-z][a-z0-9_]*$",
+            "title": "Detector",
+            "type": "string"
+          },
+          "min_content_val": {
+            "default": 15.0,
+            "description": "AdaptiveDetector minimum content value. Ignored by content detector.",
+            "minimum": 0.0,
+            "title": "Min Content Val",
+            "type": "number"
+          },
+          "min_shot_ms": {
+            "description": "Minimum accepted shot length, integer milliseconds.",
+            "exclusiveMinimum": 0.0,
+            "title": "Min Shot Ms",
+            "type": "integer"
+          },
+          "threshold": {
+            "default": 3.0,
+            "description": "Detector threshold. AdaptiveDetector.adaptive_threshold or ContentDetector.threshold.",
+            "exclusiveMinimum": 0.0,
+            "title": "Threshold",
+            "type": "number"
+          },
+          "working_width": {
+            "default": 320,
+            "description": "Target decode width in pixels for detection.",
+            "maximum": 4096.0,
+            "minimum": 16.0,
+            "title": "Working Width",
+            "type": "integer"
+          }
+        },
+        "required": [
+          "backend",
+          "detector",
+          "min_shot_ms"
+        ],
+        "title": "ShotsConfig",
+        "type": "object"
+      },
+      "SpatialConfig": {
+        "additionalProperties": false,
+        "description": "Spatial-pillar backend, tracking, proximity, and framing rules (ADR-0013, ADR-0014).",
+        "properties": {
+          "backend": {
+            "maxLength": 64,
+            "minLength": 1,
+            "pattern": "^[a-z][a-z0-9_]*$",
+            "title": "Backend",
+            "type": "string"
+          },
+          "checkpoint": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Checkpoint"
+          },
+          "framing_rules": {
+            "$ref": "#/components/schemas/FramingRules",
+            "default": {
+              "close_up_height_max": 0.85,
+              "disagreement_fraction": 0.4,
+              "edge_truncation": 0.02,
+              "extreme_wide_height_max": 0.18,
+              "medium_height_max": 0.62,
+              "min_track_coverage": 0.4,
+              "version": "framing_rules_v1",
+              "wide_height_max": 0.38
+            }
+          },
+          "person_confidence": {
+            "description": "Ratio in [0, 1]. Percentages are a presentation concern.",
+            "maximum": 1.0,
+            "minimum": 0.0,
+            "title": "Person Confidence",
+            "type": "number"
+          },
+          "primary_track_weights": {
+            "$ref": "#/components/schemas/PrimaryTrackWeights",
+            "default": {
+              "coverage": 0.45,
+              "median_area": 0.35,
+              "median_confidence": 0.2
+            }
+          },
+          "sample_fps": {
+            "description": "Spatial sampling rate in frames per second.",
+            "exclusiveMinimum": 0.0,
+            "title": "Sample Fps",
+            "type": "number"
+          },
+          "thirds_sigma": {
+            "default": 0.18,
+            "description": "Gaussian width for thirds and center proximity.",
+            "exclusiveMinimum": 0.0,
+            "title": "Thirds Sigma",
+            "type": "number"
+          },
+          "track_iou_min": {
+            "default": 0.3,
+            "description": "Ratio in [0, 1]. Percentages are a presentation concern.",
+            "maximum": 1.0,
+            "minimum": 0.0,
+            "title": "Track Iou Min",
+            "type": "number"
+          }
+        },
+        "required": [
+          "backend",
+          "sample_fps",
+          "person_confidence"
+        ],
+        "title": "SpatialConfig",
+        "type": "object"
+      },
+      "SpatialValue": {
+        "additionalProperties": false,
+        "description": "Per-shot spatial summary. Primary-track selection is a documented rule, not recognition.",
+        "properties": {
+          "center_proximity_score": {
+            "description": "Ratio in [0, 1]. Percentages are a presentation concern.",
+            "maximum": 1.0,
+            "minimum": 0.0,
+            "title": "Center Proximity Score",
+            "type": "number"
+          },
+          "framing": {
+            "$ref": "#/components/schemas/FramingLabel"
+          },
+          "framing_confidence": {
+            "description": "Ratio in [0, 1]. Percentages are a presentation concern.",
+            "maximum": 1.0,
+            "minimum": 0.0,
+            "title": "Framing Confidence",
+            "type": "number"
+          },
+          "primary_track_id": {
+            "maxLength": 128,
+            "minLength": 1,
+            "title": "Primary Track Id",
+            "type": "string"
+          },
+          "subject_coverage_ratio_median": {
+            "description": "Ratio in [0, 1]. Percentages are a presentation concern.",
+            "maximum": 1.0,
+            "minimum": 0.0,
+            "title": "Subject Coverage Ratio Median",
+            "type": "number"
+          },
+          "subject_height_ratio_median": {
+            "description": "Ratio in [0, 1]. Percentages are a presentation concern.",
+            "maximum": 1.0,
+            "minimum": 0.0,
+            "title": "Subject Height Ratio Median",
+            "type": "number"
+          },
+          "thirds_proximity_p10": {
+            "description": "Ratio in [0, 1]. Percentages are a presentation concern.",
+            "maximum": 1.0,
+            "minimum": 0.0,
+            "title": "Thirds Proximity P10",
+            "type": "number"
+          },
+          "thirds_proximity_score": {
+            "description": "Ratio in [0, 1]. Percentages are a presentation concern.",
+            "maximum": 1.0,
+            "minimum": 0.0,
+            "title": "Thirds Proximity Score",
+            "type": "number"
+          },
+          "track_coverage_ratio": {
+            "description": "Ratio in [0, 1]. Percentages are a presentation concern.",
+            "maximum": 1.0,
+            "minimum": 0.0,
+            "title": "Track Coverage Ratio",
+            "type": "number"
+          }
+        },
+        "required": [
+          "primary_track_id",
+          "subject_coverage_ratio_median",
+          "subject_height_ratio_median",
+          "thirds_proximity_score",
+          "thirds_proximity_p10",
+          "center_proximity_score",
+          "framing",
+          "framing_confidence",
+          "track_coverage_ratio"
+        ],
+        "title": "SpatialValue",
+        "type": "object"
+      },
+      "StageAvailability": {
+        "description": "Whether a pillar produced values, produced some, was skipped, or was not asked.",
+        "enum": [
+          "COMPLETE",
+          "PARTIAL",
+          "UNAVAILABLE",
+          "NOT_REQUESTED"
+        ],
+        "title": "StageAvailability",
+        "type": "string"
+      },
+      "TemporalValue": {
+        "additionalProperties": false,
+        "description": "Per-shot duration and motion magnitudes. Camera-movement labels are not emitted.",
+        "properties": {
+          "direction_consistency": {
+            "anyOf": [
+              {
+                "description": "Ratio in [0, 1]. Percentages are a presentation concern.",
+                "maximum": 1.0,
+                "minimum": 0.0,
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Direction Consistency"
+          },
+          "duration_ms": {
+            "description": "Shot duration, integer milliseconds.",
+            "exclusiveMinimum": 0.0,
+            "title": "Duration Ms",
+            "type": "integer"
+          },
+          "flow_valid_ratio": {
+            "anyOf": [
+              {
+                "description": "Ratio in [0, 1]. Percentages are a presentation concern.",
+                "maximum": 1.0,
+                "minimum": 0.0,
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Flow Valid Ratio"
+          },
+          "global_motion_magnitude": {
+            "anyOf": [
+              {
+                "minimum": 0.0,
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Global Motion Magnitude"
+          },
+          "motion_magnitude_median": {
+            "anyOf": [
+              {
+                "minimum": 0.0,
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Motion Magnitude Median"
+          },
+          "motion_magnitude_p90": {
+            "anyOf": [
+              {
+                "minimum": 0.0,
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Motion Magnitude P90"
+          },
+          "residual_motion_magnitude": {
+            "anyOf": [
+              {
+                "minimum": 0.0,
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Residual Motion Magnitude"
+          }
+        },
+        "required": [
+          "duration_ms"
+        ],
+        "title": "TemporalValue",
+        "type": "object"
+      },
+      "TensionComponents": {
+        "additionalProperties": false,
+        "description": "Named proxy components. Changing the configured weights changes combined_proxy.",
+        "properties": {
+          "audio_activity": {
+            "description": "Ratio in [0, 1]. Percentages are a presentation concern.",
+            "maximum": 1.0,
+            "minimum": 0.0,
+            "title": "Audio Activity",
+            "type": "number"
+          },
+          "combined_proxy": {
+            "description": "Ratio in [0, 1]. Percentages are a presentation concern.",
+            "maximum": 1.0,
+            "minimum": 0.0,
+            "title": "Combined Proxy",
+            "type": "number"
+          },
+          "cut_activity": {
+            "description": "Ratio in [0, 1]. Percentages are a presentation concern.",
+            "maximum": 1.0,
+            "minimum": 0.0,
+            "title": "Cut Activity",
+            "type": "number"
+          },
+          "motion_activity": {
+            "description": "Ratio in [0, 1]. Percentages are a presentation concern.",
+            "maximum": 1.0,
+            "minimum": 0.0,
+            "title": "Motion Activity",
+            "type": "number"
+          }
+        },
+        "required": [
+          "cut_activity",
+          "audio_activity",
+          "motion_activity",
+          "combined_proxy"
+        ],
+        "title": "TensionComponents",
+        "type": "object"
+      },
+      "TensionConfig": {
+        "additionalProperties": false,
+        "description": "Tension-proxy configuration (ADR-0017). Combined curve always stores weights.",
+        "properties": {
+          "cut_reference": {
+            "default": 3.0,
+            "exclusiveMinimum": 0.0,
+            "title": "Cut Reference",
+            "type": "number"
+          },
+          "cut_sigma_ms": {
+            "default": 750,
+            "description": "Gaussian cut-activity kernel width, integer milliseconds.",
+            "maximum": 10000.0,
+            "minimum": 1.0,
+            "title": "Cut Sigma Ms",
+            "type": "integer"
+          },
+          "epsilon": {
+            "default": 1e-06,
+            "exclusiveMinimum": 0.0,
+            "title": "Epsilon",
+            "type": "number"
+          },
+          "hop_ms": {
+            "default": 500,
+            "description": "Timeline hop, integer milliseconds.",
+            "maximum": 10000.0,
+            "minimum": 10.0,
+            "title": "Hop Ms",
+            "type": "integer"
+          },
+          "percentile_high": {
+            "default": 90.0,
+            "exclusiveMinimum": 50.0,
+            "maximum": 100.0,
+            "title": "Percentile High",
+            "type": "number"
+          },
+          "percentile_low": {
+            "default": 10.0,
+            "exclusiveMaximum": 50.0,
+            "minimum": 0.0,
+            "title": "Percentile Low",
+            "type": "number"
+          },
+          "weights": {
+            "$ref": "#/components/schemas/TensionWeights"
+          }
+        },
+        "required": [
+          "weights"
+        ],
+        "title": "TensionConfig",
+        "type": "object"
+      },
+      "TensionWeights": {
+        "additionalProperties": false,
+        "description": "Weights of the named tension proxy. They must sum to one.",
+        "properties": {
+          "audio_activity": {
+            "description": "Ratio in [0, 1]. Percentages are a presentation concern.",
+            "maximum": 1.0,
+            "minimum": 0.0,
+            "title": "Audio Activity",
+            "type": "number"
+          },
+          "cut_activity": {
+            "description": "Ratio in [0, 1]. Percentages are a presentation concern.",
+            "maximum": 1.0,
+            "minimum": 0.0,
+            "title": "Cut Activity",
+            "type": "number"
+          },
+          "motion": {
+            "description": "Ratio in [0, 1]. Percentages are a presentation concern.",
+            "maximum": 1.0,
+            "minimum": 0.0,
+            "title": "Motion",
+            "type": "number"
+          }
+        },
+        "required": [
+          "cut_activity",
+          "audio_activity",
+          "motion"
+        ],
+        "title": "TensionWeights",
+        "type": "object"
+      },
+      "TimeRangeMs": {
+        "additionalProperties": false,
+        "description": "Half-open interval ``[start_ms, end_ms)`` on the media timeline.",
+        "properties": {
+          "end_ms": {
+            "description": "Exclusive end on the media timeline, integer milliseconds.",
+            "exclusiveMinimum": 0.0,
+            "title": "End Ms",
+            "type": "integer"
+          },
+          "start_ms": {
+            "description": "Inclusive start on the media timeline, integer milliseconds.",
+            "minimum": 0.0,
+            "title": "Start Ms",
+            "type": "integer"
+          }
+        },
+        "required": [
+          "start_ms",
+          "end_ms"
+        ],
+        "title": "TimeRangeMs",
+        "type": "object"
+      },
+      "TimelinePoint": {
+        "additionalProperties": false,
+        "description": "One instant on the analysis timeline, with every tension component retained.",
+        "properties": {
+          "at_ms": {
+            "description": "Timeline instant, integer milliseconds.",
+            "minimum": 0.0,
+            "title": "At Ms",
+            "type": "integer"
+          },
+          "audio": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/AudioWindowValue"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "shot_index": {
+            "minimum": 0.0,
+            "title": "Shot Index",
+            "type": "integer"
+          },
+          "tension": {
+            "$ref": "#/components/schemas/TensionComponents"
+          }
+        },
+        "required": [
+          "at_ms",
+          "shot_index",
+          "tension"
+        ],
+        "title": "TimelinePoint",
+        "type": "object"
+      },
+      "TimelineWindowResponse": {
+        "additionalProperties": false,
+        "description": "Bounded timeline slice. Points are already downsampled.",
+        "properties": {
+          "analysis_id": {
+            "format": "uuid",
+            "title": "Analysis Id",
+            "type": "string"
+          },
+          "end_ms": {
+            "title": "End Ms",
+            "type": "integer"
+          },
+          "max_points": {
+            "title": "Max Points",
+            "type": "integer"
+          },
+          "points": {
+            "items": {
+              "$ref": "#/components/schemas/TimelinePoint"
+            },
+            "title": "Points",
+            "type": "array"
+          },
+          "start_ms": {
+            "title": "Start Ms",
+            "type": "integer"
+          }
+        },
+        "required": [
+          "analysis_id",
+          "start_ms",
+          "end_ms",
+          "max_points",
+          "points"
+        ],
+        "title": "TimelineWindowResponse",
+        "type": "object"
+      },
+      "ValidationError": {
+        "properties": {
+          "ctx": {
+            "title": "Context",
+            "type": "object"
+          },
+          "input": {
+            "title": "Input"
+          },
+          "loc": {
+            "items": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "integer"
+                }
+              ]
+            },
+            "title": "Location",
+            "type": "array"
+          },
+          "msg": {
+            "title": "Message",
+            "type": "string"
+          },
+          "type": {
+            "title": "Error Type",
+            "type": "string"
+          }
+        },
+        "required": [
+          "loc",
+          "msg",
+          "type"
+        ],
+        "title": "ValidationError",
+        "type": "object"
+      },
+      "VideoAccepted": {
+        "additionalProperties": false,
+        "description": "Identity returned after a streamed upload.",
+        "properties": {
+          "content_sha256": {
+            "title": "Content Sha256",
+            "type": "string"
+          },
+          "duration_ms": {
+            "title": "Duration Ms",
+            "type": "integer"
+          },
+          "has_audio": {
+            "title": "Has Audio",
+            "type": "boolean"
+          },
+          "height": {
+            "title": "Height",
+            "type": "integer"
+          },
+          "reused": {
+            "title": "Reused",
+            "type": "boolean"
+          },
+          "video_id": {
+            "format": "uuid",
+            "title": "Video Id",
+            "type": "string"
+          },
+          "width": {
+            "title": "Width",
+            "type": "integer"
+          }
+        },
+        "required": [
+          "video_id",
+          "content_sha256",
+          "reused",
+          "duration_ms",
+          "width",
+          "height",
+          "has_audio"
+        ],
+        "title": "VideoAccepted",
+        "type": "object"
+      },
+      "VideoMetadata": {
+        "additionalProperties": false,
+        "description": "Facts taken from a successful probe. Filename is stored, never echoed in errors.",
+        "properties": {
+          "audio_codec": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Audio Codec"
+          },
+          "average_frame_rate": {
+            "$ref": "#/components/schemas/Rational"
+          },
+          "content_sha256": {
+            "description": "Lowercase hex SHA-256 digest.",
+            "pattern": "^[0-9a-f]{64}$",
+            "title": "Content Sha256",
+            "type": "string"
+          },
+          "display_rotation_degrees": {
+            "description": "Container rotation applied once before spatial measurement.",
+            "title": "Display Rotation Degrees",
+            "type": "integer"
+          },
+          "duration_ms": {
+            "description": "Probed media duration, integer milliseconds.",
+            "exclusiveMinimum": 0.0,
+            "title": "Duration Ms",
+            "type": "integer"
+          },
+          "has_audio": {
+            "title": "Has Audio",
+            "type": "boolean"
+          },
+          "height": {
+            "exclusiveMinimum": 0.0,
+            "title": "Height",
+            "type": "integer"
+          },
+          "original_filename": {
+            "maxLength": 512,
+            "minLength": 1,
+            "title": "Original Filename",
+            "type": "string"
+          },
+          "pixel_format": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Pixel Format"
+          },
+          "probe_artifact": {
+            "$ref": "#/components/schemas/ArtifactRef"
+          },
+          "real_frame_rate": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/Rational"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "size_bytes": {
+            "description": "Uploaded bytes.",
+            "exclusiveMinimum": 0.0,
+            "title": "Size Bytes",
+            "type": "integer"
+          },
+          "video_codec": {
+            "maxLength": 64,
+            "minLength": 1,
+            "title": "Video Codec",
+            "type": "string"
+          },
+          "video_id": {
+            "format": "uuid",
+            "title": "Video Id",
+            "type": "string"
+          },
+          "width": {
+            "exclusiveMinimum": 0.0,
+            "title": "Width",
+            "type": "integer"
+          }
+        },
+        "required": [
+          "video_id",
+          "original_filename",
+          "content_sha256",
+          "size_bytes",
+          "duration_ms",
+          "width",
+          "height",
+          "display_rotation_degrees",
+          "average_frame_rate",
+          "video_codec",
+          "has_audio",
+          "probe_artifact"
+        ],
+        "title": "VideoMetadata",
+        "type": "object"
+      },
+      "VideoSummary": {
+        "additionalProperties": false,
+        "description": "Editing summary. Mean and median are float milliseconds (even-count medians).",
+        "properties": {
+          "average_shot_length_ms": {
+            "description": "Mean shot duration in milliseconds. Float because it is an aggregate, not a timeline instant.",
+            "exclusiveMinimum": 0.0,
+            "title": "Average Shot Length Ms",
+            "type": "number"
+          },
+          "median_shot_length_ms": {
+            "description": "Median shot duration in milliseconds. Float because an even shot count averages two integer durations.",
+            "exclusiveMinimum": 0.0,
+            "title": "Median Shot Length Ms",
+            "type": "number"
+          },
+          "shot_count": {
+            "minimum": 1.0,
+            "title": "Shot Count",
+            "type": "integer"
+          },
+          "shots_per_minute": {
+            "minimum": 0.0,
+            "title": "Shots Per Minute",
+            "type": "number"
+          }
+        },
+        "required": [
+          "shot_count",
+          "average_shot_length_ms",
+          "median_shot_length_ms",
+          "shots_per_minute"
+        ],
+        "title": "VideoSummary",
+        "type": "object"
+      }
+    }
+  },
+  "info": {
+    "summary": "Reproducible cinematography measurement control plane.",
+    "title": "cine-analyzer",
+    "version": "0.1.0"
+  },
+  "openapi": "3.1.0",
+  "paths": {
+    "/health/live": {
+      "get": {
+        "description": "Process liveness. Does not check PostgreSQL.",
+        "operationId": "live_health_live_get",
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HealthResponse"
+                }
+              }
+            },
+            "description": "Successful Response"
+          }
+        },
+        "summary": "Live",
+        "tags": [
+          "health"
+        ]
+      }
+    },
+    "/health/ready": {
+      "get": {
+        "description": "Fail when the database (and Celery broker, when configured) cannot be reached.",
+        "operationId": "ready_health_ready_get",
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HealthResponse"
+                }
+              }
+            },
+            "description": "Successful Response"
+          }
+        },
+        "summary": "Ready",
+        "tags": [
+          "health"
+        ]
+      }
+    },
+    "/metrics": {
+      "get": {
+        "description": "In-process counters and histograms. IDs are not labels.",
+        "operationId": "metrics_metrics_get",
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/MetricsSnapshot"
+                }
+              }
+            },
+            "description": "Successful Response"
+          }
+        },
+        "summary": "Metrics",
+        "tags": [
+          "health"
+        ]
+      }
+    },
+    "/v1/analyses": {
+      "post": {
+        "description": "Queue an analysis. Video identity stays separate from config identity.",
+        "operationId": "create_analysis_v1_analyses_post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/AnalysisCreateRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "202": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AnalysisAccepted"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "Create Analysis",
+        "tags": [
+          "analyses"
+        ]
+      }
+    },
+    "/v1/analyses/{analysis_id}": {
+      "get": {
+        "description": "Status, progress, and unavailable pillars.",
+        "operationId": "get_analysis_v1_analyses__analysis_id__get",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "analysis_id",
+            "required": true,
+            "schema": {
+              "format": "uuid",
+              "title": "Analysis Id",
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "Get Analysis",
+        "tags": [
+          "analyses"
+        ]
+      }
+    },
+    "/v1/analyses/{analysis_id}/cancel": {
+      "post": {
+        "description": "Request cooperative cancellation.",
+        "operationId": "cancel_analysis_v1_analyses__analysis_id__cancel_post",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "analysis_id",
+            "required": true,
+            "schema": {
+              "format": "uuid",
+              "title": "Analysis Id",
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "Cancel Analysis",
+        "tags": [
+          "analyses"
+        ]
+      }
+    },
+    "/v1/analyses/{analysis_id}/critique": {
+      "get": {
+        "description": "Stored interpretation. Omitted when the critic did not run.",
+        "operationId": "get_critique_v1_analyses__analysis_id__critique_get",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "analysis_id",
+            "required": true,
+            "schema": {
+              "format": "uuid",
+              "title": "Analysis Id",
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Critique"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "Get Critique",
+        "tags": [
+          "analyses"
+        ]
+      }
+    },
+    "/v1/analyses/{analysis_id}/report": {
+      "get": {
+        "description": "Canonical AnalysisReport JSON once aggregation has finished.",
+        "operationId": "get_report_v1_analyses__analysis_id__report_get",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "analysis_id",
+            "required": true,
+            "schema": {
+              "format": "uuid",
+              "title": "Analysis Id",
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AnalysisReport"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "Get Report",
+        "tags": [
+          "analyses"
+        ]
+      }
+    },
+    "/v1/analyses/{analysis_id}/shots/{shot_id}": {
+      "get": {
+        "description": "One shot's measured metrics from the canonical report.",
+        "operationId": "get_shot_v1_analyses__analysis_id__shots__shot_id__get",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "analysis_id",
+            "required": true,
+            "schema": {
+              "format": "uuid",
+              "title": "Analysis Id",
+              "type": "string"
+            }
+          },
+          {
+            "in": "path",
+            "name": "shot_id",
+            "required": true,
+            "schema": {
+              "format": "uuid",
+              "title": "Shot Id",
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ShotAnalysis"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "Get Shot",
+        "tags": [
+          "analyses"
+        ]
+      }
+    },
+    "/v1/analyses/{analysis_id}/timeline": {
+      "get": {
+        "description": "Windowed, downsampled tension-proxy timeline.",
+        "operationId": "get_timeline_v1_analyses__analysis_id__timeline_get",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "analysis_id",
+            "required": true,
+            "schema": {
+              "format": "uuid",
+              "title": "Analysis Id",
+              "type": "string"
+            }
+          },
+          {
+            "in": "query",
+            "name": "start_ms",
+            "required": true,
+            "schema": {
+              "minimum": 0,
+              "title": "Start Ms",
+              "type": "integer"
+            }
+          },
+          {
+            "in": "query",
+            "name": "end_ms",
+            "required": true,
+            "schema": {
+              "minimum": 0,
+              "title": "End Ms",
+              "type": "integer"
+            }
+          },
+          {
+            "in": "query",
+            "name": "max_points",
+            "required": true,
+            "schema": {
+              "maximum": 2000,
+              "minimum": 1,
+              "title": "Max Points",
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/TimelineWindowResponse"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "Get Timeline",
+        "tags": [
+          "analyses"
+        ]
+      }
+    },
+    "/v1/artifacts/{artifact_id}": {
+      "get": {
+        "description": "Authorized stream. Possession of the server-issued UUID is the capability.",
+        "operationId": "get_artifact_v1_artifacts__artifact_id__get",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "artifact_id",
+            "required": true,
+            "schema": {
+              "format": "uuid",
+              "title": "Artifact Id",
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "Get Artifact",
+        "tags": [
+          "artifacts"
+        ]
+      }
+    },
+    "/v1/videos": {
+      "post": {
+        "description": "Stream an upload into the Phase 03 ingest use case.",
+        "operationId": "upload_video_v1_videos_post",
+        "requestBody": {
+          "content": {
+            "multipart/form-data": {
+              "schema": {
+                "$ref": "#/components/schemas/Body_upload_video_v1_videos_post"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "201": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/VideoAccepted"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "Upload Video",
+        "tags": [
+          "videos"
+        ]
+      }
+    }
+  }
+}

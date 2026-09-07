@@ -1,0 +1,317 @@
+{
+  "schema_version": "1.0",
+  "analysis_id": "aaaaaaaa-aaaa-4aaa-8aaa-aaaaaaaaaaaa",
+  "video": {
+    "video_id": "bbbbbbbb-bbbb-4bbb-8bbb-bbbbbbbbbbbb",
+    "original_filename": "two_color_cut.mp4",
+    "content_sha256": "ba7974c3f1a1ec7b1bbf08d93601e80746f433e1202c315674bb6b150f761b1d",
+    "size_bytes": 4533,
+    "duration_ms": 4000,
+    "width": 320,
+    "height": 240,
+    "display_rotation_degrees": 0,
+    "average_frame_rate": {
+      "numerator": 25,
+      "denominator": 1
+    },
+    "real_frame_rate": {
+      "numerator": 25,
+      "denominator": 1
+    },
+    "video_codec": "h264",
+    "pixel_format": "yuv420p",
+    "has_audio": false,
+    "audio_codec": null,
+    "probe_artifact": {
+      "artifact_id": "058cd4c1-5a54-4c33-a20a-9f0a61ed3b1d",
+      "kind": "probe",
+      "media_type": "application/json",
+      "sha256": "ab50217b8ab58b4a8ad7f8179a568e5b5507be137fc3e5f0f472a416c24b8669",
+      "size_bytes": 2704,
+      "schema_version": "1.0"
+    }
+  },
+  "generated_at": "2026-09-07T00:00:00Z",
+  "pipeline_version": "0.1.0",
+  "configuration_hash": "66dced8dd50901cdfea31549d1395668fcca7bbc425288c3b705fe342d6304b7",
+  "availability": {
+    "shots": "COMPLETE",
+    "chromatic": "COMPLETE",
+    "spatial": "UNAVAILABLE",
+    "motion": "UNAVAILABLE",
+    "audio": "UNAVAILABLE",
+    "tension": "COMPLETE",
+    "critic": "NOT_REQUESTED"
+  },
+  "summary": {
+    "shot_count": 2,
+    "average_shot_length_ms": 2000.0,
+    "median_shot_length_ms": 2000.0,
+    "shots_per_minute": 30.0
+  },
+  "shots": [
+    {
+      "shot": {
+        "shot_id": "e41c7f7d-2774-5412-a2e4-d0e302aae441",
+        "index": 0,
+        "time_range": {
+          "start_ms": 0,
+          "end_ms": 2000
+        },
+        "incoming_boundary_id": null,
+        "outgoing_boundary_id": "7f353a8f-6adf-5cc3-b57c-6ea8c693757b",
+        "representative_sample_id": "d86f154e-171e-5ac7-902a-6449f554ef69"
+      },
+      "chromatic": {
+        "status": "OK",
+        "value": {
+          "palette": [
+            {
+              "rank": 1,
+              "lab": {
+                "lstar": 52.50498962402344,
+                "a": 79.25103759765625,
+                "b": 66.5
+              },
+              "rgb": {
+                "r": 251,
+                "g": 0,
+                "b": 0,
+                "hex": "#FB0000"
+              },
+              "proportion": 1.0
+            }
+          ],
+          "lightness": {
+            "mean_lstar": 52.520751953125,
+            "stddev_lstar": 0.0,
+            "p10_lstar": 52.520751953125,
+            "p50_lstar": 52.520751953125,
+            "p90_lstar": 52.520751953125,
+            "shadow_ratio": 0.0,
+            "highlight_ratio": 0.0
+          },
+          "lighting_key": "BALANCED_ESTIMATE",
+          "usable_pixel_ratio": 1.0
+        },
+        "confidence": 0.5059906005859375,
+        "reason_code": null,
+        "evidence_sample_ids": [
+          "71829005-9c26-5dcd-9c1a-18ceb9ed4b83",
+          "d86f154e-171e-5ac7-902a-6449f554ef69",
+          "857144e1-ef9a-5ccc-a53b-8fb39361ab97"
+        ],
+        "method": {
+          "method": "chromatics.opencv_sklearn",
+          "method_version": "chromatics-v1",
+          "config_hash": "66dced8dd50901cdfea31549d1395668fcca7bbc425288c3b705fe342d6304b7",
+          "code_revision": "cine-analyzer-0.1.0",
+          "random_seed": 42,
+          "model_name": null,
+          "model_package_version": null,
+          "weights_sha256": null,
+          "device": "cpu",
+          "started_at": "2026-09-07T02:56:58.980468Z",
+          "completed_at": "2026-09-07T02:56:58.980748Z"
+        }
+      },
+      "spatial": {
+        "status": "NOT_COMPUTED",
+        "value": null,
+        "confidence": null,
+        "reason_code": "detector_not_installed",
+        "evidence_sample_ids": [],
+        "method": {
+          "method": "spatial.none",
+          "method_version": "spatial-v1",
+          "config_hash": "66dced8dd50901cdfea31549d1395668fcca7bbc425288c3b705fe342d6304b7",
+          "code_revision": "cine-analyzer-0.1.0",
+          "random_seed": null,
+          "model_name": null,
+          "model_package_version": null,
+          "weights_sha256": null,
+          "device": "cpu",
+          "started_at": "2026-09-07T02:56:58.980468Z",
+          "completed_at": "2026-09-07T02:56:59.197011Z"
+        }
+      },
+      "temporal": {
+        "status": "OK",
+        "value": {
+          "duration_ms": 2000,
+          "motion_magnitude_median": null,
+          "global_motion_magnitude": null,
+          "residual_motion_magnitude": null,
+          "motion_magnitude_p90": null,
+          "flow_valid_ratio": null,
+          "direction_consistency": null
+        },
+        "confidence": null,
+        "reason_code": null,
+        "evidence_sample_ids": [
+          "50957dfc-315c-548e-8cc6-85439965b2c1",
+          "0cb283d7-96a6-5972-aafe-f2f4d8901326",
+          "b61763c0-88cd-537f-bbc3-1f66b401b6c4",
+          "6176605d-f1c1-5b49-b5c9-95b42089c7ed",
+          "d86e369e-7762-558c-bba2-ba8499f7fbd3",
+          "de96719a-f777-58ee-8852-c23c464a94bc",
+          "923acd12-83ac-522e-826f-3b0980a57c8b",
+          "b910a1a7-cb1b-58d1-b8bd-592f8f04f28f",
+          "90ec5ba5-dd0f-5212-9845-de776b0b32e5",
+          "e3be97db-4f18-5dd1-afea-724ef69aff2c",
+          "0fabf83b-bc4e-5f30-bb27-23b619f7eca0",
+          "d8bfd564-a7e1-5a4b-8630-6bedbe39e10e"
+        ],
+        "method": {
+          "method": "motion.opencv_farneback",
+          "method_version": "motion-v1",
+          "config_hash": "66dced8dd50901cdfea31549d1395668fcca7bbc425288c3b705fe342d6304b7",
+          "code_revision": "cine-analyzer-0.1.0",
+          "random_seed": null,
+          "model_name": null,
+          "model_package_version": null,
+          "weights_sha256": null,
+          "device": "cpu",
+          "started_at": "2026-09-07T02:56:58.980468Z",
+          "completed_at": "2026-09-07T02:56:59.197226Z"
+        }
+      }
+    },
+    {
+      "shot": {
+        "shot_id": "1b339dc6-deff-5dd3-8757-6fbc39e9cf5a",
+        "index": 1,
+        "time_range": {
+          "start_ms": 2000,
+          "end_ms": 4000
+        },
+        "incoming_boundary_id": "7f353a8f-6adf-5cc3-b57c-6ea8c693757b",
+        "outgoing_boundary_id": null,
+        "representative_sample_id": "bc402693-f624-537d-83d6-ca7fcb8e68c2"
+      },
+      "chromatic": {
+        "status": "OK",
+        "value": {
+          "palette": [
+            {
+              "rank": 1,
+              "lab": {
+                "lstar": 31.844066619873047,
+                "a": 78.24581146240234,
+                "b": -106.65046691894531
+              },
+              "rgb": {
+                "r": 1,
+                "g": 1,
+                "b": 251,
+                "hex": "#0101FB"
+              },
+              "proportion": 1.0
+            }
+          ],
+          "lightness": {
+            "mean_lstar": 31.842041015625,
+            "stddev_lstar": 0.0,
+            "p10_lstar": 31.842041015625,
+            "p50_lstar": 31.842041015625,
+            "p90_lstar": 31.842041015625,
+            "shadow_ratio": 0.0,
+            "highlight_ratio": 0.0
+          },
+          "lighting_key": "BALANCED_ESTIMATE",
+          "usable_pixel_ratio": 1.0
+        },
+        "confidence": 0.4519744873046875,
+        "reason_code": null,
+        "evidence_sample_ids": [
+          "dd131b6d-1c37-52fa-b177-734c895e1043",
+          "bc402693-f624-537d-83d6-ca7fcb8e68c2",
+          "44afb985-bbb4-52d9-b52d-df7c640f06b3"
+        ],
+        "method": {
+          "method": "chromatics.opencv_sklearn",
+          "method_version": "chromatics-v1",
+          "config_hash": "66dced8dd50901cdfea31549d1395668fcca7bbc425288c3b705fe342d6304b7",
+          "code_revision": "cine-analyzer-0.1.0",
+          "random_seed": 42,
+          "model_name": null,
+          "model_package_version": null,
+          "weights_sha256": null,
+          "device": "cpu",
+          "started_at": "2026-09-07T02:56:58.980468Z",
+          "completed_at": "2026-09-07T02:56:58.980748Z"
+        }
+      },
+      "spatial": {
+        "status": "NOT_COMPUTED",
+        "value": null,
+        "confidence": null,
+        "reason_code": "detector_not_installed",
+        "evidence_sample_ids": [],
+        "method": {
+          "method": "spatial.none",
+          "method_version": "spatial-v1",
+          "config_hash": "66dced8dd50901cdfea31549d1395668fcca7bbc425288c3b705fe342d6304b7",
+          "code_revision": "cine-analyzer-0.1.0",
+          "random_seed": null,
+          "model_name": null,
+          "model_package_version": null,
+          "weights_sha256": null,
+          "device": "cpu",
+          "started_at": "2026-09-07T02:56:58.980468Z",
+          "completed_at": "2026-09-07T02:56:59.197011Z"
+        }
+      },
+      "temporal": {
+        "status": "OK",
+        "value": {
+          "duration_ms": 2000,
+          "motion_magnitude_median": null,
+          "global_motion_magnitude": null,
+          "residual_motion_magnitude": null,
+          "motion_magnitude_p90": null,
+          "flow_valid_ratio": null,
+          "direction_consistency": null
+        },
+        "confidence": null,
+        "reason_code": null,
+        "evidence_sample_ids": [
+          "e00572ef-b0fb-53ef-ba00-82c519464711",
+          "18b94546-7949-5a97-9c21-8fb325f292ae",
+          "4fa97354-3742-5470-94e7-0aff62ef6167",
+          "be05d1a8-9a1f-5e13-a016-91a07b6b24d3",
+          "d0df16c7-2801-5387-a3fb-1396f31644a9",
+          "e542ecab-e540-5e49-a06e-b03e931a3a3c",
+          "519fb947-b8f8-552b-8ae1-8512a64668b2",
+          "ef305451-7a9f-55be-bdc7-492e0b2613ca",
+          "357b1ba3-05de-5061-9add-5a753506aab4",
+          "05d6a13f-758c-590d-8a66-4ad50e7fae76",
+          "d60f5b54-f0f9-5179-98e8-949dbd73a006",
+          "49cf8d27-e040-50c5-833a-87cc2a52bf05"
+        ],
+        "method": {
+          "method": "motion.opencv_farneback",
+          "method_version": "motion-v1",
+          "config_hash": "66dced8dd50901cdfea31549d1395668fcca7bbc425288c3b705fe342d6304b7",
+          "code_revision": "cine-analyzer-0.1.0",
+          "random_seed": null,
+          "model_name": null,
+          "model_package_version": null,
+          "weights_sha256": null,
+          "device": "cpu",
+          "started_at": "2026-09-07T02:56:58.980468Z",
+          "completed_at": "2026-09-07T02:56:59.197226Z"
+        }
+      }
+    }
+  ],
+  "timeline_artifact": {
+    "artifact_id": "2b80d0c8-5395-43a0-9de7-c3d30e2e397b",
+    "kind": "timeline",
+    "media_type": "application/json",
+    "sha256": "0e34168725091d47e4c01da9a874705399be68061a223ff15edc9fe4660e67ed",
+    "size_bytes": 1748,
+    "schema_version": "1.0"
+  },
+  "critique": null
+}

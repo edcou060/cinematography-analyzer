@@ -1,0 +1,120 @@
+name: cinematography-analyzer
+
+services:
+  postgres:
+    image: postgres:16
+    environment:
+      POSTGRES_USER: cine
+      POSTGRES_PASSWORD: cine
+      POSTGRES_DB: cine_analyzer
+    ports:
+      - "55432:5432"
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U cine -d cine_analyzer"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+
+  redis:
+    image: redis:7-alpine
+    ports:
+      - "56379:6379"
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 5s
+      timeout: 3s
+      retries: 10
+
+  migrate:
+    image: cine-analyzer:local
+    build:
+      context: .
+      dockerfile: docker/Dockerfile
+    command: ["alembic", "upgrade", "head"]
+    environment:
+      CINE_DATABASE_URL: postgresql+pg8000://cine:cine@postgres:5432/cine_analyzer
+    depends_on:
+      postgres:
+        condition: service_healthy
+
+  api:
+    image: cine-analyzer:local
+    command: ["cine-analyzer", "serve", "--host", "0.0.0.0"]
+    environment:
+      CINE_DATABASE_URL: postgresql+pg8000://cine:cine@postgres:5432/cine_analyzer
+      CINE_REDIS_URL: redis://redis:6379/0
+      CINE_EXECUTION_BACKEND: celery
+      CINE_ARTIFACT_ROOT: /artifacts
+      CINE_API_HOST: 0.0.0.0
+      CINE_API_PORT: "8000"
+      CINE_API_PUBLIC_URL: http://127.0.0.1:8000
+      CINE_WORKER_ID: compose-api
+    ports:
+      - "8000:8000"
+    volumes:
+      - artifacts:/artifacts
+    depends_on:
+      migrate:
+        condition: service_completed_successfully
+      redis:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://127.0.0.1:8000/health/live"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+    user: "1000:1000"
+    read_only: true
+    tmpfs:
+      - /tmp
+
+  worker-cpu:
+    image: cine-analyzer:local
+    command: ["cine-analyzer", "celery-worker", "--role", "cpu"]
+    environment:
+      CINE_DATABASE_URL: postgresql+pg8000://cine:cine@postgres:5432/cine_analyzer
+      CINE_REDIS_URL: redis://redis:6379/0
+      CINE_EXECUTION_BACKEND: celery
+      CINE_ARTIFACT_ROOT: /artifacts
+      CINE_WORKER_ID: compose-cpu
+      CINE_SERVICE_NAME: cine-worker-cpu
+    volumes:
+      - artifacts:/artifacts
+    depends_on:
+      migrate:
+        condition: service_completed_successfully
+      redis:
+        condition: service_healthy
+    shm_size: "256mb"
+    user: "1000:1000"
+    read_only: true
+    tmpfs:
+      - /tmp
+
+  worker-gpu:
+    profiles: ["gpu"]
+    image: cine-analyzer:local
+    command: ["cine-analyzer", "celery-worker", "--role", "gpu"]
+    environment:
+      CINE_DATABASE_URL: postgresql+pg8000://cine:cine@postgres:5432/cine_analyzer
+      CINE_REDIS_URL: redis://redis:6379/0
+      CINE_EXECUTION_BACKEND: celery
+      CINE_ARTIFACT_ROOT: /artifacts
+      CINE_WORKER_ID: compose-gpu
+      CINE_SERVICE_NAME: cine-worker-gpu
+      CINE_WORKER_ROLE: gpu
+    volumes:
+      - artifacts:/artifacts
+    depends_on:
+      redis:
+        condition: service_healthy
+    user: "1000:1000"
+    read_only: true
+    tmpfs:
+      - /tmp
+
+volumes:
+  pgdata:
+  artifacts:

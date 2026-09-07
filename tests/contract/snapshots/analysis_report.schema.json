@@ -1,0 +1,1262 @@
+{
+  "$defs": {
+    "ArtifactRef": {
+      "additionalProperties": false,
+      "description": "Content-addressed pointer to an immutable blob.",
+      "properties": {
+        "artifact_id": {
+          "format": "uuid",
+          "title": "Artifact Id",
+          "type": "string"
+        },
+        "kind": {
+          "maxLength": 64,
+          "minLength": 1,
+          "title": "Kind",
+          "type": "string"
+        },
+        "media_type": {
+          "maxLength": 128,
+          "minLength": 1,
+          "title": "Media Type",
+          "type": "string"
+        },
+        "schema_version": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Schema Version"
+        },
+        "sha256": {
+          "description": "Lowercase hex SHA-256 digest.",
+          "pattern": "^[0-9a-f]{64}$",
+          "title": "Sha256",
+          "type": "string"
+        },
+        "size_bytes": {
+          "description": "Artifact size in bytes, not a media duration.",
+          "minimum": 0,
+          "title": "Size Bytes",
+          "type": "integer"
+        }
+      },
+      "required": [
+        "artifact_id",
+        "kind",
+        "media_type",
+        "sha256",
+        "size_bytes"
+      ],
+      "title": "ArtifactRef",
+      "type": "object"
+    },
+    "ChromaticValue": {
+      "additionalProperties": false,
+      "description": "Measured palette and lightness, plus a lighting-key estimate.",
+      "properties": {
+        "lighting_key": {
+          "$ref": "#/$defs/LightingKeyLabel"
+        },
+        "lightness": {
+          "$ref": "#/$defs/LightnessDistribution"
+        },
+        "palette": {
+          "items": {
+            "$ref": "#/$defs/ColorSwatch"
+          },
+          "maxItems": 5,
+          "minItems": 1,
+          "title": "Palette",
+          "type": "array"
+        },
+        "usable_pixel_ratio": {
+          "description": "Ratio in [0, 1]. Percentages are a presentation concern.",
+          "maximum": 1.0,
+          "minimum": 0.0,
+          "title": "Usable Pixel Ratio",
+          "type": "number"
+        }
+      },
+      "required": [
+        "palette",
+        "lightness",
+        "lighting_key",
+        "usable_pixel_ratio"
+      ],
+      "title": "ChromaticValue",
+      "type": "object"
+    },
+    "ColorSwatch": {
+      "additionalProperties": false,
+      "description": "One palette entry. Rank 1 is the most prevalent colour.",
+      "properties": {
+        "lab": {
+          "$ref": "#/$defs/LabColor"
+        },
+        "proportion": {
+          "description": "Ratio in [0, 1]. Percentages are a presentation concern.",
+          "maximum": 1.0,
+          "minimum": 0.0,
+          "title": "Proportion",
+          "type": "number"
+        },
+        "rank": {
+          "maximum": 5,
+          "minimum": 1,
+          "title": "Rank",
+          "type": "integer"
+        },
+        "rgb": {
+          "$ref": "#/$defs/RgbColor"
+        }
+      },
+      "required": [
+        "rank",
+        "lab",
+        "rgb",
+        "proportion"
+      ],
+      "title": "ColorSwatch",
+      "type": "object"
+    },
+    "Critique": {
+      "additionalProperties": false,
+      "description": "Optional interpretation of an already-validated report. Regenerable; cannot write metrics.",
+      "properties": {
+        "input_report_sha256": {
+          "anyOf": [
+            {
+              "description": "Lowercase hex SHA-256 digest.",
+              "pattern": "^[0-9a-f]{64}$",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Input Report Sha256"
+        },
+        "model_name": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Model Name"
+        },
+        "prompt_version": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Prompt Version"
+        },
+        "status": {
+          "$ref": "#/$defs/MetricStatus"
+        },
+        "text": {
+          "anyOf": [
+            {
+              "maxLength": 1200,
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Text"
+        }
+      },
+      "required": [
+        "status"
+      ],
+      "title": "Critique",
+      "type": "object"
+    },
+    "FramingLabel": {
+      "description": "Heuristic shot-size estimate. Abstains rather than guessing.",
+      "enum": [
+        "EXTREME_WIDE_ESTIMATE",
+        "WIDE_ESTIMATE",
+        "MEDIUM_ESTIMATE",
+        "CLOSE_UP_ESTIMATE",
+        "EXTREME_CLOSE_UP_ESTIMATE",
+        "UNDETERMINED"
+      ],
+      "title": "FramingLabel",
+      "type": "string"
+    },
+    "LabColor": {
+      "additionalProperties": false,
+      "description": "CIE L*a*b* colour. L* is not an OpenCV 8-bit L channel.",
+      "properties": {
+        "a": {
+          "maximum": 127.0,
+          "minimum": -128.0,
+          "title": "A",
+          "type": "number"
+        },
+        "b": {
+          "maximum": 127.0,
+          "minimum": -128.0,
+          "title": "B",
+          "type": "number"
+        },
+        "lstar": {
+          "description": "CIE L*, range [0, 100].",
+          "maximum": 100.0,
+          "minimum": 0.0,
+          "title": "Lstar",
+          "type": "number"
+        }
+      },
+      "required": [
+        "lstar",
+        "a",
+        "b"
+      ],
+      "title": "LabColor",
+      "type": "object"
+    },
+    "LightingKeyLabel": {
+      "description": "Heuristic lighting-key estimate. Describes sampled pixels, not intent.",
+      "enum": [
+        "LOW_KEY_ESTIMATE",
+        "HIGH_KEY_ESTIMATE",
+        "BALANCED_ESTIMATE"
+      ],
+      "title": "LightingKeyLabel",
+      "type": "string"
+    },
+    "LightnessDistribution": {
+      "additionalProperties": false,
+      "description": "Perceptual lightness statistics in CIE L*.",
+      "properties": {
+        "highlight_ratio": {
+          "description": "Ratio in [0, 1]. Percentages are a presentation concern.",
+          "maximum": 1.0,
+          "minimum": 0.0,
+          "title": "Highlight Ratio",
+          "type": "number"
+        },
+        "mean_lstar": {
+          "maximum": 100.0,
+          "minimum": 0.0,
+          "title": "Mean Lstar",
+          "type": "number"
+        },
+        "p10_lstar": {
+          "maximum": 100.0,
+          "minimum": 0.0,
+          "title": "P10 Lstar",
+          "type": "number"
+        },
+        "p50_lstar": {
+          "maximum": 100.0,
+          "minimum": 0.0,
+          "title": "P50 Lstar",
+          "type": "number"
+        },
+        "p90_lstar": {
+          "maximum": 100.0,
+          "minimum": 0.0,
+          "title": "P90 Lstar",
+          "type": "number"
+        },
+        "shadow_ratio": {
+          "description": "Ratio in [0, 1]. Percentages are a presentation concern.",
+          "maximum": 1.0,
+          "minimum": 0.0,
+          "title": "Shadow Ratio",
+          "type": "number"
+        },
+        "stddev_lstar": {
+          "minimum": 0.0,
+          "title": "Stddev Lstar",
+          "type": "number"
+        }
+      },
+      "required": [
+        "mean_lstar",
+        "stddev_lstar",
+        "p10_lstar",
+        "p50_lstar",
+        "p90_lstar",
+        "shadow_ratio",
+        "highlight_ratio"
+      ],
+      "title": "LightnessDistribution",
+      "type": "object"
+    },
+    "Measurement_ChromaticValue_": {
+      "additionalProperties": false,
+      "properties": {
+        "confidence": {
+          "anyOf": [
+            {
+              "description": "Ratio in [0, 1]. Percentages are a presentation concern.",
+              "maximum": 1.0,
+              "minimum": 0.0,
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Confidence"
+        },
+        "evidence_sample_ids": {
+          "default": [],
+          "items": {
+            "format": "uuid",
+            "type": "string"
+          },
+          "title": "Evidence Sample Ids",
+          "type": "array"
+        },
+        "method": {
+          "$ref": "#/$defs/MethodProvenance"
+        },
+        "reason_code": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Reason Code"
+        },
+        "status": {
+          "$ref": "#/$defs/MetricStatus"
+        },
+        "value": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/ChromaticValue"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        }
+      },
+      "required": [
+        "status",
+        "value",
+        "method"
+      ],
+      "title": "Measurement[ChromaticValue]",
+      "type": "object"
+    },
+    "Measurement_SpatialValue_": {
+      "additionalProperties": false,
+      "properties": {
+        "confidence": {
+          "anyOf": [
+            {
+              "description": "Ratio in [0, 1]. Percentages are a presentation concern.",
+              "maximum": 1.0,
+              "minimum": 0.0,
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Confidence"
+        },
+        "evidence_sample_ids": {
+          "default": [],
+          "items": {
+            "format": "uuid",
+            "type": "string"
+          },
+          "title": "Evidence Sample Ids",
+          "type": "array"
+        },
+        "method": {
+          "$ref": "#/$defs/MethodProvenance"
+        },
+        "reason_code": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Reason Code"
+        },
+        "status": {
+          "$ref": "#/$defs/MetricStatus"
+        },
+        "value": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/SpatialValue"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        }
+      },
+      "required": [
+        "status",
+        "value",
+        "method"
+      ],
+      "title": "Measurement[SpatialValue]",
+      "type": "object"
+    },
+    "Measurement_TemporalValue_": {
+      "additionalProperties": false,
+      "properties": {
+        "confidence": {
+          "anyOf": [
+            {
+              "description": "Ratio in [0, 1]. Percentages are a presentation concern.",
+              "maximum": 1.0,
+              "minimum": 0.0,
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Confidence"
+        },
+        "evidence_sample_ids": {
+          "default": [],
+          "items": {
+            "format": "uuid",
+            "type": "string"
+          },
+          "title": "Evidence Sample Ids",
+          "type": "array"
+        },
+        "method": {
+          "$ref": "#/$defs/MethodProvenance"
+        },
+        "reason_code": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Reason Code"
+        },
+        "status": {
+          "$ref": "#/$defs/MetricStatus"
+        },
+        "value": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/TemporalValue"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        }
+      },
+      "required": [
+        "status",
+        "value",
+        "method"
+      ],
+      "title": "Measurement[TemporalValue]",
+      "type": "object"
+    },
+    "MethodProvenance": {
+      "additionalProperties": false,
+      "description": "How a value was produced, including the hashed analysis configuration.",
+      "properties": {
+        "code_revision": {
+          "maxLength": 128,
+          "minLength": 1,
+          "title": "Code Revision",
+          "type": "string"
+        },
+        "completed_at": {
+          "format": "date-time",
+          "title": "Completed At",
+          "type": "string"
+        },
+        "config_hash": {
+          "description": "Lowercase hex SHA-256 digest.",
+          "pattern": "^[0-9a-f]{64}$",
+          "title": "Config Hash",
+          "type": "string"
+        },
+        "device": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Device"
+        },
+        "method": {
+          "maxLength": 128,
+          "minLength": 1,
+          "title": "Method",
+          "type": "string"
+        },
+        "method_version": {
+          "maxLength": 64,
+          "minLength": 1,
+          "title": "Method Version",
+          "type": "string"
+        },
+        "model_name": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Model Name"
+        },
+        "model_package_version": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Model Package Version"
+        },
+        "random_seed": {
+          "anyOf": [
+            {
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Random Seed"
+        },
+        "started_at": {
+          "format": "date-time",
+          "title": "Started At",
+          "type": "string"
+        },
+        "weights_sha256": {
+          "anyOf": [
+            {
+              "description": "Lowercase hex SHA-256 digest.",
+              "pattern": "^[0-9a-f]{64}$",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Weights Sha256"
+        }
+      },
+      "required": [
+        "method",
+        "method_version",
+        "config_hash",
+        "code_revision",
+        "started_at",
+        "completed_at"
+      ],
+      "title": "MethodProvenance",
+      "type": "object"
+    },
+    "MetricStatus": {
+      "description": "Why a measurement envelope does or does not carry a value.\n\n``OK`` is the only status that may hold a value. Every other status is a\nmachine-readable absence, never an unexplained null.",
+      "enum": [
+        "OK",
+        "NOT_COMPUTED",
+        "INSUFFICIENT_DATA",
+        "NO_SUBJECT",
+        "NO_AUDIO",
+        "FAILED"
+      ],
+      "title": "MetricStatus",
+      "type": "string"
+    },
+    "Rational": {
+      "additionalProperties": false,
+      "description": "Exact frame-rate fraction. A float is display-only and is not stored here.",
+      "properties": {
+        "denominator": {
+          "description": "Non-zero denominator.",
+          "exclusiveMinimum": 0,
+          "title": "Denominator",
+          "type": "integer"
+        },
+        "numerator": {
+          "title": "Numerator",
+          "type": "integer"
+        }
+      },
+      "required": [
+        "numerator",
+        "denominator"
+      ],
+      "title": "Rational",
+      "type": "object"
+    },
+    "ReportAvailability": {
+      "additionalProperties": false,
+      "description": "Typed per-pillar availability. Absence is a status, not a missing key.",
+      "properties": {
+        "audio": {
+          "$ref": "#/$defs/StageAvailability"
+        },
+        "chromatic": {
+          "$ref": "#/$defs/StageAvailability"
+        },
+        "critic": {
+          "$ref": "#/$defs/StageAvailability"
+        },
+        "motion": {
+          "$ref": "#/$defs/StageAvailability"
+        },
+        "shots": {
+          "$ref": "#/$defs/StageAvailability"
+        },
+        "spatial": {
+          "$ref": "#/$defs/StageAvailability"
+        },
+        "tension": {
+          "$ref": "#/$defs/StageAvailability"
+        }
+      },
+      "required": [
+        "shots",
+        "chromatic",
+        "spatial",
+        "motion",
+        "audio",
+        "tension",
+        "critic"
+      ],
+      "title": "ReportAvailability",
+      "type": "object"
+    },
+    "RgbColor": {
+      "additionalProperties": false,
+      "description": "8-bit sRGB plus the matching uppercase hex encoding.",
+      "properties": {
+        "b": {
+          "maximum": 255,
+          "minimum": 0,
+          "title": "B",
+          "type": "integer"
+        },
+        "g": {
+          "maximum": 255,
+          "minimum": 0,
+          "title": "G",
+          "type": "integer"
+        },
+        "hex": {
+          "description": "sRGB hex colour, uppercase, with a leading #.",
+          "pattern": "^#[0-9A-F]{6}$",
+          "title": "Hex",
+          "type": "string"
+        },
+        "r": {
+          "maximum": 255,
+          "minimum": 0,
+          "title": "R",
+          "type": "integer"
+        }
+      },
+      "required": [
+        "r",
+        "g",
+        "b",
+        "hex"
+      ],
+      "title": "RgbColor",
+      "type": "object"
+    },
+    "Shot": {
+      "additionalProperties": false,
+      "description": "Half-open interval between two consecutive boundaries, plus clip start and end.",
+      "properties": {
+        "incoming_boundary_id": {
+          "anyOf": [
+            {
+              "format": "uuid",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Incoming Boundary Id"
+        },
+        "index": {
+          "minimum": 0,
+          "title": "Index",
+          "type": "integer"
+        },
+        "outgoing_boundary_id": {
+          "anyOf": [
+            {
+              "format": "uuid",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Outgoing Boundary Id"
+        },
+        "representative_sample_id": {
+          "anyOf": [
+            {
+              "format": "uuid",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Representative Sample Id"
+        },
+        "shot_id": {
+          "format": "uuid",
+          "title": "Shot Id",
+          "type": "string"
+        },
+        "time_range": {
+          "$ref": "#/$defs/TimeRangeMs"
+        }
+      },
+      "required": [
+        "shot_id",
+        "index",
+        "time_range"
+      ],
+      "title": "Shot",
+      "type": "object"
+    },
+    "ShotAnalysis": {
+      "additionalProperties": false,
+      "description": "One shot and the three per-shot measurement envelopes.",
+      "properties": {
+        "chromatic": {
+          "$ref": "#/$defs/Measurement_ChromaticValue_"
+        },
+        "shot": {
+          "$ref": "#/$defs/Shot"
+        },
+        "spatial": {
+          "$ref": "#/$defs/Measurement_SpatialValue_"
+        },
+        "temporal": {
+          "$ref": "#/$defs/Measurement_TemporalValue_"
+        }
+      },
+      "required": [
+        "shot",
+        "chromatic",
+        "spatial",
+        "temporal"
+      ],
+      "title": "ShotAnalysis",
+      "type": "object"
+    },
+    "SpatialValue": {
+      "additionalProperties": false,
+      "description": "Per-shot spatial summary. Primary-track selection is a documented rule, not recognition.",
+      "properties": {
+        "center_proximity_score": {
+          "description": "Ratio in [0, 1]. Percentages are a presentation concern.",
+          "maximum": 1.0,
+          "minimum": 0.0,
+          "title": "Center Proximity Score",
+          "type": "number"
+        },
+        "framing": {
+          "$ref": "#/$defs/FramingLabel"
+        },
+        "framing_confidence": {
+          "description": "Ratio in [0, 1]. Percentages are a presentation concern.",
+          "maximum": 1.0,
+          "minimum": 0.0,
+          "title": "Framing Confidence",
+          "type": "number"
+        },
+        "primary_track_id": {
+          "maxLength": 128,
+          "minLength": 1,
+          "title": "Primary Track Id",
+          "type": "string"
+        },
+        "subject_coverage_ratio_median": {
+          "description": "Ratio in [0, 1]. Percentages are a presentation concern.",
+          "maximum": 1.0,
+          "minimum": 0.0,
+          "title": "Subject Coverage Ratio Median",
+          "type": "number"
+        },
+        "subject_height_ratio_median": {
+          "description": "Ratio in [0, 1]. Percentages are a presentation concern.",
+          "maximum": 1.0,
+          "minimum": 0.0,
+          "title": "Subject Height Ratio Median",
+          "type": "number"
+        },
+        "thirds_proximity_p10": {
+          "description": "Ratio in [0, 1]. Percentages are a presentation concern.",
+          "maximum": 1.0,
+          "minimum": 0.0,
+          "title": "Thirds Proximity P10",
+          "type": "number"
+        },
+        "thirds_proximity_score": {
+          "description": "Ratio in [0, 1]. Percentages are a presentation concern.",
+          "maximum": 1.0,
+          "minimum": 0.0,
+          "title": "Thirds Proximity Score",
+          "type": "number"
+        },
+        "track_coverage_ratio": {
+          "description": "Ratio in [0, 1]. Percentages are a presentation concern.",
+          "maximum": 1.0,
+          "minimum": 0.0,
+          "title": "Track Coverage Ratio",
+          "type": "number"
+        }
+      },
+      "required": [
+        "primary_track_id",
+        "subject_coverage_ratio_median",
+        "subject_height_ratio_median",
+        "thirds_proximity_score",
+        "thirds_proximity_p10",
+        "center_proximity_score",
+        "framing",
+        "framing_confidence",
+        "track_coverage_ratio"
+      ],
+      "title": "SpatialValue",
+      "type": "object"
+    },
+    "StageAvailability": {
+      "description": "Whether a pillar produced values, produced some, was skipped, or was not asked.",
+      "enum": [
+        "COMPLETE",
+        "PARTIAL",
+        "UNAVAILABLE",
+        "NOT_REQUESTED"
+      ],
+      "title": "StageAvailability",
+      "type": "string"
+    },
+    "TemporalValue": {
+      "additionalProperties": false,
+      "description": "Per-shot duration and motion magnitudes. Camera-movement labels are not emitted.",
+      "properties": {
+        "direction_consistency": {
+          "anyOf": [
+            {
+              "description": "Ratio in [0, 1]. Percentages are a presentation concern.",
+              "maximum": 1.0,
+              "minimum": 0.0,
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Direction Consistency"
+        },
+        "duration_ms": {
+          "description": "Shot duration, integer milliseconds.",
+          "exclusiveMinimum": 0,
+          "title": "Duration Ms",
+          "type": "integer"
+        },
+        "flow_valid_ratio": {
+          "anyOf": [
+            {
+              "description": "Ratio in [0, 1]. Percentages are a presentation concern.",
+              "maximum": 1.0,
+              "minimum": 0.0,
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Flow Valid Ratio"
+        },
+        "global_motion_magnitude": {
+          "anyOf": [
+            {
+              "minimum": 0.0,
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Global Motion Magnitude"
+        },
+        "motion_magnitude_median": {
+          "anyOf": [
+            {
+              "minimum": 0.0,
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Motion Magnitude Median"
+        },
+        "motion_magnitude_p90": {
+          "anyOf": [
+            {
+              "minimum": 0.0,
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Motion Magnitude P90"
+        },
+        "residual_motion_magnitude": {
+          "anyOf": [
+            {
+              "minimum": 0.0,
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Residual Motion Magnitude"
+        }
+      },
+      "required": [
+        "duration_ms"
+      ],
+      "title": "TemporalValue",
+      "type": "object"
+    },
+    "TimeRangeMs": {
+      "additionalProperties": false,
+      "description": "Half-open interval ``[start_ms, end_ms)`` on the media timeline.",
+      "properties": {
+        "end_ms": {
+          "description": "Exclusive end on the media timeline, integer milliseconds.",
+          "exclusiveMinimum": 0,
+          "title": "End Ms",
+          "type": "integer"
+        },
+        "start_ms": {
+          "description": "Inclusive start on the media timeline, integer milliseconds.",
+          "minimum": 0,
+          "title": "Start Ms",
+          "type": "integer"
+        }
+      },
+      "required": [
+        "start_ms",
+        "end_ms"
+      ],
+      "title": "TimeRangeMs",
+      "type": "object"
+    },
+    "VideoMetadata": {
+      "additionalProperties": false,
+      "description": "Facts taken from a successful probe. Filename is stored, never echoed in errors.",
+      "properties": {
+        "audio_codec": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Audio Codec"
+        },
+        "average_frame_rate": {
+          "$ref": "#/$defs/Rational"
+        },
+        "content_sha256": {
+          "description": "Lowercase hex SHA-256 digest.",
+          "pattern": "^[0-9a-f]{64}$",
+          "title": "Content Sha256",
+          "type": "string"
+        },
+        "display_rotation_degrees": {
+          "description": "Container rotation applied once before spatial measurement.",
+          "title": "Display Rotation Degrees",
+          "type": "integer"
+        },
+        "duration_ms": {
+          "description": "Probed media duration, integer milliseconds.",
+          "exclusiveMinimum": 0,
+          "title": "Duration Ms",
+          "type": "integer"
+        },
+        "has_audio": {
+          "title": "Has Audio",
+          "type": "boolean"
+        },
+        "height": {
+          "exclusiveMinimum": 0,
+          "title": "Height",
+          "type": "integer"
+        },
+        "original_filename": {
+          "maxLength": 512,
+          "minLength": 1,
+          "title": "Original Filename",
+          "type": "string"
+        },
+        "pixel_format": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Pixel Format"
+        },
+        "probe_artifact": {
+          "$ref": "#/$defs/ArtifactRef"
+        },
+        "real_frame_rate": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/Rational"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null
+        },
+        "size_bytes": {
+          "description": "Uploaded bytes.",
+          "exclusiveMinimum": 0,
+          "title": "Size Bytes",
+          "type": "integer"
+        },
+        "video_codec": {
+          "maxLength": 64,
+          "minLength": 1,
+          "title": "Video Codec",
+          "type": "string"
+        },
+        "video_id": {
+          "format": "uuid",
+          "title": "Video Id",
+          "type": "string"
+        },
+        "width": {
+          "exclusiveMinimum": 0,
+          "title": "Width",
+          "type": "integer"
+        }
+      },
+      "required": [
+        "video_id",
+        "original_filename",
+        "content_sha256",
+        "size_bytes",
+        "duration_ms",
+        "width",
+        "height",
+        "display_rotation_degrees",
+        "average_frame_rate",
+        "video_codec",
+        "has_audio",
+        "probe_artifact"
+      ],
+      "title": "VideoMetadata",
+      "type": "object"
+    },
+    "VideoSummary": {
+      "additionalProperties": false,
+      "description": "Editing summary. Mean and median are float milliseconds (even-count medians).",
+      "properties": {
+        "average_shot_length_ms": {
+          "description": "Mean shot duration in milliseconds. Float because it is an aggregate, not a timeline instant.",
+          "exclusiveMinimum": 0,
+          "title": "Average Shot Length Ms",
+          "type": "number"
+        },
+        "median_shot_length_ms": {
+          "description": "Median shot duration in milliseconds. Float because an even shot count averages two integer durations.",
+          "exclusiveMinimum": 0,
+          "title": "Median Shot Length Ms",
+          "type": "number"
+        },
+        "shot_count": {
+          "minimum": 1,
+          "title": "Shot Count",
+          "type": "integer"
+        },
+        "shots_per_minute": {
+          "minimum": 0.0,
+          "title": "Shots Per Minute",
+          "type": "number"
+        }
+      },
+      "required": [
+        "shot_count",
+        "average_shot_length_ms",
+        "median_shot_length_ms",
+        "shots_per_minute"
+      ],
+      "title": "VideoSummary",
+      "type": "object"
+    }
+  },
+  "additionalProperties": false,
+  "description": "The versioned document a client reads. Large series live behind artifact references.",
+  "properties": {
+    "analysis_id": {
+      "format": "uuid",
+      "title": "Analysis Id",
+      "type": "string"
+    },
+    "availability": {
+      "$ref": "#/$defs/ReportAvailability"
+    },
+    "configuration_hash": {
+      "description": "Lowercase hex SHA-256 digest.",
+      "pattern": "^[0-9a-f]{64}$",
+      "title": "Configuration Hash",
+      "type": "string"
+    },
+    "critique": {
+      "anyOf": [
+        {
+          "$ref": "#/$defs/Critique"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null
+    },
+    "generated_at": {
+      "format": "date-time",
+      "title": "Generated At",
+      "type": "string"
+    },
+    "pipeline_version": {
+      "maxLength": 64,
+      "minLength": 1,
+      "title": "Pipeline Version",
+      "type": "string"
+    },
+    "schema_version": {
+      "description": "Report schema version.",
+      "title": "Schema Version",
+      "type": "string"
+    },
+    "shots": {
+      "items": {
+        "$ref": "#/$defs/ShotAnalysis"
+      },
+      "minItems": 1,
+      "title": "Shots",
+      "type": "array"
+    },
+    "summary": {
+      "$ref": "#/$defs/VideoSummary"
+    },
+    "timeline_artifact": {
+      "anyOf": [
+        {
+          "$ref": "#/$defs/ArtifactRef"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null
+    },
+    "video": {
+      "$ref": "#/$defs/VideoMetadata"
+    }
+  },
+  "required": [
+    "schema_version",
+    "analysis_id",
+    "video",
+    "generated_at",
+    "pipeline_version",
+    "configuration_hash",
+    "availability",
+    "summary",
+    "shots"
+  ],
+  "title": "AnalysisReport",
+  "type": "object"
+}

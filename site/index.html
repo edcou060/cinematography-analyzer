@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Automated Cinematography Analyzer</title>
+    <meta
+      name="description"
+      content="Reproducible cinematography measurement. Every number traces to frames or a time range. Heuristics are estimates. The critic cannot change a metric."
+    />
+    <link rel="stylesheet" href="./styles.css" />
+  </head>
+  <body>
+    <a class="skip" href="#main">Skip to content</a>
+    <header>
+      <div class="mark">Cine Analyzer · 0.1.0-rc</div>
+      <nav>
+        <a href="https://github.com/edcou060/cinematography-analyzer">GitHub</a>
+        <a href="#report">Sample report</a>
+        <a href="#run">Run locally</a>
+      </nav>
+    </header>
+    <main id="main">
+      <section class="hero">
+        <p class="kicker">Measurement instrument, not an aesthetic judge</p>
+        <h1>Editing, colour, framing, and audio — with evidence attached.</h1>
+        <p class="lede">
+          A clip goes in. A versioned report comes out. Measured values are
+          reproducible. Heuristic labels abstain when evidence is weak. Missing
+          pillars are <span class="mono">unavailable</span> with a reason, never
+          a fabricated zero.
+        </p>
+        <div class="actions">
+          <a class="btn primary" href="https://github.com/edcou060/cinematography-analyzer"
+            >Source on GitHub</a
+          >
+          <a class="btn" href="#report">Inspect a sample report</a>
+        </div>
+      </section>
+
+      <p class="notice">
+        This Netlify page is the public brief. It does not analyse video.
+        The pipeline needs FFmpeg, Python 3.12, and (for the API) PostgreSQL.
+        Clone the repository to run it.
+      </p>
+
+      <h2>Four kinds of output</h2>
+      <div class="kinds">
+        <article class="card">
+          <h3>Measured</h3>
+          <p>Deterministic function of pixels, samples, or probe facts. Unit and method version on every value.</p>
+        </article>
+        <article class="card">
+          <h3>Estimated</h3>
+          <p>Thresholded labels such as lighting-key or framing. Confidence plus evidence. Not artistic intent.</p>
+        </article>
+        <article class="card">
+          <h3>Interpreted</h3>
+          <p>Optional critic prose from compact metrics. Stored separately. Cannot modify or fail analysis.</p>
+        </article>
+        <article class="card">
+          <h3>Unavailable</h3>
+          <p>Named reason: <span class="mono">detector_not_installed</span>, <span class="mono">no_audio_stream</span>, stage failure.</p>
+        </article>
+      </div>
+
+      <h2>Evidence, not vibes</h2>
+      <figure>
+        <img src="./images/shot-timeline.svg" alt="Two detected shot intervals on a four-second clip" />
+        <figcaption>Detected shot intervals. Algorithmic edit boundaries, not narrative scenes.</figcaption>
+      </figure>
+      <figure>
+        <img src="./images/palette.svg" alt="A single palette swatch labelled with hex and proportion" />
+        <figcaption>Palette proportions from sampled frames, letterbox-aware clustering.</figcaption>
+      </figure>
+      <figure>
+        <img src="./images/tension.svg" alt="Tension proxy component traces" />
+        <figcaption>Tension proxy components (cut / audio / motion). Configurable weights, not audience emotion.</figcaption>
+      </figure>
+      <figure>
+        <img src="./images/composition.svg" alt="Rule-of-thirds guides and a schematic subject box" />
+        <figcaption>Composition schematic. Thirds proximity is geometry, not a quality score.</figcaption>
+      </figure>
+
+      <h2>Architecture in this release</h2>
+      <div class="arch">
+        <article class="card">
+          <h3>Current</h3>
+          <p>
+            FastAPI control plane, PostgreSQL job truth, local poll worker,
+            filesystem artifacts, Streamlit as an HTTP client. Spatial backends:
+            <span class="mono">none</span> / <span class="mono">fake</span>.
+            Critic: <span class="mono">none</span> / <span class="mono">fake</span> /
+            OpenAI-compatible HTTP.
+          </p>
+        </article>
+        <article class="card">
+          <h3>Optional</h3>
+          <p>
+            Celery + Redis transport. Compose API/CPU worker. GPU worker is a
+            Compose profile and unused in the Apache-2.0 base install.
+          </p>
+        </article>
+        <article class="card">
+          <h3>Not here</h3>
+          <p>SAM 2, Triton, Ray, Kubernetes, NVDEC, Prometheus, Ollama SDK, vLLM, Ultralytics.</p>
+        </article>
+      </div>
+
+      <h2>Synthetic CPU-core timings</h2>
+      <p>
+        Host: macOS 13.5 arm64, Python 3.12.7, pipeline <span class="mono">0.1.0</span>.
+        Tiny FFmpeg fixtures, not 60&nbsp;s 1080p film. RTF milli = wall_ms × 1000 / duration_ms
+        (1000 ≈ real-time).
+      </p>
+      <p class="hash">
+        config hash 66dced8dd50901cdfea31549d1395668fcca7bbc425288c3b705fe342d6304b7
+      </p>
+      <table>
+        <thead>
+          <tr>
+            <th>Clip</th>
+            <th class="num">Cold ms</th>
+            <th class="num">Cold RTF‰</th>
+            <th class="num">Warm ms</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>two_color_cut</td>
+            <td class="num">1552</td>
+            <td class="num">388</td>
+            <td class="num">612</td>
+          </tr>
+          <tr>
+            <td>no_cut</td>
+            <td class="num">469</td>
+            <td class="num">117</td>
+            <td class="num">468</td>
+          </tr>
+          <tr>
+            <td>no_audio</td>
+            <td class="num">127</td>
+            <td class="num">127</td>
+            <td class="num">120</td>
+          </tr>
+          <tr>
+            <td>tension_signals</td>
+            <td class="num">5372</td>
+            <td class="num">1343</td>
+            <td class="num">1010</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <h2 id="report">Sample report</h2>
+      <p>
+        Generated from the redistributable <span class="mono">two_color_cut.mp4</span>
+        fixture. Spatial is unavailable because the base install ships no person
+        detector. Audio is unavailable because the clip has no audio stream.
+        Those absences are the demonstration.
+      </p>
+      <div class="chips" id="chips"></div>
+      <pre id="report-preview">Loading sample report…</pre>
+
+      <h2 id="run">Run locally</h2>
+      <pre>
+git clone https://github.com/edcou060/cinematography-analyzer
+cd cinematography-analyzer
+make bootstrap
+make fixtures
+make check
+uv run cine-analyzer analyze fixtures/video/two_color_cut.mp4 --through report
+      </pre>
+    </main>
+    <footer>
+      Apache-2.0 · Edgar Coutiño Ocampo · 2026.
+      Film-language labels are estimates. Detected shots are not narrative scenes.
+    </footer>
+    <script>
+      fetch("./examples/sample-report.json")
+        .then((r) => r.json())
+        .then((report) => {
+          const chips = document.getElementById("chips");
+          const preview = document.getElementById("report-preview");
+          const avail = report.availability || {};
+          chips.replaceChildren();
+          for (const [pillar, state] of Object.entries(avail)) {
+            const el = document.createElement("span");
+            el.className = "chip " + (state === "COMPLETE" ? "ok" : "off");
+            el.textContent = pillar + " " + state;
+            chips.appendChild(el);
+          }
+          const shot0 = report.shots && report.shots[0];
+          const spatial = shot0 && shot0.spatial;
+          preview.textContent = JSON.stringify(
+            {
+              schema_version: report.schema_version,
+              pipeline_version: report.pipeline_version,
+              configuration_hash: report.configuration_hash,
+              availability: avail,
+              summary: report.summary,
+              spatial_reason: spatial && spatial.reason_code,
+              shot_count: report.summary && report.summary.shot_count,
+            },
+            null,
+            2
+          );
+        })
+        .catch(() => {
+          document.getElementById("report-preview").textContent =
+            "Could not load the sample report.";
+        });
+    </script>
+  </body>
+</html>

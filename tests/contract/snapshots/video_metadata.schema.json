@@ -1,0 +1,197 @@
+{
+  "$defs": {
+    "ArtifactRef": {
+      "additionalProperties": false,
+      "description": "Content-addressed pointer to an immutable blob.",
+      "properties": {
+        "artifact_id": {
+          "format": "uuid",
+          "title": "Artifact Id",
+          "type": "string"
+        },
+        "kind": {
+          "maxLength": 64,
+          "minLength": 1,
+          "title": "Kind",
+          "type": "string"
+        },
+        "media_type": {
+          "maxLength": 128,
+          "minLength": 1,
+          "title": "Media Type",
+          "type": "string"
+        },
+        "schema_version": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Schema Version"
+        },
+        "sha256": {
+          "description": "Lowercase hex SHA-256 digest.",
+          "pattern": "^[0-9a-f]{64}$",
+          "title": "Sha256",
+          "type": "string"
+        },
+        "size_bytes": {
+          "description": "Artifact size in bytes, not a media duration.",
+          "minimum": 0,
+          "title": "Size Bytes",
+          "type": "integer"
+        }
+      },
+      "required": [
+        "artifact_id",
+        "kind",
+        "media_type",
+        "sha256",
+        "size_bytes"
+      ],
+      "title": "ArtifactRef",
+      "type": "object"
+    },
+    "Rational": {
+      "additionalProperties": false,
+      "description": "Exact frame-rate fraction. A float is display-only and is not stored here.",
+      "properties": {
+        "denominator": {
+          "description": "Non-zero denominator.",
+          "exclusiveMinimum": 0,
+          "title": "Denominator",
+          "type": "integer"
+        },
+        "numerator": {
+          "title": "Numerator",
+          "type": "integer"
+        }
+      },
+      "required": [
+        "numerator",
+        "denominator"
+      ],
+      "title": "Rational",
+      "type": "object"
+    }
+  },
+  "additionalProperties": false,
+  "description": "Facts taken from a successful probe. Filename is stored, never echoed in errors.",
+  "properties": {
+    "audio_codec": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Audio Codec"
+    },
+    "average_frame_rate": {
+      "$ref": "#/$defs/Rational"
+    },
+    "content_sha256": {
+      "description": "Lowercase hex SHA-256 digest.",
+      "pattern": "^[0-9a-f]{64}$",
+      "title": "Content Sha256",
+      "type": "string"
+    },
+    "display_rotation_degrees": {
+      "description": "Container rotation applied once before spatial measurement.",
+      "title": "Display Rotation Degrees",
+      "type": "integer"
+    },
+    "duration_ms": {
+      "description": "Probed media duration, integer milliseconds.",
+      "exclusiveMinimum": 0,
+      "title": "Duration Ms",
+      "type": "integer"
+    },
+    "has_audio": {
+      "title": "Has Audio",
+      "type": "boolean"
+    },
+    "height": {
+      "exclusiveMinimum": 0,
+      "title": "Height",
+      "type": "integer"
+    },
+    "original_filename": {
+      "maxLength": 512,
+      "minLength": 1,
+      "title": "Original Filename",
+      "type": "string"
+    },
+    "pixel_format": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Pixel Format"
+    },
+    "probe_artifact": {
+      "$ref": "#/$defs/ArtifactRef"
+    },
+    "real_frame_rate": {
+      "anyOf": [
+        {
+          "$ref": "#/$defs/Rational"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null
+    },
+    "size_bytes": {
+      "description": "Uploaded bytes.",
+      "exclusiveMinimum": 0,
+      "title": "Size Bytes",
+      "type": "integer"
+    },
+    "video_codec": {
+      "maxLength": 64,
+      "minLength": 1,
+      "title": "Video Codec",
+      "type": "string"
+    },
+    "video_id": {
+      "format": "uuid",
+      "title": "Video Id",
+      "type": "string"
+    },
+    "width": {
+      "exclusiveMinimum": 0,
+      "title": "Width",
+      "type": "integer"
+    }
+  },
+  "required": [
+    "video_id",
+    "original_filename",
+    "content_sha256",
+    "size_bytes",
+    "duration_ms",
+    "width",
+    "height",
+    "display_rotation_degrees",
+    "average_frame_rate",
+    "video_codec",
+    "has_audio",
+    "probe_artifact"
+  ],
+  "title": "VideoMetadata",
+  "type": "object"
+}

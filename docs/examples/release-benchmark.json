@@ -1,0 +1,135 @@
+{
+  "schema_version": "1.0",
+  "profile": "cpu_core",
+  "commit": "uncommitted",
+  "hardware": "macOS-13.5-arm64-arm-64bit python=3.12.7",
+  "pipeline_version": "0.1.0",
+  "configuration_hash": "66dced8dd50901cdfea31549d1395668fcca7bbc425288c3b705fe342d6304b7",
+  "jpeg_cache": "on",
+  "clips": [
+    {
+      "clip_id": "two_color_cut",
+      "relative_path": "fixtures/video/two_color_cut.mp4",
+      "skipped_reason": null,
+      "cold": {
+        "wall_ms": 1552,
+        "rss_raw": 137216000,
+        "rtf_milli": 388,
+        "jpeg_reads": 2,
+        "jpeg_hits": 36,
+        "config_hash": "66dced8dd50901cdfea31549d1395668fcca7bbc425288c3b705fe342d6304b7",
+        "pipeline_version": "0.1.0",
+        "golden_status": "pass",
+        "duration_ms": 4000
+      },
+      "warm": {
+        "wall_ms": 612,
+        "rss_raw": 137216000,
+        "rtf_milli": 153,
+        "jpeg_reads": 2,
+        "jpeg_hits": 36,
+        "config_hash": "66dced8dd50901cdfea31549d1395668fcca7bbc425288c3b705fe342d6304b7",
+        "pipeline_version": "0.1.0",
+        "golden_status": "pass",
+        "duration_ms": 4000
+      }
+    },
+    {
+      "clip_id": "no_cut",
+      "relative_path": "fixtures/video/no_cut.mp4",
+      "skipped_reason": null,
+      "cold": {
+        "wall_ms": 469,
+        "rss_raw": 137592832,
+        "rtf_milli": 117,
+        "jpeg_reads": 1,
+        "jpeg_hits": 34,
+        "config_hash": "66dced8dd50901cdfea31549d1395668fcca7bbc425288c3b705fe342d6304b7",
+        "pipeline_version": "0.1.0",
+        "golden_status": "pass",
+        "duration_ms": 4000
+      },
+      "warm": {
+        "wall_ms": 468,
+        "rss_raw": 142524416,
+        "rtf_milli": 117,
+        "jpeg_reads": 1,
+        "jpeg_hits": 34,
+        "config_hash": "66dced8dd50901cdfea31549d1395668fcca7bbc425288c3b705fe342d6304b7",
+        "pipeline_version": "0.1.0",
+        "golden_status": "pass",
+        "duration_ms": 4000
+      }
+    },
+    {
+      "clip_id": "no_audio",
+      "relative_path": "fixtures/video/no_audio.mp4",
+      "skipped_reason": null,
+      "cold": {
+        "wall_ms": 127,
+        "rss_raw": 143032320,
+        "rtf_milli": 127,
+        "jpeg_reads": 1,
+        "jpeg_hits": 11,
+        "config_hash": "66dced8dd50901cdfea31549d1395668fcca7bbc425288c3b705fe342d6304b7",
+        "pipeline_version": "0.1.0",
+        "golden_status": "pass",
+        "duration_ms": 1000
+      },
+      "warm": {
+        "wall_ms": 120,
+        "rss_raw": 143032320,
+        "rtf_milli": 120,
+        "jpeg_reads": 1,
+        "jpeg_hits": 11,
+        "config_hash": "66dced8dd50901cdfea31549d1395668fcca7bbc425288c3b705fe342d6304b7",
+        "pipeline_version": "0.1.0",
+        "golden_status": "pass",
+        "duration_ms": 1000
+      }
+    },
+    {
+      "clip_id": "tension_signals",
+      "relative_path": "fixtures/video/tension_signals.mp4",
+      "skipped_reason": null,
+      "cold": {
+        "wall_ms": 5372,
+        "rss_raw": 280920064,
+        "rtf_milli": 1343,
+        "jpeg_reads": 15,
+        "jpeg_hits": 23,
+        "config_hash": "66dced8dd50901cdfea31549d1395668fcca7bbc425288c3b705fe342d6304b7",
+        "pipeline_version": "0.1.0",
+        "golden_status": "pass",
+        "duration_ms": 4000
+      },
+      "warm": {
+        "wall_ms": 1010,
+        "rss_raw": 292782080,
+        "rtf_milli": 252,
+        "jpeg_reads": 15,
+        "jpeg_hits": 23,
+        "config_hash": "66dced8dd50901cdfea31549d1395668fcca7bbc425288c3b705fe342d6304b7",
+        "pipeline_version": "0.1.0",
+        "golden_status": "pass",
+        "duration_ms": 4000
+      }
+    }
+  ],
+  "profile_top": [
+    "_run_clip",
+    "_timed_report",
+    "execute",
+    "_execute",
+    "_measure_chromatic",
+    "analyze_shot",
+    "_palette",
+    "_find_and_load",
+    "_find_and_load_unlocked",
+    "_load_unlocked",
+    "_call_with_frames_removed",
+    "exec_module",
+    "_fit_kmeans",
+    "load_sklearn"
+  ]
+}

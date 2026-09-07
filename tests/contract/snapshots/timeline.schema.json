@@ -1,0 +1,230 @@
+{
+  "$defs": {
+    "AudioWindowValue": {
+      "additionalProperties": false,
+      "description": "Audio features over one timeline window. Absent audio is a measurement status, not zeros.",
+      "properties": {
+        "loudness_lufs_short_term": {
+          "anyOf": [
+            {
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Loudness Lufs Short Term"
+        },
+        "onset_strength": {
+          "minimum": 0.0,
+          "title": "Onset Strength",
+          "type": "number"
+        },
+        "rms_dbfs": {
+          "title": "Rms Dbfs",
+          "type": "number"
+        },
+        "spectral_flux": {
+          "minimum": 0.0,
+          "title": "Spectral Flux",
+          "type": "number"
+        }
+      },
+      "required": [
+        "rms_dbfs",
+        "onset_strength",
+        "spectral_flux"
+      ],
+      "title": "AudioWindowValue",
+      "type": "object"
+    },
+    "TensionComponents": {
+      "additionalProperties": false,
+      "description": "Named proxy components. Changing the configured weights changes combined_proxy.",
+      "properties": {
+        "audio_activity": {
+          "description": "Ratio in [0, 1]. Percentages are a presentation concern.",
+          "maximum": 1.0,
+          "minimum": 0.0,
+          "title": "Audio Activity",
+          "type": "number"
+        },
+        "combined_proxy": {
+          "description": "Ratio in [0, 1]. Percentages are a presentation concern.",
+          "maximum": 1.0,
+          "minimum": 0.0,
+          "title": "Combined Proxy",
+          "type": "number"
+        },
+        "cut_activity": {
+          "description": "Ratio in [0, 1]. Percentages are a presentation concern.",
+          "maximum": 1.0,
+          "minimum": 0.0,
+          "title": "Cut Activity",
+          "type": "number"
+        },
+        "motion_activity": {
+          "description": "Ratio in [0, 1]. Percentages are a presentation concern.",
+          "maximum": 1.0,
+          "minimum": 0.0,
+          "title": "Motion Activity",
+          "type": "number"
+        }
+      },
+      "required": [
+        "cut_activity",
+        "audio_activity",
+        "motion_activity",
+        "combined_proxy"
+      ],
+      "title": "TensionComponents",
+      "type": "object"
+    },
+    "TensionWeights": {
+      "additionalProperties": false,
+      "description": "Weights of the named tension proxy. They must sum to one.",
+      "properties": {
+        "audio_activity": {
+          "description": "Ratio in [0, 1]. Percentages are a presentation concern.",
+          "maximum": 1.0,
+          "minimum": 0.0,
+          "title": "Audio Activity",
+          "type": "number"
+        },
+        "cut_activity": {
+          "description": "Ratio in [0, 1]. Percentages are a presentation concern.",
+          "maximum": 1.0,
+          "minimum": 0.0,
+          "title": "Cut Activity",
+          "type": "number"
+        },
+        "motion": {
+          "description": "Ratio in [0, 1]. Percentages are a presentation concern.",
+          "maximum": 1.0,
+          "minimum": 0.0,
+          "title": "Motion",
+          "type": "number"
+        }
+      },
+      "required": [
+        "cut_activity",
+        "audio_activity",
+        "motion"
+      ],
+      "title": "TensionWeights",
+      "type": "object"
+    },
+    "TimelinePoint": {
+      "additionalProperties": false,
+      "description": "One instant on the analysis timeline, with every tension component retained.",
+      "properties": {
+        "at_ms": {
+          "description": "Timeline instant, integer milliseconds.",
+          "minimum": 0,
+          "title": "At Ms",
+          "type": "integer"
+        },
+        "audio": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/AudioWindowValue"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null
+        },
+        "shot_index": {
+          "minimum": 0,
+          "title": "Shot Index",
+          "type": "integer"
+        },
+        "tension": {
+          "$ref": "#/$defs/TensionComponents"
+        }
+      },
+      "required": [
+        "at_ms",
+        "shot_index",
+        "tension"
+      ],
+      "title": "TimelinePoint",
+      "type": "object"
+    }
+  },
+  "additionalProperties": false,
+  "description": "Ordered series of timeline points for one analysis.",
+  "properties": {
+    "analysis_id": {
+      "format": "uuid",
+      "title": "Analysis Id",
+      "type": "string"
+    },
+    "effective_weights": {
+      "$ref": "#/$defs/TensionWeights",
+      "default": {
+        "audio_activity": 0.3,
+        "cut_activity": 0.35,
+        "motion": 0.35
+      }
+    },
+    "hop_ms": {
+      "default": 500,
+      "description": "Timeline hop, integer milliseconds.",
+      "minimum": 1,
+      "title": "Hop Ms",
+      "type": "integer"
+    },
+    "method_version": {
+      "default": "tension-v1",
+      "maxLength": 64,
+      "minLength": 1,
+      "title": "Method Version",
+      "type": "string"
+    },
+    "points": {
+      "default": [],
+      "items": {
+        "$ref": "#/$defs/TimelinePoint"
+      },
+      "title": "Points",
+      "type": "array"
+    },
+    "schema_version": {
+      "description": "Timeline schema version.",
+      "title": "Schema Version",
+      "type": "string"
+    },
+    "warnings": {
+      "default": [],
+      "items": {
+        "type": "string"
+      },
+      "title": "Warnings",
+      "type": "array"
+    },
+    "weights": {
+      "$ref": "#/$defs/TensionWeights",
+      "default": {
+        "audio_activity": 0.3,
+        "cut_activity": 0.35,
+        "motion": 0.35
+      }
+    },
+    "window_ms": {
+      "default": 1000,
+      "description": "Audio feature window, integer milliseconds.",
+      "minimum": 1,
+      "title": "Window Ms",
+      "type": "integer"
+    }
+  },
+  "required": [
+    "schema_version",
+    "analysis_id"
+  ],
+  "title": "Timeline",
+  "type": "object"
+}

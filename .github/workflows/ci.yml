@@ -1,0 +1,121 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+concurrency:
+  group: ci-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+
+env:
+  # Nothing in this pipeline downloads media or model weights. The only cache is
+  # the resolved Python dependency set, keyed on the lockfile.
+  UV_FROZEN: "1"
+
+jobs:
+  quality:
+    name: Lint, types, and unit tests
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+
+    services:
+      postgres:
+        image: postgres:16
+        env:
+          POSTGRES_USER: cine
+          POSTGRES_PASSWORD: cine
+          POSTGRES_DB: cine_analyzer
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd "pg_isready -U cine -d cine_analyzer"
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+
+      redis:
+        image: redis:7
+        ports:
+          - 6379:6379
+        options: >-
+          --health-cmd "redis-cli ping"
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+
+    env:
+      PYTEST_POSTGRES_URL: postgresql+pg8000://cine:cine@localhost:5432/cine_analyzer
+      CINE_DATABASE_URL: postgresql+pg8000://cine:cine@localhost:5432/cine_analyzer
+      PYTEST_REDIS_URL: redis://localhost:6379/0
+
+    steps:
+      - name: Check out
+        uses: actions/checkout@v4
+
+      - name: Install uv
+        uses: astral-sh/setup-uv@v6
+        with:
+          enable-cache: true
+          cache-dependency-glob: uv.lock
+
+      - name: Install the pinned Python
+        run: uv python install
+
+      # Each step below is the same make target a developer runs locally.
+      - name: Install dependencies
+        run: make bootstrap
+
+      - name: Lockfile consistency
+        run: make lock-check
+
+      - name: Lint
+        run: make lint
+
+      - name: Format
+        run: make format-check
+
+      - name: Types
+        run: make typecheck
+
+      - name: Install FFmpeg
+        run: sudo apt-get update && sudo apt-get install -y --no-install-recommends ffmpeg
+
+      - name: Generate media fixtures
+        run: make fixtures
+
+      - name: Apply database migrations
+        run: make migrate
+        env:
+          CINE_DATABASE_URL: postgresql+pg8000://cine:cine@localhost:5432/cine_analyzer
+
+      - name: Unit tests
+        run: make test
+
+      - name: Module entry point
+        run: make version
+
+      - name: Runtime capabilities
+        run: make doctor
+
+      - name: Ingest and reuse analysis identity
+        run: |
+          first="$(uv run cine-analyzer analyze fixtures/video/two_color_cut.mp4 --dry-run)"
+          second="$(uv run cine-analyzer analyze fixtures/video/two_color_cut.mp4 --dry-run)"
+          uv run cine-analyzer ingest fixtures/video/two_color_cut.mp4
+          python -c "import json,sys; a=json.loads(sys.argv[1]); b=json.loads(sys.argv[2]); assert a['analysis_id']==b['analysis_id']; assert b['reused'] is True" "$first" "$second"
+
+      - name: Shot detection and sampling
+        run: uv run cine-analyzer analyze fixtures/video/two_color_cut.mp4 --through sampling
+
+      - name: Chromatic report
+        run: |
+          uv run cine-analyzer analyze fixtures/video/two_color_cut.mp4 --output build/report.json
+          uv run cine-analyzer validate-report build/report.json
+
+      - name: OpenAPI snapshot
+        run: uv run cine-analyzer export-openapi --check

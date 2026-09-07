@@ -1,0 +1,65 @@
+{
+  "additionalProperties": false,
+  "description": "Work request passed across a process boundary. Identifiers only.",
+  "properties": {
+    "analysis_id": {
+      "format": "uuid",
+      "title": "Analysis Id",
+      "type": "string"
+    },
+    "configuration_hash": {
+      "description": "Lowercase hex SHA-256 digest.",
+      "pattern": "^[0-9a-f]{64}$",
+      "title": "Configuration Hash",
+      "type": "string"
+    },
+    "input_artifact_ids": {
+      "items": {
+        "format": "uuid",
+        "type": "string"
+      },
+      "title": "Input Artifact Ids",
+      "type": "array"
+    },
+    "pipeline_version": {
+      "maxLength": 64,
+      "minLength": 1,
+      "title": "Pipeline Version",
+      "type": "string"
+    },
+    "requested_at": {
+      "format": "date-time",
+      "title": "Requested At",
+      "type": "string"
+    },
+    "schema_version": {
+      "description": "Stage-command schema version.",
+      "title": "Schema Version",
+      "type": "string"
+    },
+    "stage_name": {
+      "maxLength": 64,
+      "minLength": 1,
+      "title": "Stage Name",
+      "type": "string"
+    },
+    "trace_id": {
+      "maxLength": 128,
+      "minLength": 1,
+      "title": "Trace Id",
+      "type": "string"
+    }
+  },
+  "required": [
+    "schema_version",
+    "analysis_id",
+    "stage_name",
+    "input_artifact_ids",
+    "configuration_hash",
+    "pipeline_version",
+    "requested_at",
+    "trace_id"
+  ],
+  "title": "StageCommand",
+  "type": "object"
+}

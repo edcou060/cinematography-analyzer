@@ -1,0 +1,808 @@
+{
+  "$defs": {
+    "AudioConfig": {
+      "additionalProperties": false,
+      "description": "Audio resampling target and analysis window (ADR-0016).",
+      "properties": {
+        "sample_rate_hz": {
+          "description": "Target audio sample rate in hertz.",
+          "exclusiveMinimum": 0,
+          "title": "Sample Rate Hz",
+          "type": "integer"
+        },
+        "window_ms": {
+          "default": 1000,
+          "description": "Audio feature window, integer milliseconds.",
+          "maximum": 10000,
+          "minimum": 50,
+          "title": "Window Ms",
+          "type": "integer"
+        }
+      },
+      "required": [
+        "sample_rate_hz"
+      ],
+      "title": "AudioConfig",
+      "type": "object"
+    },
+    "ChromaticConfig": {
+      "additionalProperties": false,
+      "description": "Sampling, letterbox, clustering, and lighting-key rules (ADR-0011).",
+      "properties": {
+        "clusters": {
+          "maximum": 5,
+          "minimum": 1,
+          "title": "Clusters",
+          "type": "integer"
+        },
+        "delta_e_merge": {
+          "default": 3.0,
+          "description": "CIE76 Delta-E below which palette centres merge.",
+          "minimum": 0.0,
+          "title": "Delta E Merge",
+          "type": "number"
+        },
+        "highlight_lstar": {
+          "default": 80.0,
+          "maximum": 100.0,
+          "minimum": 0.0,
+          "title": "Highlight Lstar",
+          "type": "number"
+        },
+        "kmeans_batch_size": {
+          "default": 1024,
+          "minimum": 1,
+          "title": "Kmeans Batch Size",
+          "type": "integer"
+        },
+        "kmeans_n_init": {
+          "default": 3,
+          "minimum": 1,
+          "title": "Kmeans N Init",
+          "type": "integer"
+        },
+        "letterbox_coverage": {
+          "default": 0.92,
+          "description": "Ratio in [0, 1]. Percentages are a presentation concern.",
+          "maximum": 1.0,
+          "minimum": 0.0,
+          "title": "Letterbox Coverage",
+          "type": "number"
+        },
+        "letterbox_lstar_max": {
+          "default": 8.0,
+          "description": "Maximum CIE L* treated as near-black letterbox.",
+          "maximum": 100.0,
+          "minimum": 0.0,
+          "title": "Letterbox Lstar Max",
+          "type": "number"
+        },
+        "lighting_key_rules": {
+          "$ref": "#/$defs/LightingKeyRules",
+          "default": {
+            "high_median_lstar": 65.0,
+            "high_shadow_ratio": 0.1,
+            "high_spread_lstar": 45.0,
+            "low_median_lstar": 40.0,
+            "low_shadow_ratio": 0.4,
+            "low_spread_lstar": 45.0
+          }
+        },
+        "max_pixels_per_shot": {
+          "minimum": 1,
+          "title": "Max Pixels Per Shot",
+          "type": "integer"
+        },
+        "min_swatch_proportion": {
+          "default": 0.02,
+          "description": "Ratio in [0, 1]. Percentages are a presentation concern.",
+          "maximum": 1.0,
+          "minimum": 0.0,
+          "title": "Min Swatch Proportion",
+          "type": "number"
+        },
+        "min_usable_pixel_ratio": {
+          "default": 0.05,
+          "description": "Ratio in [0, 1]. Percentages are a presentation concern.",
+          "maximum": 1.0,
+          "minimum": 0.0,
+          "title": "Min Usable Pixel Ratio",
+          "type": "number"
+        },
+        "random_seed": {
+          "title": "Random Seed",
+          "type": "integer"
+        },
+        "samples_per_shot": {
+          "minimum": 1,
+          "title": "Samples Per Shot",
+          "type": "integer"
+        },
+        "shadow_lstar": {
+          "default": 20.0,
+          "maximum": 100.0,
+          "minimum": 0.0,
+          "title": "Shadow Lstar",
+          "type": "number"
+        },
+        "working_max_side": {
+          "default": 640,
+          "description": "Longest downscale side in pixels before sampling.",
+          "maximum": 4096,
+          "minimum": 16,
+          "title": "Working Max Side",
+          "type": "integer"
+        }
+      },
+      "required": [
+        "samples_per_shot",
+        "max_pixels_per_shot",
+        "clusters",
+        "random_seed"
+      ],
+      "title": "ChromaticConfig",
+      "type": "object"
+    },
+    "CriticConfig": {
+      "additionalProperties": false,
+      "description": "Interpretation switch. Disabled by default; cannot write a measured field.",
+      "properties": {
+        "enabled": {
+          "default": false,
+          "title": "Enabled",
+          "type": "boolean"
+        }
+      },
+      "title": "CriticConfig",
+      "type": "object"
+    },
+    "FarnebackParams": {
+      "additionalProperties": false,
+      "description": "Dense Farneback hyperparameters. Camera-movement labels are not derived from these.",
+      "properties": {
+        "iterations": {
+          "default": 3,
+          "maximum": 16,
+          "minimum": 1,
+          "title": "Iterations",
+          "type": "integer"
+        },
+        "levels": {
+          "default": 3,
+          "maximum": 8,
+          "minimum": 1,
+          "title": "Levels",
+          "type": "integer"
+        },
+        "poly_n": {
+          "default": 5,
+          "maximum": 7,
+          "minimum": 5,
+          "title": "Poly N",
+          "type": "integer"
+        },
+        "poly_sigma": {
+          "default": 1.2,
+          "exclusiveMinimum": 0.0,
+          "title": "Poly Sigma",
+          "type": "number"
+        },
+        "pyr_scale": {
+          "default": 0.5,
+          "exclusiveMaximum": 1.0,
+          "exclusiveMinimum": 0.0,
+          "title": "Pyr Scale",
+          "type": "number"
+        },
+        "winsize": {
+          "default": 15,
+          "maximum": 64,
+          "minimum": 3,
+          "title": "Winsize",
+          "type": "integer"
+        }
+      },
+      "title": "FarnebackParams",
+      "type": "object"
+    },
+    "FramingRules": {
+      "additionalProperties": false,
+      "description": "Versioned person-height framing estimates. Labels are estimates, not shot size.",
+      "properties": {
+        "close_up_height_max": {
+          "default": 0.85,
+          "exclusiveMaximum": 1.0,
+          "exclusiveMinimum": 0.0,
+          "title": "Close Up Height Max",
+          "type": "number"
+        },
+        "disagreement_fraction": {
+          "default": 0.4,
+          "description": "Ratio in [0, 1]. Percentages are a presentation concern.",
+          "maximum": 1.0,
+          "minimum": 0.0,
+          "title": "Disagreement Fraction",
+          "type": "number"
+        },
+        "edge_truncation": {
+          "default": 0.02,
+          "description": "Ratio in [0, 1]. Percentages are a presentation concern.",
+          "maximum": 1.0,
+          "minimum": 0.0,
+          "title": "Edge Truncation",
+          "type": "number"
+        },
+        "extreme_wide_height_max": {
+          "default": 0.18,
+          "exclusiveMaximum": 1.0,
+          "exclusiveMinimum": 0.0,
+          "title": "Extreme Wide Height Max",
+          "type": "number"
+        },
+        "medium_height_max": {
+          "default": 0.62,
+          "exclusiveMaximum": 1.0,
+          "exclusiveMinimum": 0.0,
+          "title": "Medium Height Max",
+          "type": "number"
+        },
+        "min_track_coverage": {
+          "default": 0.4,
+          "description": "Ratio in [0, 1]. Percentages are a presentation concern.",
+          "maximum": 1.0,
+          "minimum": 0.0,
+          "title": "Min Track Coverage",
+          "type": "number"
+        },
+        "version": {
+          "default": "framing_rules_v1",
+          "maxLength": 64,
+          "minLength": 1,
+          "title": "Version",
+          "type": "string"
+        },
+        "wide_height_max": {
+          "default": 0.38,
+          "exclusiveMaximum": 1.0,
+          "exclusiveMinimum": 0.0,
+          "title": "Wide Height Max",
+          "type": "number"
+        }
+      },
+      "title": "FramingRules",
+      "type": "object"
+    },
+    "LightingKeyRules": {
+      "additionalProperties": false,
+      "description": "Versioned lighting-key estimate thresholds. Labels are estimates, not intent.",
+      "properties": {
+        "high_median_lstar": {
+          "default": 65.0,
+          "maximum": 100.0,
+          "minimum": 0.0,
+          "title": "High Median Lstar",
+          "type": "number"
+        },
+        "high_shadow_ratio": {
+          "default": 0.1,
+          "description": "Ratio in [0, 1]. Percentages are a presentation concern.",
+          "maximum": 1.0,
+          "minimum": 0.0,
+          "title": "High Shadow Ratio",
+          "type": "number"
+        },
+        "high_spread_lstar": {
+          "default": 45.0,
+          "maximum": 100.0,
+          "minimum": 0.0,
+          "title": "High Spread Lstar",
+          "type": "number"
+        },
+        "low_median_lstar": {
+          "default": 40.0,
+          "maximum": 100.0,
+          "minimum": 0.0,
+          "title": "Low Median Lstar",
+          "type": "number"
+        },
+        "low_shadow_ratio": {
+          "default": 0.4,
+          "description": "Ratio in [0, 1]. Percentages are a presentation concern.",
+          "maximum": 1.0,
+          "minimum": 0.0,
+          "title": "Low Shadow Ratio",
+          "type": "number"
+        },
+        "low_spread_lstar": {
+          "default": 45.0,
+          "maximum": 100.0,
+          "minimum": 0.0,
+          "title": "Low Spread Lstar",
+          "type": "number"
+        }
+      },
+      "title": "LightingKeyRules",
+      "type": "object"
+    },
+    "LimitsConfig": {
+      "additionalProperties": false,
+      "description": "Acceptance ceilings. Enforced at probe time; part of the hashed analysis key.",
+      "properties": {
+        "max_duration_ms": {
+          "description": "Maximum accepted media duration, integer milliseconds.",
+          "exclusiveMinimum": 0,
+          "title": "Max Duration Ms",
+          "type": "integer"
+        },
+        "max_height": {
+          "exclusiveMinimum": 0,
+          "title": "Max Height",
+          "type": "integer"
+        },
+        "max_upload_bytes": {
+          "description": "Maximum upload size in bytes.",
+          "exclusiveMinimum": 0,
+          "title": "Max Upload Bytes",
+          "type": "integer"
+        },
+        "max_width": {
+          "exclusiveMinimum": 0,
+          "title": "Max Width",
+          "type": "integer"
+        }
+      },
+      "required": [
+        "max_upload_bytes",
+        "max_duration_ms",
+        "max_width",
+        "max_height"
+      ],
+      "title": "LimitsConfig",
+      "type": "object"
+    },
+    "MotionConfig": {
+      "additionalProperties": false,
+      "description": "Motion sampling and Farneback identity (ADR-0015). Camera-movement labels are not emitted.",
+      "properties": {
+        "discontinuity_diag_per_s": {
+          "default": 1.5,
+          "description": "Flag a pair when global magnitude exceeds this many frame-diagonals per second.",
+          "exclusiveMinimum": 0.0,
+          "title": "Discontinuity Diag Per S",
+          "type": "number"
+        },
+        "farneback": {
+          "$ref": "#/$defs/FarnebackParams",
+          "default": {
+            "iterations": 3,
+            "levels": 3,
+            "poly_n": 5,
+            "poly_sigma": 1.2,
+            "pyr_scale": 0.5,
+            "winsize": 15
+          }
+        },
+        "sample_fps": {
+          "description": "Motion sampling rate in frames per second.",
+          "exclusiveMinimum": 0,
+          "title": "Sample Fps",
+          "type": "number"
+        },
+        "working_max_side": {
+          "default": 320,
+          "description": "Longest side after aspect-preserving downscale.",
+          "maximum": 1920,
+          "minimum": 32,
+          "title": "Working Max Side",
+          "type": "integer"
+        }
+      },
+      "required": [
+        "sample_fps"
+      ],
+      "title": "MotionConfig",
+      "type": "object"
+    },
+    "PrimaryTrackWeights": {
+      "additionalProperties": false,
+      "description": "Primary-subject score weights. They must sum to one (metric-definitions \u00a75.1).",
+      "properties": {
+        "coverage": {
+          "default": 0.45,
+          "description": "Ratio in [0, 1]. Percentages are a presentation concern.",
+          "maximum": 1.0,
+          "minimum": 0.0,
+          "title": "Coverage",
+          "type": "number"
+        },
+        "median_area": {
+          "default": 0.35,
+          "description": "Ratio in [0, 1]. Percentages are a presentation concern.",
+          "maximum": 1.0,
+          "minimum": 0.0,
+          "title": "Median Area",
+          "type": "number"
+        },
+        "median_confidence": {
+          "default": 0.2,
+          "description": "Ratio in [0, 1]. Percentages are a presentation concern.",
+          "maximum": 1.0,
+          "minimum": 0.0,
+          "title": "Median Confidence",
+          "type": "number"
+        }
+      },
+      "title": "PrimaryTrackWeights",
+      "type": "object"
+    },
+    "ShotsConfig": {
+      "additionalProperties": false,
+      "description": "Shot-boundary detector selection, working resolution, and thresholds.\n\nThresholds are hashed with the analysis so a detector change cannot reuse\na previous identity (ADR-0010).",
+      "properties": {
+        "backend": {
+          "maxLength": 64,
+          "minLength": 1,
+          "pattern": "^[a-z][a-z0-9_]*$",
+          "title": "Backend",
+          "type": "string"
+        },
+        "debug": {
+          "default": false,
+          "title": "Debug",
+          "type": "boolean"
+        },
+        "detector": {
+          "maxLength": 64,
+          "minLength": 1,
+          "pattern": "^[a-z][a-z0-9_]*$",
+          "title": "Detector",
+          "type": "string"
+        },
+        "min_content_val": {
+          "default": 15.0,
+          "description": "AdaptiveDetector minimum content value. Ignored by content detector.",
+          "minimum": 0,
+          "title": "Min Content Val",
+          "type": "number"
+        },
+        "min_shot_ms": {
+          "description": "Minimum accepted shot length, integer milliseconds.",
+          "exclusiveMinimum": 0,
+          "title": "Min Shot Ms",
+          "type": "integer"
+        },
+        "threshold": {
+          "default": 3.0,
+          "description": "Detector threshold. AdaptiveDetector.adaptive_threshold or ContentDetector.threshold.",
+          "exclusiveMinimum": 0,
+          "title": "Threshold",
+          "type": "number"
+        },
+        "working_width": {
+          "default": 320,
+          "description": "Target decode width in pixels for detection.",
+          "maximum": 4096,
+          "minimum": 16,
+          "title": "Working Width",
+          "type": "integer"
+        }
+      },
+      "required": [
+        "backend",
+        "detector",
+        "min_shot_ms"
+      ],
+      "title": "ShotsConfig",
+      "type": "object"
+    },
+    "SpatialConfig": {
+      "additionalProperties": false,
+      "description": "Spatial-pillar backend, tracking, proximity, and framing rules (ADR-0013, ADR-0014).",
+      "properties": {
+        "backend": {
+          "maxLength": 64,
+          "minLength": 1,
+          "pattern": "^[a-z][a-z0-9_]*$",
+          "title": "Backend",
+          "type": "string"
+        },
+        "checkpoint": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Checkpoint"
+        },
+        "framing_rules": {
+          "$ref": "#/$defs/FramingRules",
+          "default": {
+            "close_up_height_max": 0.85,
+            "disagreement_fraction": 0.4,
+            "edge_truncation": 0.02,
+            "extreme_wide_height_max": 0.18,
+            "medium_height_max": 0.62,
+            "min_track_coverage": 0.4,
+            "version": "framing_rules_v1",
+            "wide_height_max": 0.38
+          }
+        },
+        "person_confidence": {
+          "description": "Ratio in [0, 1]. Percentages are a presentation concern.",
+          "maximum": 1.0,
+          "minimum": 0.0,
+          "title": "Person Confidence",
+          "type": "number"
+        },
+        "primary_track_weights": {
+          "$ref": "#/$defs/PrimaryTrackWeights",
+          "default": {
+            "coverage": 0.45,
+            "median_area": 0.35,
+            "median_confidence": 0.2
+          }
+        },
+        "sample_fps": {
+          "description": "Spatial sampling rate in frames per second.",
+          "exclusiveMinimum": 0,
+          "title": "Sample Fps",
+          "type": "number"
+        },
+        "thirds_sigma": {
+          "default": 0.18,
+          "description": "Gaussian width for thirds and center proximity.",
+          "exclusiveMinimum": 0.0,
+          "title": "Thirds Sigma",
+          "type": "number"
+        },
+        "track_iou_min": {
+          "default": 0.3,
+          "description": "Ratio in [0, 1]. Percentages are a presentation concern.",
+          "maximum": 1.0,
+          "minimum": 0.0,
+          "title": "Track Iou Min",
+          "type": "number"
+        }
+      },
+      "required": [
+        "backend",
+        "sample_fps",
+        "person_confidence"
+      ],
+      "title": "SpatialConfig",
+      "type": "object"
+    },
+    "TensionConfig": {
+      "additionalProperties": false,
+      "description": "Tension-proxy configuration (ADR-0017). Combined curve always stores weights.",
+      "properties": {
+        "cut_reference": {
+          "default": 3.0,
+          "exclusiveMinimum": 0.0,
+          "title": "Cut Reference",
+          "type": "number"
+        },
+        "cut_sigma_ms": {
+          "default": 750,
+          "description": "Gaussian cut-activity kernel width, integer milliseconds.",
+          "maximum": 10000,
+          "minimum": 1,
+          "title": "Cut Sigma Ms",
+          "type": "integer"
+        },
+        "epsilon": {
+          "default": 1e-06,
+          "exclusiveMinimum": 0.0,
+          "title": "Epsilon",
+          "type": "number"
+        },
+        "hop_ms": {
+          "default": 500,
+          "description": "Timeline hop, integer milliseconds.",
+          "maximum": 10000,
+          "minimum": 10,
+          "title": "Hop Ms",
+          "type": "integer"
+        },
+        "percentile_high": {
+          "default": 90.0,
+          "exclusiveMinimum": 50.0,
+          "maximum": 100.0,
+          "title": "Percentile High",
+          "type": "number"
+        },
+        "percentile_low": {
+          "default": 10.0,
+          "exclusiveMaximum": 50.0,
+          "minimum": 0.0,
+          "title": "Percentile Low",
+          "type": "number"
+        },
+        "weights": {
+          "$ref": "#/$defs/TensionWeights"
+        }
+      },
+      "required": [
+        "weights"
+      ],
+      "title": "TensionConfig",
+      "type": "object"
+    },
+    "TensionWeights": {
+      "additionalProperties": false,
+      "description": "Weights of the named tension proxy. They must sum to one.",
+      "properties": {
+        "audio_activity": {
+          "description": "Ratio in [0, 1]. Percentages are a presentation concern.",
+          "maximum": 1.0,
+          "minimum": 0.0,
+          "title": "Audio Activity",
+          "type": "number"
+        },
+        "cut_activity": {
+          "description": "Ratio in [0, 1]. Percentages are a presentation concern.",
+          "maximum": 1.0,
+          "minimum": 0.0,
+          "title": "Cut Activity",
+          "type": "number"
+        },
+        "motion": {
+          "description": "Ratio in [0, 1]. Percentages are a presentation concern.",
+          "maximum": 1.0,
+          "minimum": 0.0,
+          "title": "Motion",
+          "type": "number"
+        }
+      },
+      "required": [
+        "cut_activity",
+        "audio_activity",
+        "motion"
+      ],
+      "title": "TensionWeights",
+      "type": "object"
+    }
+  },
+  "additionalProperties": false,
+  "description": "The hashed analysis configuration. Environment endpoints never appear here.",
+  "properties": {
+    "audio": {
+      "$ref": "#/$defs/AudioConfig",
+      "default": {
+        "sample_rate_hz": 22050,
+        "window_ms": 1000
+      }
+    },
+    "chromatic": {
+      "$ref": "#/$defs/ChromaticConfig",
+      "default": {
+        "clusters": 5,
+        "delta_e_merge": 3.0,
+        "highlight_lstar": 80.0,
+        "kmeans_batch_size": 1024,
+        "kmeans_n_init": 3,
+        "letterbox_coverage": 0.92,
+        "letterbox_lstar_max": 8.0,
+        "lighting_key_rules": {
+          "high_median_lstar": 65.0,
+          "high_shadow_ratio": 0.1,
+          "high_spread_lstar": 45.0,
+          "low_median_lstar": 40.0,
+          "low_shadow_ratio": 0.4,
+          "low_spread_lstar": 45.0
+        },
+        "max_pixels_per_shot": 50000,
+        "min_swatch_proportion": 0.02,
+        "min_usable_pixel_ratio": 0.05,
+        "random_seed": 42,
+        "samples_per_shot": 3,
+        "shadow_lstar": 20.0,
+        "working_max_side": 640
+      }
+    },
+    "critic": {
+      "$ref": "#/$defs/CriticConfig",
+      "default": {
+        "enabled": false
+      }
+    },
+    "limits": {
+      "$ref": "#/$defs/LimitsConfig",
+      "default": {
+        "max_duration_ms": 1200000,
+        "max_height": 2160,
+        "max_upload_bytes": 1073741824,
+        "max_width": 4096
+      }
+    },
+    "motion": {
+      "$ref": "#/$defs/MotionConfig",
+      "default": {
+        "discontinuity_diag_per_s": 1.5,
+        "farneback": {
+          "iterations": 3,
+          "levels": 3,
+          "poly_n": 5,
+          "poly_sigma": 1.2,
+          "pyr_scale": 0.5,
+          "winsize": 15
+        },
+        "sample_fps": 6.0,
+        "working_max_side": 320
+      }
+    },
+    "pipeline_version": {
+      "default": "0.1.0",
+      "maxLength": 64,
+      "minLength": 1,
+      "title": "Pipeline Version",
+      "type": "string"
+    },
+    "schema_version": {
+      "default": "1.0",
+      "description": "Analysis-config schema version.",
+      "title": "Schema Version",
+      "type": "string"
+    },
+    "shots": {
+      "$ref": "#/$defs/ShotsConfig",
+      "default": {
+        "backend": "pyscenedetect",
+        "debug": false,
+        "detector": "adaptive",
+        "min_content_val": 15.0,
+        "min_shot_ms": 300,
+        "threshold": 3.0,
+        "working_width": 320
+      }
+    },
+    "spatial": {
+      "$ref": "#/$defs/SpatialConfig",
+      "default": {
+        "backend": "none",
+        "checkpoint": null,
+        "framing_rules": {
+          "close_up_height_max": 0.85,
+          "disagreement_fraction": 0.4,
+          "edge_truncation": 0.02,
+          "extreme_wide_height_max": 0.18,
+          "medium_height_max": 0.62,
+          "min_track_coverage": 0.4,
+          "version": "framing_rules_v1",
+          "wide_height_max": 0.38
+        },
+        "person_confidence": 0.35,
+        "primary_track_weights": {
+          "coverage": 0.45,
+          "median_area": 0.35,
+          "median_confidence": 0.2
+        },
+        "sample_fps": 2.0,
+        "thirds_sigma": 0.18,
+        "track_iou_min": 0.3
+      }
+    },
+    "tension": {
+      "$ref": "#/$defs/TensionConfig",
+      "default": {
+        "cut_reference": 3.0,
+        "cut_sigma_ms": 750,
+        "epsilon": 1e-06,
+        "hop_ms": 500,
+        "percentile_high": 90.0,
+        "percentile_low": 10.0,
+        "weights": {
+          "audio_activity": 0.3,
+          "cut_activity": 0.35,
+          "motion": 0.35
+        }
+      }
+    }
+  },
+  "title": "AnalysisConfig",
+  "type": "object"
+}

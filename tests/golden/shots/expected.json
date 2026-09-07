@@ -1,0 +1,21 @@
+{
+  "tolerance_ms": 200,
+  "clips": {
+    "two_color_cut.mp4": {
+      "internal_boundaries_ms": [2000],
+      "strict_timing": true
+    },
+    "no_cut.mp4": {
+      "internal_boundaries_ms": [],
+      "strict_timing": true
+    },
+    "fade.mp4": {
+      "internal_boundaries_ms": [],
+      "strict_timing": false
+    },
+    "flash.mp4": {
+      "internal_boundaries_ms": [2000, 2080],
+      "strict_timing": false
+    }
+  }
+}
