@@ -8,7 +8,6 @@ Add replaceable person detection/tracking and honest composition estimates. The 
 
 Read only:
 
-- `AGENTS.md`
 - `docs/project-state.md`
 - detector licensing/model ADRs
 - `docs/contracts/data-contracts.md` sections 7 and 10
@@ -70,13 +69,3 @@ If the real adapter is enabled, run its marked smoke test separately and report 
 - [ ] Evidence overlay makes geometry auditable.
 - [ ] Real adapter licensing and weights identity are documented.
 - [ ] `docs/project-state.md` points to Phase 07.
-
-## Cursor prompt
-
-```text
-Execute Phase 06 from docs/phases/phase-06-spatial.md. Build detector-neutral
-spatial contracts and services, fake-driven tests, within-shot tracking,
-primary-subject selection, thirds/center geometry, calibrated framing estimates,
-and evidence overlays. Add a real detector only if the accepted license ADR
-permits it. Do not add SAM 2 or distributed execution. Verify, update state, stop.
-```

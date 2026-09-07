@@ -69,11 +69,9 @@ Operator 60s clips absent. `pip-audit` not in the dependency set.
 See `docs/backlog.md`. Detector extra, Prometheus, SAM 2, NVDEC, Triton,
 Ray/Kubernetes, camera-movement labels, narrative grouping, LUFS.
 
-## Notes for the next session
+## Notes
 
-Do not add features. Tag only after commit. Run Compose on a Docker host
-before a registry push. Do not invent 1080p numbers.
-
-## Handoff format
+Do not add features. Run Compose on a Docker host before a registry push.
+Do not invent 1080p numbers.
 
 Keep this file under 120 lines.

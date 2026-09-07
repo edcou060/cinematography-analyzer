@@ -2,13 +2,12 @@
 
 ## Mission
 
-Turn the concept into a testable product contract before code exists. This phase removes ambiguous language, records scope, and creates the decision structure that later Cursor sessions must respect.
+Turn the concept into a testable product contract before code exists. This phase removes ambiguous language, records scope, and creates the decision structure that later work must respect.
 
 ## Context budget
 
 Read only:
 
-- `AGENTS.md`
 - `docs/project-state.md`
 - `docs/architecture/system-design.md` sections 1-4, 14, and 16
 - `docs/architecture/decision-log.md`
@@ -54,13 +53,3 @@ Every remaining TODO/TBD must name an owner phase or true blocking decision.
 - [ ] The demo and benchmark inputs are legally usable.
 - [ ] No code scaffold has been created prematurely.
 - [ ] `docs/project-state.md` points to Phase 01.
-
-## Cursor prompt
-
-```text
-Execute Phase 00 from docs/phases/phase-00-charter.md. Work only on product
-contract, ADRs, release/licensing posture, ignore rules, and README framing.
-Do not scaffold Python packages or add dependencies. Resolve contradictions
-between the concept and the canonical architecture explicitly. Run the stated
-document checks, update docs/project-state.md, and stop at the Phase 00 gate.
-```

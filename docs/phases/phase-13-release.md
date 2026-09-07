@@ -8,7 +8,6 @@ Turn the tested system into a credible portfolio centerpiece. Freeze scope, repr
 
 Read only:
 
-- `AGENTS.md`
 - `docs/project-state.md`
 - accepted ADR index
 - `docs/architecture/system-design.md` sections 1, 5, 18, and 19
@@ -80,13 +79,3 @@ Run the documented demo from a clean checkout or clean container volume. Confirm
 - [ ] Demo includes graceful failure and one optimization story.
 - [ ] Licensing/notices/SBOM are present.
 - [ ] Release checklist is signed off and project state marks the release candidate.
-
-## Cursor prompt
-
-```text
-Execute Phase 13 from docs/phases/phase-13-release.md. Freeze feature scope and
-produce the release evidence: clean bootstrap, full verification, Compose smoke,
-qualified benchmark, current architecture, sample report/screenshots, security
-and licensing artifacts, limitations, and a timed demo script including graceful
-failure plus one profiling story. Do not add features. Update state and stop.
-```

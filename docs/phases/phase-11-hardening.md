@@ -8,7 +8,6 @@ Make failure and cost visible, harden hostile-media boundaries, execute failure 
 
 Read only:
 
-- `AGENTS.md`
 - `docs/project-state.md`
 - security/operations ADRs
 - `docs/operations/quality-and-operations.md`
@@ -68,13 +67,3 @@ Also run dependency/container/SBOM checks selected by the repository policy and 
 - [ ] Baseline benchmark is reproducible.
 - [ ] One optimization has measured before/after data and unchanged golden status.
 - [ ] `docs/project-state.md` points to Phase 12 or directly Phase 13 if critic is skipped.
-
-## Cursor prompt
-
-```text
-Execute Phase 11 from docs/phases/phase-11-hardening.md. Add observability,
-hostile-media and subprocess controls, resource limits/backpressure, retention,
-failure drills, benchmark tooling, and exactly one profiling-backed optimization.
-Do not add new analysis features. Preserve golden correctness, report actual
-before/after results, update docs/project-state.md, and stop.
-```

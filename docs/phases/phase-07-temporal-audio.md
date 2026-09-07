@@ -8,7 +8,6 @@ Add time-aligned motion and audio measurements, then combine observable normaliz
 
 Read only:
 
-- `AGENTS.md`
 - `docs/project-state.md`
 - motion/audio/tension ADRs
 - `docs/contracts/data-contracts.md` section 8
@@ -66,13 +65,3 @@ Inspect peaks against known synthetic events. Verify all values are finite, boun
 - [ ] Missing components renormalize deterministically.
 - [ ] UI/report language says tension proxy.
 - [ ] `docs/project-state.md` points to Phase 08.
-
-## Cursor prompt
-
-```text
-Execute Phase 07 from docs/phases/phase-07-temporal-audio.md. Add bounded,
-time-aligned global/residual motion, audio window features, cut activity, and an
-explainable tension proxy with component curves and no-audio degradation.
-Use synthetic golden signals and never infer emotion or camera labels as fact.
-Do not add web/distributed/LLM work. Verify, update project state, and stop.
-```

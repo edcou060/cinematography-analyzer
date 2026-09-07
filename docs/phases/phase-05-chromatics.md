@@ -8,7 +8,6 @@ Complete the first useful end-to-end analysis: video -> shots -> sampled frames 
 
 Read only:
 
-- `AGENTS.md`
 - `docs/project-state.md`
 - chromatic/config/schema ADRs
 - `docs/contracts/data-contracts.md` sections 3, 6, 9, and 12
@@ -63,13 +62,3 @@ Manually inspect palette swatches/evidence for every golden frame. Confirm black
 - [ ] Local report validates against the public schema.
 - [ ] Same input/config/version produces equivalent output.
 - [ ] `docs/project-state.md` points to Phase 06.
-
-## Cursor prompt
-
-```text
-Execute Phase 05 from docs/phases/phase-05-chromatics.md. Complete the CPU-only
-vertical slice through a validated report: deterministic pixel sampling, float
-CIELAB, prevalence-sorted palette, lightness features, versioned lighting-key
-estimate, evidence, and golden tests. Do not add spatial models, audio, FastAPI,
-Celery, or Streamlit. Run/inspect the outputs, update project state, and stop.
-```

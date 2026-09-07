@@ -8,7 +8,6 @@ Add a replaceable, non-authoritative prose layer that summarizes only validated 
 
 Read only:
 
-- `AGENTS.md`
 - `docs/project-state.md`
 - critic/privacy/model ADRs
 - `docs/contracts/data-contracts.md` sections 9 and 11
@@ -80,13 +79,3 @@ If a real local server is enabled, run one marked smoke test and record model, p
 - [ ] Cache identity includes prompt/model/input.
 - [ ] Core report is unchanged with critic disabled.
 - [ ] `docs/project-state.md` points to Phase 13.
-
-## Cursor prompt
-
-```text
-Execute Phase 12 from docs/phases/phase-12-critic.md only if its ADR is accepted.
-Add a replaceable, optional prose critic over a compact validated metrics-only
-input. Use a fake for CI, strict short output, claim checks, caching, timeout,
-and graceful omission. It must never modify/fail measured analysis. Do not pass
-frames or filenames. Verify, update project state, and stop.
-```

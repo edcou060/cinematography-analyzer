@@ -485,9 +485,7 @@ Do not bury this choice in a dependency file. It is a release-level architectura
 ## 17. Repository layout
 
 ```text
-automated-cinematography-analyzer/
-├── AGENTS.md
-├── .cursor/rules/
+cinematography-analyzer/
 ├── pyproject.toml
 ├── uv.lock
 ├── src/cine_analyzer/

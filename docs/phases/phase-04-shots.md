@@ -8,7 +8,6 @@ Produce a validated `ShotSet`, deterministic `SamplingPlan`, and extracted evide
 
 Read only:
 
-- `AGENTS.md`
 - `docs/project-state.md`
 - shot/sampling ADRs
 - `docs/architecture/system-design.md` sections 7-9
@@ -62,13 +61,3 @@ Inspect the generated manifest and representative images. Tests must assert exac
 - [ ] Evidence artifacts are atomic and checksummed.
 - [ ] Golden detector results are recorded.
 - [ ] `docs/project-state.md` points to Phase 05.
-
-## Cursor prompt
-
-```text
-Execute Phase 04 from docs/phases/phase-04-shots.md. Implement pinned shot
-detection, validated shot intervals, deterministic multi-purpose sampling, and
-ordered evidence extraction. Do not implement chromatics, spatial inference,
-audio, web API, or queues. Prove timing/coverage with golden media fixtures,
-inspect artifacts, update docs/project-state.md, and stop.
-```

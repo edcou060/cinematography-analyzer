@@ -8,7 +8,6 @@ Build a polished Streamlit/Plotly client that uses only the HTTP API and makes t
 
 Read only:
 
-- `AGENTS.md`
 - `docs/project-state.md`
 - dashboard/API ADRs
 - `docs/architecture/system-design.md` sections 6 and 12
@@ -67,13 +66,3 @@ Manual QA must cover: successful analysis, no audio, no subject, spatial unavail
 - [ ] Text avoids artistic-quality claims.
 - [ ] Visual QA checklist is completed with screenshots for the README.
 - [ ] `docs/project-state.md` points to Phase 10.
-
-## Cursor prompt
-
-```text
-Execute Phase 09 from docs/phases/phase-09-dashboard.md. Build an evidence-first
-Streamlit/Plotly client using HTTP only. Implement upload/status, overview, shot
-inspection, palette/lightness/composition evidence, and tension components with
-graceful partial states. Do not import persistence or worker internals. Test the
-client/transforms, perform the manual degradation QA, update state, and stop.
-```

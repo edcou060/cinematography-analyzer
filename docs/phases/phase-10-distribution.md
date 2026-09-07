@@ -8,7 +8,6 @@ Replace the local runner as the deployment execution backend while preserving th
 
 Read only:
 
-- `AGENTS.md`
 - `docs/project-state.md`
 - orchestration/idempotency ADRs
 - `docs/architecture/system-design.md` sections 2, 6-9, and 11
@@ -67,13 +66,3 @@ Run the worker-loss scenario and inspect database attempts/artifact metadata. Ve
 - [ ] Models initialize once per appropriate worker process.
 - [ ] No Ray/Triton/Kubernetes added.
 - [ ] `docs/project-state.md` points to Phase 11.
-
-## Cursor prompt
-
-```text
-Execute Phase 10 from docs/phases/phase-10-distribution.md. Add Celery/Redis as
-an execution adapter around existing stage services, with JSON-only small
-commands, PostgreSQL truth, queue routing, leases, bounded retries, cancellation,
-and one-time model initialization. Prove equivalence with the local runner and
-worker-loss idempotency. Do not add Ray/Triton/Kubernetes. Verify, update, stop.
-```

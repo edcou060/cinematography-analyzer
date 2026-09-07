@@ -8,7 +8,6 @@ Create the smallest executable repository with reliable tooling, configuration l
 
 Read only:
 
-- `AGENTS.md`
 - `docs/project-state.md`
 - accepted foundation-related ADRs
 - `docs/architecture/system-design.md` sections 5, 13, 15, and 17
@@ -62,13 +61,3 @@ Record exact results. `doctor` may report FFmpeg unavailable as a diagnosed capa
 - [ ] CI and local checks use the same commands.
 - [ ] Logs are structured and tested.
 - [ ] `docs/project-state.md` points to Phase 02.
-
-## Cursor prompt
-
-```text
-Execute Phase 01 from docs/phases/phase-01-foundation.md. Create only the
-repository/tooling vertical slice: uv package, settings, structured logging,
-minimal CLI, tests, and CI. Do not implement domain schemas or media/CV work.
-Use only dependencies exercised in this phase. Run every verification command,
-update docs/project-state.md with actual results, and stop.
-```

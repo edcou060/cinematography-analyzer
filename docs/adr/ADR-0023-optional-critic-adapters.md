@@ -40,7 +40,7 @@ a default gate.
 **Ollama Python client in a `critic` extra.** Rejected: extra dependency for
 one HTTP POST the base install can already make.
 
-**vLLM as a required runtime.** Rejected: premature (AGENTS.md). An
+**vLLM as a required runtime.** Rejected: premature for the MVP base install. An
 OpenAI-compatible URL can point at vLLM later without a new package.
 
 **Hash model name and temperature into `AnalysisConfig`.** Rejected: those are

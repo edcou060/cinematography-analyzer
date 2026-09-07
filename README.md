@@ -92,7 +92,6 @@ The thumbnail is the **default** local-poll shape. Celery/Redis is an optional p
 
 `docs/architecture/system-design.md` is the architectural source of truth.
 
-
 ## Licensing and inputs
 
 Apache-2.0; see `LICENSE` (copyright 2026 Edgar Coutiño Ocampo). The base installation stays free of dependencies whose terms conflict with that, which is why the person detector is an opt-in extra rather than a default — Ultralytics ships under AGPL-3.0 or an Enterprise licence, and that choice is a release decision, not a line in a dependency file. `THIRD_PARTY_NOTICES.md` records the posture of every gated and deferred component. ADR-0007 and ADR-0008 hold the reasoning.
@@ -204,13 +203,11 @@ triggers in `docs/backlog.md`.
 
 | Path | Owns |
 | --- | --- |
-| `AGENTS.md` | Stable repository behaviour for coding agents |
 | `pyproject.toml` | Dependencies, and the configuration for Ruff, mypy, pytest, and coverage |
 | `src/cine_analyzer/` | The package: settings boundary, structured logging, diagnostics, CLI, API, workers, dashboard client |
 | `apps/dashboard/` | Streamlit UI (HTTP client only) |
 | `tests/unit/` | Unit suite, including the lockfile licence and gating checks |
 | `Makefile` | The commands CI and a developer both run |
-| `.cursor/rules/00-project.mdc` | The same guardrails, applied inside Cursor |
 | `docs/product-contract.md` | Supported input, report outcomes, vocabulary, caveats, success metrics, benchmark and demo inputs |
 | `docs/architecture/system-design.md` | Architectural source of truth |
 | `docs/architecture/decision-log.md` | ADR index and status |
@@ -225,19 +222,7 @@ triggers in `docs/backlog.md`.
 | `docs/operations/benchmark-baseline.md` | Hardware-qualified synthetic timings |
 | `docs/operations/limitations.md` | Honest limits for this candidate |
 | `docs/operations/security-scan.md` | Supply-chain scan record |
-| `docs/project-state.md` | Compact handoff between conversations, 120 lines or fewer |
-| `docs/phases/` | One guide per phase |
-| `prompts/` | Bootstrap and task-packet prompts |
-
-## Working on this repository in Cursor
-
-The Markdown files in `docs/` are the operational source. The Engineering Bible PDF is the human reference; it is not loaded into a working session unless a phase asks for a specific section.
-
-1. Start a fresh Cursor Agent chat for each phase.
-2. Paste `prompts/BOOTSTRAP.md` and name the active phase.
-3. Attach only the files listed under that phase's **Context budget**.
-4. Let the phase finish, run its required checks, and update `docs/project-state.md`.
-5. Review the diff and commit it.
-6. Start a new chat for the next phase.
+| `docs/project-state.md` | Compact project status, 120 lines or fewer |
+| `docs/phases/` | One guide per implementation phase |
 
 When implementation and documentation disagree, stop and resolve it with an ADR. Never silently reinterpret a contract.

@@ -8,7 +8,6 @@ Promote the working local pipeline into a durable control plane: PostgreSQL stat
 
 Read only:
 
-- `AGENTS.md`
 - `docs/project-state.md`
 - database/API/state ADRs
 - `docs/architecture/system-design.md` sections 4, 6, 10-13
@@ -65,13 +64,3 @@ Run a manual smoke: start API and local worker, upload the tiny clip, receive 20
 - [ ] Public schemas are snapshotted.
 - [ ] Timeline/artifact endpoints are bounded and authorized.
 - [ ] `docs/project-state.md` points to Phase 09.
-
-## Cursor prompt
-
-```text
-Execute Phase 08 from docs/phases/phase-08-aggregation-api.md. Add PostgreSQL
-migrations/repository/leases, strict aggregation, and a thin FastAPI control
-plane around the already working local pipeline. Heavy analysis must remain in
-a separate runner process. Test races, partial reports, safe errors, 202/status,
-and bounded artifacts. Run checks, update project state, and stop.
-```

@@ -200,3 +200,6 @@ Desktop.ini
 
 # Local Netlify folder
 .netlify
+
+# Editor / local tool metadata
+.cursor/

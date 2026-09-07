@@ -5,7 +5,6 @@
 .pytest_cache
 .ruff_cache
 .venv
-.cursor
 __pycache__
 *.pyc
 var/
@@ -17,7 +16,6 @@ docs/
 apps/
 tests/
 fixtures/
-prompts/
 *.md
 !README.md
 !LICENSE

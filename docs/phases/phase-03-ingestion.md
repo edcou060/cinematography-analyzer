@@ -8,7 +8,6 @@ Implement a local CLI/use-case path that streams a file into an artifact store, 
 
 Read only:
 
-- `AGENTS.md`
 - `docs/project-state.md`
 - ingestion/artifact ADRs
 - `docs/architecture/system-design.md` sections 4, 6, 8, 10, and 13
@@ -61,13 +60,3 @@ Run the dry-run twice and prove analysis identity reuse. Verify corrupt/oversize
 - [ ] Repeated semantic requests reuse identity.
 - [ ] Unsupported media fails before analysis.
 - [ ] `docs/project-state.md` points to Phase 04.
-
-## Cursor prompt
-
-```text
-Execute Phase 03 from docs/phases/phase-03-ingestion.md. Build the local,
-safe ingestion/probe/idempotency slice through ports and tested adapters.
-Do not add FastAPI, Celery, Redis, spatial models, or dashboard code. Treat
-filenames/media as hostile. Prove repeated analysis identity and atomic cleanup,
-run all checks, update docs/project-state.md, and stop.
-```

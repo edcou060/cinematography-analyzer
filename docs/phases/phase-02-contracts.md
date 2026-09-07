@@ -8,7 +8,6 @@ Implement strict, framework-independent domain models, canonical configuration h
 
 Read only:
 
-- `AGENTS.md`
 - `docs/project-state.md`
 - accepted schema/time/state ADRs
 - `docs/contracts/data-contracts.md`
@@ -58,13 +57,3 @@ The final search must be empty unless a string appears in documentation metadata
 - [ ] JSON schema snapshots are reviewed.
 - [ ] Domain package is infrastructure-free.
 - [ ] `docs/project-state.md` points to Phase 03.
-
-## Cursor prompt
-
-```text
-Execute Phase 02 from docs/phases/phase-02-contracts.md. Implement strict,
-framework-independent Pydantic v2 contracts, config hashing, and state rules.
-Do not add persistence, FastAPI, queues, media decoding, or CV dependencies.
-Use property and schema-snapshot tests. Run the phase verification, update
-docs/project-state.md, and stop at the contract gate.
-```
