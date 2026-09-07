@@ -6,7 +6,7 @@ Measure the editing, colour, framing, and audio of a video clip, and return a ve
 Pipeline version `0.1.0`. Default configuration hash
 `66dced8dd50901cdfea31549d1395668fcca7bbc425288c3b705fe342d6304b7`.
 Source: <https://github.com/edcou060/cinematography-analyzer>.
-`site/` is a static public brief for Netlify; it does not run analysis.
+Public brief (static, no analysis): <https://cinematography-analyzer.netlify.app>.
 Compose/container promotion is documented and unverified on hosts without Docker.
 Next measured work lives in `docs/backlog.md`, not a Phase 14 guide.
 
