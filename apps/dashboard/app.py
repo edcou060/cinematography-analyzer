@@ -57,6 +57,30 @@ _SESSION_SEEK = "seek_s"
 _SESSION_POLL = "poll_attempt"
 _SESSION_ERROR = "last_error"
 _SESSION_BYTES = "_upload_bytes"
+_UI_FONT = "Helvetica, Arial, sans-serif"
+_THEME_CSS = """
+<style>
+html, body, [data-testid="stAppViewContainer"], [data-testid="stHeader"],
+[data-testid="stSidebar"], [data-testid="stMarkdownContainer"],
+.stMarkdown, .stCaption, label, p, h1, h2, h3, h4 {
+  font-family: Helvetica, Arial, sans-serif !important;
+}
+code, pre, [data-testid="stCode"], .stCode {
+  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace !important;
+}
+footer { visibility: hidden; }
+[data-testid="stToolbar"],
+[data-testid="stAppDeployButton"],
+.stAppDeployButton {
+  display: none !important;
+}
+</style>
+"""
+_CHART_FONT = {"family": _UI_FONT, "color": "#111111"}
+
+
+def _apply_theme() -> None:
+    st.markdown(_THEME_CSS, unsafe_allow_html=True)
 
 
 class _UploadedFile(Protocol):
@@ -107,6 +131,7 @@ def _selection_points(event: object) -> list[object]:
 def main() -> None:
     """Page entry. Streamlit reruns this function on every interaction."""
     st.set_page_config(page_title=PAGE_TITLE, layout="wide")
+    _apply_theme()
     st.title(PAGE_TITLE)
     st.caption(
         "Measured values carry units and method versions. Estimated labels can abstain. "
@@ -131,6 +156,9 @@ def main() -> None:
         st.caption(SYNC_LIMITATION)
     else:
         st.info(empty_upload())
+
+    if st.session_state.get(_SESSION_ERROR):
+        st.error(failed_job(str(st.session_state[_SESSION_ERROR])))
 
     analysis_id = st.session_state[_SESSION_ANALYSIS]
     if analysis_id is None:
@@ -191,15 +219,15 @@ def _analysis_body(client: AnalyzerClient, analysis_id: UUID) -> None:
         st.error(failed_job(error.safe.message))
         return
     st.subheader("Job")
-    st.write(f"**{status.state.value}** · progress {status.progress:.0%}")
+    st.write(f"**{status.state.value}**, progress {status.progress:.0%}")
     st.caption(state_caption(status.state))
     st.caption(progress_caption())
     st.write(
         "Completed stages:",
         ", ".join(status.completed_stages) or "none",
-        "· Active:",
+        "Active:",
         ", ".join(status.active_stages) or "none",
-        "· Unavailable pillars:",
+        "Unavailable pillars:",
         ", ".join(status.unavailable_stages) or "none",
     )
     if status.error is not None:
@@ -230,10 +258,10 @@ def _overview(client: AnalyzerClient, analysis_id: UUID, report: AnalysisReport)
     video = report.video
     st.markdown("#### Source (measured)")
     st.write(
-        f"{video.width}x{video.height} · {format_timecode(video.duration_ms)} · "
-        f"codec `{video.video_codec}` · audio {'yes' if video.has_audio else 'no'}"
+        f"{video.width}x{video.height}, {format_timecode(video.duration_ms)}, "
+        f"codec `{video.video_codec}`, audio {'yes' if video.has_audio else 'no'}"
     )
-    st.caption(f"content sha256 `{video.content_sha256}` · config `{report.configuration_hash}`")
+    st.caption(f"content sha256 `{video.content_sha256}`, config `{report.configuration_hash}`")
     st.markdown("#### Availability")
     rows = pillar_rows(report.availability)
     st.dataframe(
@@ -250,14 +278,14 @@ def _overview(client: AnalyzerClient, analysis_id: UUID, report: AnalysisReport)
     st.markdown(f"#### {interpretation_label()}")
     st.caption(evidence_chip_caption())
     chips = evidence_chips(CriticInput.from_report(report))
-    st.write(" · ".join(f"{chip.label} ({chip.kind})" for chip in chips))
+    st.write(", ".join(f"{chip.label} ({chip.kind})" for chip in chips))
     try:
         critique = client.get_critique(analysis_id)
     except DashboardClientError:
         critique = Critique(status=MetricStatus.NOT_COMPUTED)
     if critique.status is MetricStatus.OK and critique.text is not None:
         st.write(critique.text)
-        st.caption(f"Interpreted · optional · {critique.prompt_version} · {critique.model_name}")
+        st.caption(f"Interpreted, optional, {critique.prompt_version}, {critique.model_name}")
     else:
         st.caption(critic_caption(report.availability.critic))
     st.markdown("#### Detected shots")
@@ -280,6 +308,9 @@ def _overview(client: AnalyzerClient, analysis_id: UUID, report: AnalysisReport)
         showlegend=False,
         xaxis_title="time (ms)",
         margin={"l": 120, "r": 20, "t": 20, "b": 40},
+        font=_CHART_FONT,
+        paper_bgcolor="#ffffff",
+        plot_bgcolor="#ffffff",
     )
     event = st.plotly_chart(
         figure, on_select="rerun", key="shot-overview", use_container_width=True
@@ -294,11 +325,14 @@ def _overview(client: AnalyzerClient, analysis_id: UUID, report: AnalysisReport)
         yaxis_title="count",
         height=240,
         margin={"l": 40, "r": 20, "t": 20, "b": 40},
+        font=_CHART_FONT,
+        paper_bgcolor="#ffffff",
+        plot_bgcolor="#ffffff",
     )
     st.plotly_chart(hist, use_container_width=True)
     st.write(
-        f"Average shot length {report.summary.average_shot_length_ms:.1f} ms · "
-        f"median {report.summary.median_shot_length_ms:.1f} ms · "
+        f"Average shot length {report.summary.average_shot_length_ms:.1f} ms, "
+        f"median {report.summary.median_shot_length_ms:.1f} ms, "
         f"{report.summary.shots_per_minute:.2f} shots/min"
     )
 
@@ -349,8 +383,8 @@ def _chromatic_panel(shot: ShotAnalysis) -> None:
         markers = lightness_markers(shot)
         if markers is not None:
             st.write(
-                f"L* p10 {markers['p10']:.1f} · p50 {markers['p50']:.1f} · "
-                f"p90 {markers['p90']:.1f} · shadow {markers['shadow_ratio']:.2f} · "
+                f"L* p10 {markers['p10']:.1f}, p50 {markers['p50']:.1f}, "
+                f"p90 {markers['p90']:.1f}, shadow {markers['shadow_ratio']:.2f}, "
                 f"highlight {markers['highlight_ratio']:.2f}"
             )
     else:
@@ -377,8 +411,8 @@ def _provenance_panel(shot: ShotAnalysis) -> None:
         ):
             method = measurement.method
             st.write(
-                f"**{name}** · `{method.method}` `{method.method_version}` · "
-                f"status {measurement.status.value} · config `{method.config_hash}`"
+                f"**{name}**, `{method.method}` `{method.method_version}`, "
+                f"status {measurement.status.value}, config `{method.config_hash}`"
             )
             if measurement.reason_code:
                 st.write(f"reason: `{measurement.reason_code}`")
@@ -420,6 +454,9 @@ def _tension(client: AnalyzerClient, analysis_id: UUID, report: AnalysisReport) 
         yaxis={"range": [0, 1]},
         height=360,
         margin={"l": 40, "r": 20, "t": 20, "b": 40},
+        font=_CHART_FONT,
+        paper_bgcolor="#ffffff",
+        plot_bgcolor="#ffffff",
     )
     event = st.plotly_chart(
         figure, on_select="rerun", key="tension-chart", use_container_width=True
@@ -431,9 +468,7 @@ def _tension(client: AnalyzerClient, analysis_id: UUID, report: AnalysisReport) 
         if isinstance(at_ms, int | float):
             _maybe_seek(int(at_ms))
     st.caption(series.warning)
-    st.caption(
-        f"Window {query['start_ms']}-{query['end_ms']} ms · max_points {query['max_points']}"
-    )
+    st.caption(f"Window {query['start_ms']}-{query['end_ms']} ms, max_points {query['max_points']}")
 
 
 def _apply_shot_click(event: object, bars: tuple[ShotBar, ...]) -> None:

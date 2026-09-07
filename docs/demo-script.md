@@ -12,11 +12,10 @@ interpreter startup.
 
 ## 0:00–0:20 — Problem and limits
 
-This is a measurement instrument, not an aesthetic judge. Numbers are
-reproducible and tied to frames or time ranges. Heuristic labels are estimates.
-Detected intervals are shots, not narrative scenes. Spatial detection is gated
-out of the Apache-2.0 base install (ADR-0007). The optional critic cannot change
-a metric.
+Numbers are reproducible and tied to frames or time ranges. Heuristic labels
+are estimates. Detected intervals are shots, not narrative scenes. Spatial
+detection is gated out of the Apache-2.0 base install (ADR-0007). The optional
+critic cannot change a metric.
 
 ## 0:20–1:10 — Upload a shareable clip
 

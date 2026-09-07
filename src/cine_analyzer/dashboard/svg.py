@@ -9,6 +9,8 @@ from cine_analyzer.dashboard.transforms import (
 )
 from cine_analyzer.domain.spatial import SpatialValue
 
+_UI_FONT = "Helvetica, Arial, sans-serif"
+
 __all__ = [
     "composition_svg",
     "hash_wrap_svg",
@@ -34,7 +36,7 @@ def palette_svg(bars: tuple[PaletteBar, ...], *, width: int = 640, height: int =
         chunks.append(
             f'<rect x="{cursor:.2f}" y="0" width="{span:.2f}" height="40" fill="{bar.hex_color}"/>'
         )
-        label = f"{bar.hex_color} · {bar.width_pct:.1f}%"
+        label = f"{bar.hex_color} {bar.width_pct:.1f}%"
         chunks.append(
             f'<text x="{cursor + 4:.2f}" y="60" font-size="11" font-family="monospace" '
             f'style="overflow-wrap:anywhere">{label}</text>'
@@ -60,7 +62,10 @@ def shot_timeline_svg(bars: tuple[ShotBar, ...], *, width: int = 640, height: in
             f'<rect x="{x:.2f}" y="8" width="{w:.2f}" height="32" fill="{color}" opacity="0.85"/>'
         )
         stamp = format_timecode(bar.start_ms)
-        chunks.append(f'<text x="{x + 2:.2f}" y="60" font-size="10">{bar.index} {stamp}</text>')
+        chunks.append(
+            f'<text x="{x + 2:.2f}" y="60" font-size="10" font-family="{_UI_FONT}">'
+            f"{bar.index} {stamp}</text>"
+        )
     chunks.append("</svg>")
     return "".join(chunks)
 
@@ -95,7 +100,10 @@ def tension_svg(series: TensionSeries, *, width: int = 640, height: int = 180) -
             f'stroke="#868E96" stroke-dasharray="4 3"/>'
         )
     version = series.method_version
-    chunks.append(f'<text x="8" y="{height - 4}" font-size="10">{version} · tension proxy</text>')
+    chunks.append(
+        f'<text x="8" y="{height - 4}" font-size="10" font-family="{_UI_FONT}">'
+        f"{version} tension proxy</text>"
+    )
     chunks.append("</svg>")
     return "".join(chunks)
 
@@ -118,7 +126,7 @@ def composition_svg(value: SpatialValue | None, *, width: int = 320, height: int
     chunks.append(f'<circle cx="{width / 2:.1f}" cy="{height / 2:.1f}" r="4" fill="#E9ECEF"/>')
     if value is None:
         chunks.append(
-            '<text x="8" y="20" fill="#E9ECEF" font-size="11">'
+            f'<text x="8" y="20" fill="#E9ECEF" font-size="11" font-family="{_UI_FONT}">'
             "no person / spatial unavailable</text>"
         )
     else:
