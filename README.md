@@ -2,13 +2,13 @@
 
 Measure the editing, colour, framing, and audio of a video clip, and return a versioned report in which every number is traceable to the frames or the time range that produced it.
 
-**Status: 0.1.0 release candidate (Phase 13).** Feature scope is frozen.
+
 Pipeline version `0.1.0`. Default configuration hash
 `66dced8dd50901cdfea31549d1395668fcca7bbc425288c3b705fe342d6304b7`.
 Source: <https://github.com/edcou060/cinematography-analyzer>.
 Public brief (static, no analysis): <https://cinematography-analyzer.netlify.app>.
 Compose/container promotion is documented and unverified on hosts without Docker.
-Next measured work lives in `docs/backlog.md`, not a Phase 14 guide.
+
 
 ## The problem
 
