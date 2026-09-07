@@ -197,3 +197,6 @@ Desktop.ini
 *.swp
 *.swo
 *~
+
+# Local Netlify folder
+.netlify
