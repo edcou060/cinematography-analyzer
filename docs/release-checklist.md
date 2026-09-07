@@ -96,9 +96,17 @@ Items are grouped by what they protect. The phase column names where the check i
 
 ## Phase 13 sign-off (2026-09-07)
 
-Package version `0.1.0`. Pipeline version `0.1.0`. Tag `v0.1.0-rc.1` is the
-owner's action after the first commit; this tree is still uncommitted.
+Package version `0.1.0`. Pipeline version `0.1.0`.
 Hardware: macOS 13.5 arm64, CPython 3.12.7, ffmpeg 9.0.1.
+
+Ledger (7 September 2026): `main` is
+`fff75a8fd926bb06f7e3d2f2656885734ae37f5d`. Tag `v0.1.0-rc.1` points at
+`a86aeab0c4f4b5f9aebded9dd9df5254a4f8c4bd` (`main` is five commits ahead).
+GitHub Actions workflow run 6 passed on current `main`. The published
+synthetic benchmark still records `commit: "uncommitted"`; that is
+measurement provenance from before the first commit, not current git
+identity. Compose/container promotion and operator `bench-01`–`bench-03` /
+2160p remain open.
 
 | # | Verdict | Evidence |
 | --- | --- | --- |

@@ -22,7 +22,8 @@ take PyYAML. Clips are the tiny generated fixtures under `fixtures/video/`.
 - `pipeline_version`: `0.1.0`
 - default config hash:
   `66dced8dd50901cdfea31549d1395668fcca7bbc425288c3b705fe342d6304b7`
-- `commit` field in this run: `uncommitted` (no git tag yet)
+- `commit` field in this run: `uncommitted` (historical; recorded before the
+  first commit. Not the tag and not current `main`.)
 - hardware: `macOS-13.5-arm64-arm-64bit python=3.12.7`
 - profile: `cpu_core`, JPEG cache `on`
 
