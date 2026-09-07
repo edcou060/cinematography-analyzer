@@ -92,44 +92,6 @@ The thumbnail is the **default** local-poll shape. Celery/Redis is an optional p
 
 `docs/architecture/system-design.md` is the architectural source of truth.
 
-## Where the original concept was corrected
-
-The first concept was sound in ambition and wrong in several specifics. Each correction is recorded rather than quietly applied — `docs/architecture/original-blueprint-corrections.md` holds the full table, and the consequential ones became decision records:
-
-| Original idea | Resolution | Record |
-| --- | --- | --- |
-| PySceneDetect returns "scenes" | Detected intervals are shots; `scene` is reserved for a future semantic feature | ADR-0001 |
-| Celery and Ray | One orchestrator per profile: local runner first, Celery for the distributed profile, Ray not adopted | ADR-0002 |
-| Three consumers share a frame buffer, full video processed concurrently from ingestion | Immutable sample artifacts and reference-only messages; shared memory kept as a measured optimization behind a port | ADR-0004 |
-| Streamlit owns the workflow | Streamlit is an API client; PostgreSQL and the API own job state | ADR-0003 |
-| A vLLM critic is the headline feature | Measurement and estimation come first; interpretation is optional, separate, and unable to alter a metric | ADR-0005 |
-| Float-second timings from mixed sources | Integer milliseconds at every persisted and transported boundary | ADR-0006 |
-| YOLO11 and SAM 2 from the start | A `SubjectDetector` port with the licensed adapter gated out of the base install | ADR-0007 |
-
-Metric-level corrections — thirds proximity instead of an alignment score, framing estimates instead of box-area shot types, percentile-based lighting rules instead of mean and variance, a componentised tension proxy instead of a tension claim — are owned by `docs/metrics/metric-definitions.md` and applied in the phases that build them.
-
-## Roadmap
-
-One phase per conversation. Each phase has an exit gate, and the next phase does not start until it is met.
-
-| Phase | Outcome | Guide |
-| --- | --- | --- |
-| 00 | Product contract and decision records | `docs/phases/phase-00-charter.md` |
-| 01 | Python repository and quality gates | `docs/phases/phase-01-foundation.md` |
-| 02 | Strict domain contracts and job state | `docs/phases/phase-02-contracts.md` |
-| 03 | Safe upload, probe, hashing, idempotency | `docs/phases/phase-03-ingestion.md` |
-| 04 | Shot detection and deterministic sampling | `docs/phases/phase-04-shots.md` |
-| 05 | Chromatic vertical slice | `docs/phases/phase-05-chromatics.md` |
-| 06 | Spatial composition baseline | `docs/phases/phase-06-spatial.md` |
-| 07 | Motion, audio, and tension components | `docs/phases/phase-07-temporal-audio.md` |
-| 08 | Aggregation, provenance, and report API | `docs/phases/phase-08-aggregation-api.md` |
-| 09 | Streamlit and Plotly dashboard | `docs/phases/phase-09-dashboard.md` |
-| 10 | Celery and Redis distributed execution | `docs/phases/phase-10-distribution.md` |
-| 11 | Reliability, observability, and security | `docs/phases/phase-11-hardening.md` |
-| 12 | Optional evidence-bounded AI critic | `docs/phases/phase-12-critic.md` |
-| 13 | Benchmark, demo, and portfolio release candidate | `docs/phases/phase-13-release.md` |
-
-`docs/release-checklist.md` holds the measurable conditions and the Phase 13 sign-off. There is no Phase 14 guide.
 
 ## Licensing and inputs
 
