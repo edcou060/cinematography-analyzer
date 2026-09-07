@@ -22,7 +22,7 @@
     </header>
     <main id="main">
       <section class="hero">
-        <p class="version">0.1.0-rc</p>
+        <p class="kicker">0.1.0-rc</p>
         <h1>Editing, colour, framing, and audio with evidence attached.</h1>
         <p class="lede">
           A clip goes in. A versioned report comes out. Measured values are
@@ -45,25 +45,24 @@
       </p>
 
       <h2>Four kinds of output</h2>
-      <ul class="kinds">
-        <li>
-          <strong>Measured.</strong> Deterministic function of pixels, samples,
-          or probe facts. Unit and method version on every value.
-        </li>
-        <li>
-          <strong>Estimated.</strong> Thresholded labels such as lighting-key or
-          framing. Confidence plus evidence. Not artistic intent.
-        </li>
-        <li>
-          <strong>Interpreted.</strong> Optional critic prose from compact
-          metrics. Stored separately. Cannot modify or fail analysis.
-        </li>
-        <li>
-          <strong>Unavailable.</strong> Named reason:
-          <span class="mono">detector_not_installed</span>,
-          <span class="mono">no_audio_stream</span>, stage failure.
-        </li>
-      </ul>
+      <div class="kinds">
+        <article class="card">
+          <h3>Measured</h3>
+          <p>Deterministic function of pixels, samples, or probe facts. Unit and method version on every value.</p>
+        </article>
+        <article class="card">
+          <h3>Estimated</h3>
+          <p>Thresholded labels such as lighting-key or framing. Confidence plus evidence. Not artistic intent.</p>
+        </article>
+        <article class="card">
+          <h3>Interpreted</h3>
+          <p>Optional critic prose from compact metrics. Stored separately. Cannot modify or fail analysis.</p>
+        </article>
+        <article class="card">
+          <h3>Unavailable</h3>
+          <p>Named reason: <span class="mono">detector_not_installed</span>, <span class="mono">no_audio_stream</span>, stage failure.</p>
+        </article>
+      </div>
 
       <h2>What a report shows</h2>
       <figure>
@@ -84,25 +83,29 @@
       </figure>
 
       <h2>Architecture in this release</h2>
-      <ul class="kinds">
-        <li>
-          <strong>Current.</strong> FastAPI control plane, PostgreSQL job truth,
-          local poll worker, filesystem artifacts, Streamlit as an HTTP client.
-          Spatial backends: <span class="mono">none</span> /
-          <span class="mono">fake</span>. Critic:
-          <span class="mono">none</span> / <span class="mono">fake</span> /
-          OpenAI-compatible HTTP.
-        </li>
-        <li>
-          <strong>Optional.</strong> Celery and Redis transport. Compose API/CPU
-          worker. GPU worker is a Compose profile and unused in the Apache-2.0
-          base install.
-        </li>
-        <li>
-          <strong>Not here.</strong> SAM 2, Triton, Ray, Kubernetes, NVDEC,
-          Prometheus, Ollama SDK, vLLM, Ultralytics.
-        </li>
-      </ul>
+      <div class="arch">
+        <article class="card">
+          <h3>Current</h3>
+          <p>
+            FastAPI control plane, PostgreSQL job truth, local poll worker,
+            filesystem artifacts, Streamlit as an HTTP client. Spatial backends:
+            <span class="mono">none</span> / <span class="mono">fake</span>.
+            Critic: <span class="mono">none</span> / <span class="mono">fake</span> /
+            OpenAI-compatible HTTP.
+          </p>
+        </article>
+        <article class="card">
+          <h3>Optional</h3>
+          <p>
+            Celery and Redis transport. Compose API/CPU worker. GPU worker is a
+            Compose profile and unused in the Apache-2.0 base install.
+          </p>
+        </article>
+        <article class="card">
+          <h3>Not here</h3>
+          <p>SAM 2, Triton, Ray, Kubernetes, NVDEC, Prometheus, Ollama SDK, vLLM, Ultralytics.</p>
+        </article>
+      </div>
 
       <h2>Synthetic CPU-core timings</h2>
       <p>
